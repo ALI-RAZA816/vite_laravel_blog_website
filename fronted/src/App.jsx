@@ -26,6 +26,9 @@ import AdminEditPost from "./Pages/AdminEditPost";
 import ScrollToTop from "./components/ScrollToTop";
 import AdminPostPreview from "./Pages/AdminPostPreview";
 import Loader from "./components/Loader";
+import AuthDashboard from "./Auth/AuthDashboard";
+import NotFound from "./components/NotFound";
+import Unauthorized from "./components/Unauthorized";
 
 function App() {
 
@@ -35,7 +38,7 @@ function App() {
       <>
         {!isAdmin && <Header />}
             <ScrollToTop/>
-            {/* {loader && <Loader/>} */}
+            {loader && <Loader/>}
             <Routes>
               <Route path='/' element={<Home />} />
               <Route path='/blog-post/:id' element={<BlogPost/>}/>
@@ -44,32 +47,37 @@ function App() {
               <Route path='/login' element={<Login/>}/>
               <Route path='/register' element={<Register/>}/>
               <Route path='/admin-login' element={<AdminLogin/>}/>
-              <Route path="/admin-panel" element={<Sidebar/>}>
-                <Route path="dashboard" element={<AdminHeader/>}>
-                  <Route index element={<DashboardContent/>}/>
-                </Route>
-                <Route path="posts" element={<AdminHeader/>}>
-                  <Route index element={<AdminPosts/>}/>
-                  <Route path="post-preview/:id" element={<AdminPostPreview/>} />
-                  <Route path="add-post" element={<AddAdminPost/>}/>
-                  <Route path="edit-post/:id" element={<AdminEditPost/>}/>
-                  <Route path="add-categories" element={<AdminCategories/>}/>
-                </Route>
-                <Route path="categories" element={<AdminHeader/>}>
-                  <Route index element={<AdminCategories/>}/>
-                </Route>
-                <Route path="comments" element={<AdminHeader/>}>
-                  <Route index element={<ManageComments/>}/>
-                </Route>
-                <Route path="users" element={<AdminHeader/>}>
-                  <Route index element={<ManageUsers/>}/>
-                  <Route path="edituser/:id" element={<EditUser/>}/>
-                  <Route path="add-new-user" element={<AddNewUser/>}/>
-                </Route>
-                <Route path="settings" element={<AdminHeader/>}>
-                  <Route index element={<AdminSetting/>}/>
+                
+              <Route element={<AuthDashboard/>}>
+                <Route path="/admin-panel" element={<Sidebar/>}>
+                  <Route path="dashboard" element={<AdminHeader/>}>
+                    <Route index element={<DashboardContent/>}/>
+                  </Route>
+                  <Route path="posts" element={<AdminHeader/>}>
+                    <Route index element={<AdminPosts/>}/>
+                    <Route path="post-preview/:id" element={<AdminPostPreview/>} />
+                    <Route path="add-post" element={<AddAdminPost/>}/>
+                    <Route path="edit-post/:id" element={<AdminEditPost/>}/>
+                    <Route path="add-categories" element={<AdminCategories/>}/>
+                  </Route>
+                  <Route path="categories" element={<AdminHeader/>}>
+                    <Route index element={<AdminCategories/>}/>
+                  </Route>
+                  <Route path="comments" element={<AdminHeader/>}>
+                    <Route index element={<ManageComments/>}/>
+                  </Route>
+                  <Route path="users" element={<AdminHeader/>}>
+                    <Route index element={<ManageUsers/>}/>
+                    <Route path="edituser/:id" element={<EditUser/>}/>
+                    <Route path="add-new-user" element={<AddNewUser/>}/>
+                  </Route>
+                  <Route path="settings" element={<AdminHeader/>}>
+                    <Route index element={<AdminSetting/>}/>
+                  </Route>
                 </Route>
               </Route>
+              <Route path="/aunauthorized" element={<Unauthorized/>}/>
+              <Route path="*" element={<NotFound/>}/>
             </Routes>
         
         {!isAdmin && <Footer />}

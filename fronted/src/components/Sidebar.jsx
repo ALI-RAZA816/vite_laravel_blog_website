@@ -12,8 +12,10 @@ import {
   BsBoxArrowRight,
   BsXLg,
 } from "react-icons/bs";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";
+import { useUser } from "../Context/UserContext";
+import { apiSend } from "../services/apiClient";
 
 const navItems = [
   { icon: <BsGrid1X2Fill />, label: "dashboard", active: true },
@@ -28,8 +30,21 @@ const navItems = [
 const Sidebar = () => {
 
     const location = useLocation();
+    const navigate = useNavigate();
     const {deleteModel, sidebarOpen, closeSidebar} = useContext(AppContext);
-
+    const logoutPanel = async (event)=>{
+        event.preventDefault();
+        try{
+            const {ok, data} = await apiSend('logout','POST',null);
+            if(ok){
+                localStorage.removeItem('token');
+                localStorage.removeItem('UserInfo');
+                navigate('/');
+            }
+        }catch(error){
+            console.log(error);
+        }
+    }
   return (
     <>
         {deleteModel && <DeleteModel/>}
@@ -69,7 +84,7 @@ const Sidebar = () => {
                 </ul>
 
                 {/* Logout */}
-                <div className={styles.logoutWrapper}>
+                <div onClick={logoutPanel} className={styles.logoutWrapper}>
                     <a href="#" className={`d-flex align-items-center ${styles.logoutLink}`}>
                     <span className={styles.icon}>
                         <BsBoxArrowRight />

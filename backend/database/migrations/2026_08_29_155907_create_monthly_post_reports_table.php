@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('monthly_reports', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users');
+            $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->unsignedTinyInteger('month');
             $table->unsignedSmallInteger('year');
             $table->unsignedInteger('total_post')->default(0);

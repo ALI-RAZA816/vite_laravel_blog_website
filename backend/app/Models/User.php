@@ -35,10 +35,18 @@ class User extends Authenticatable
     }
 
     public function posts(){
-        return $this->hasMany(Post::class);
+        return $this->hasMany(Post::class, 'author_id');
     }
 
     public function comments(){
         return $this->hasMany(Comment::class);
+    }
+
+    protected static function booted(): void
+    {
+        static::deleted(function($user){
+            $user->posts->each->delete();
+            $user->comments()->delete();
+        });
     }
 }

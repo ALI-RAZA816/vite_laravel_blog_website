@@ -64,7 +64,11 @@ const SettingContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchSetting();
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('UserInfo'));
+    if(token && user.role !== 'user'){
+      fetchSetting();
+    }
   }, [settingRefresh]);
 
   // save settings

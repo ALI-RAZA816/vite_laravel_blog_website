@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('post_views', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users')->unique()->cascadeOnDelete();
-            $table->foreignId('post_id')->references('id')->on('posts')->unique()->cascadeOnDelete();
+            $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreignId('post_id')->references('id')->on('posts')->cascadeOnDelete();
+            $table->unique(['user_id','post_id']);
             $table->timestamps();
         });
     }

@@ -38,7 +38,11 @@ const CommentContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchcomments();
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('UserInfo'));
+    if(token && user.role !== 'user'){
+      fetchcomments();
+    }
   }, [currentComments, commentRefresh]);
 
   // status ke hisaab se derived lists - stat cards aur tab counts ke liye

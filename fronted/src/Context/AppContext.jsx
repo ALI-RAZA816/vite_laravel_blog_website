@@ -5,7 +5,8 @@ import { apiUrl } from "../Http/Http";
 export const AppContext = createContext();
 
 const AppContextProvider = ({children})=>{
-
+    const [authorized, setAuthorized] = useState('');
+    const [statuCode, setStatusCode] = useState(0);
     const [deletId, setDeleteId] = useState(null);
     const [loader, setLoader] = useState(true);
     const [deleteModel, setDeleteModel] = useState(false);
@@ -19,7 +20,7 @@ const AppContextProvider = ({children})=>{
     const closeMobileMenu = () => setMobileMenuOpen(false);
 
     const location = useLocation();
-    const isAdmin = location.pathname === '/register' || location.pathname === '/login' || location.pathname === '/admin-login' || location.pathname === '/admin-panel' || location.pathname === '/admin-panel/dashboard' || location.pathname === '/admin-panel/posts' || location.pathname === '/admin-panel/posts/add-post' || location.pathname === '/admin-panel/categories' || location.pathname === '/admin-panel/comments' || location.pathname === '/admin-panel/users' || location.pathname === '/admin-panel/settings' || location.pathname.startsWith('/admin-panel');
+    const isAdmin = location.pathname === '/register' || location.pathname === '/login' || location.pathname.startsWith('/admin-panel') || location.pathname.startsWith('/admin-login');
 
     const DeleteModelHandler = (deleteId)=>{
         setDeleteModel(!deleteModel);
@@ -50,8 +51,6 @@ const AppContextProvider = ({children})=>{
         }
     }
 
-    // const loaderHandler = () => setLoader(true);
-
     useEffect(()=>{
         const loaderHandler = ()=>{
             setTimeout(()=>setLoader(false), 2000);
@@ -62,7 +61,11 @@ const AppContextProvider = ({children})=>{
         }else{
             window.addEventListener('load',loaderHandler);
         }
-        fetchCategory();
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('UserInfo'));
+        if(token && user.role !== 'user'){
+            fetchCategory();
+        }
         
         return () => {
             window.removeEventListener('load', loaderHandler);
@@ -86,7 +89,11 @@ const AppContextProvider = ({children})=>{
             refresh,
             setRefresh,
             allCat,
-            loader
+            loader,
+            authorized,
+            statuCode,
+            setStatusCode,
+            setAuthorized
         }}>
             {children}
         </AppContext.Provider>

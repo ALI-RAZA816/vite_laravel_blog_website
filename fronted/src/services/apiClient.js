@@ -28,7 +28,7 @@ export const apiSend = async (path, method = 'POST', body = null)=>{
         body: body ? JSON.stringify(body) : null
     });
     const data = await response.json();
-    return {ok:response.ok, data}
+    return {ok:response.ok, status:response.status, data}
 }
 
 export const apiUpload = async (path, method = 'POST', body = null)=>{

@@ -4,10 +4,12 @@ import styles from "../assets/AdminHeader.module.css";
 import { Outlet } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";
 import { useLocation } from "react-router-dom";
+import { useUser } from "../Context/UserContext";
 
 const AdminHeader = () => {
   const { toggleSidebar } = useContext(AppContext);
   const location = useLocation();
+  const {loggedUser} = useUser();
   const lastSegment = location.pathname.split('/').pop();
   return (
     <>
@@ -38,14 +40,20 @@ const AdminHeader = () => {
 
                     <div className={`d-flex align-items-center ${styles.userSection}`}>
                     <div className={styles.userInfo}>
-                        <p className={styles.userName}>Alex Rivera</p>
-                        <p className={styles.userRole}>Editor in Chief</p>
+                        <p className={`${styles.userName} text-capitalize`}>{loggedUser?.name}</p>
+                        <p className={`${styles.userRole} text-capitalize`}>{loggedUser?.role}</p>
                     </div>
-                    <img
-                        src="https://i.pravatar.cc/100?img=47"
-                        alt="Alex Rivera"
-                        className={styles.avatar}
-                    />
+                   {loggedUser.image ? <div className="rounded-5 text-center text-white" style={{lineHeight:'40px',height:'40px', width:'40px', backgroundColor: '#5b3fd9', overflow:'hidden'}}>
+                      <img
+                        src={`${baseUrl}/uploads/${loggedUser.image}`}
+                        alt=""
+                        className={styles.authorAvatar}
+                      />
+                    </div>: <div className="rounded-5 text-center text-white" style={{lineHeight:'40px',height:'40px', width:'40px', backgroundColor: '#5b3fd9', overflow:'hidden'}}>
+                            {loggedUser?.name?.split(' ')[0].substr(0, 1)}
+                            {loggedUser?.name?.split(' ')[1].substr(0, 1)}
+                        </div>
+                    }
                     </div>
                 </div>
                 </div>

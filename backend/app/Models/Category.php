@@ -12,4 +12,11 @@ class Category extends Model
     public function posts(){
         return $this->hasMany(Post::class);
     }
+
+    protected static function booted(): void
+    {
+        static::deleted(function($category){
+            $category->posts->each->delete();
+        }); 
+    }
 }
