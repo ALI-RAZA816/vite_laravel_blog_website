@@ -1,0 +1,129 @@
+.wrapper {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f2fa;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+.sidebar {
+  width: 260px;
+  background: #1e1e26;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px 18px;
+  flex-shrink: 0;
+}
+.brand h2 {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.2;
+}
+.brand span {
+  font-size: 12px;
+  color: #9c97ab;
+}
+.nav {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.navItem,
+.navItemActive {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 8px;
+  color: #c7c3d2;
+  font-size: 14px;
+  font-weight: 500;
+}
+.navItemActive {
+  background: #5b3fa0;
+  color: #fff;
+  font-weight: 700;
+}
+.navIcon {
+  width: 18px;
+  display: inline-flex;
+  justify-content: center;
+}
+.logout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  color: #c7c3d2;
+  font-size: 14px;
+  border-top: 1px solid #33333d;
+  padding-top: 20px;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  padding: 16px 30px;
+  border-bottom: 1px solid #eee;
+}
+.searchWrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f5f3f8;
+  border-radius: 8px;
+  padding: 10px 16px;
+  width: 340px;
+  max-width: 40vw;
+}
+.searchWrap input {
+  border: none;
+  background: transparent;
+  outline: none;
+  flex: 1;
+  font-size: 14px;
+}
+.topbarRight {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.bell {
+  position: relative;
+  font-size: 18px;
+}
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.userName {
+  font-weight: 700;
+  font-size: 14px;
+}
+.userRole {
+  font-size: 11px;
+  color: #888;
+}
+
+.content {
+  padding: 30px;
+  flex: 1;
+}

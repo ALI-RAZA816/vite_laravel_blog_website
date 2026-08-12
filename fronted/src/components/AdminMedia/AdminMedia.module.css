@@ -1,0 +1,110 @@
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.headerRow h1 {
+  font-size: 26px;
+  font-weight: 800;
+  margin: 0 0 6px;
+}
+.headerRow p {
+  color: #777;
+  font-size: 14px;
+  margin: 0;
+}
+.headerActions {
+  display: flex;
+  gap: 12px;
+}
+.filterBtn {
+  background: #fff;
+  border: 1px solid #e2dbec;
+  border-radius: 8px;
+  padding: 12px 18px;
+  font-weight: 600;
+  font-size: 14px;
+}
+.uploadBtn {
+  background: #5b3fa0;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 18px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 14px 20px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+.selectedCount {
+  color: #5b3fa0;
+  font-weight: 700;
+}
+.toolbarRight {
+  margin-left: auto;
+  display: flex;
+  gap: 24px;
+  font-size: 14px;
+}
+.deleteBtn {
+  color: #d34848;
+  font-weight: 600;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+}
+.item {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.fileItem {
+  height: 130px;
+  border-radius: 10px;
+  background: #f0edf5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #666;
+}
+.fileItem span {
+  font-size: 26px;
+}
+
+.fab {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #5b3fa0;
+  color: #fff;
+  border: none;
+  font-size: 22px;
+}
+
+@media (max-width: 992px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

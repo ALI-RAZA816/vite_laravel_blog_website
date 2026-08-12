@@ -1,0 +1,249 @@
+.page {
+  background: #f7f2fb;
+  min-height: 100vh;
+}
+.navbar {
+  padding: 22px 0;
+}
+.navInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+.logo {
+  font-size: 22px;
+  font-weight: 800;
+  color: #5b3fa0;
+}
+.navLinks {
+  display: flex;
+  gap: 24px;
+  font-size: 14px;
+  color: #333;
+}
+.navLinks a {
+  color: #333;
+}
+.navActive {
+  color: #5b3fa0 !important;
+  border-bottom: 2px solid #5b3fa0;
+  padding-bottom: 4px;
+}
+.navRight {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 14px;
+}
+.loginLink {
+  color: #5b3fa0;
+  font-weight: 600;
+}
+.registerBtn {
+  background: #5b3fa0;
+  color: #fff;
+  padding: 7px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.eyebrow {
+  color: #5b3fa0;
+  font-size: 12px;
+  letter-spacing: 1px;
+  margin-top: 30px;
+  margin-bottom: 6px;
+}
+.title {
+  font-size: 44px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+.description {
+  font-style: italic;
+  color: #555;
+  max-width: 600px;
+  margin-bottom: 30px;
+}
+
+.featuredCard {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.featuredCard img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+}
+.longRead {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: #f0d9a0;
+  color: #6b4b0f;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+.readTime {
+  position: absolute;
+  top: 16px;
+  left: 100px;
+  color: #fff;
+  font-size: 12px;
+}
+.featuredTitle {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.featuredExcerpt {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.sideBox {
+  background: #fff;
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 16px;
+}
+.sideBoxTitle {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #444;
+  margin-bottom: 14px;
+}
+.subItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0eaf7;
+  font-size: 14px;
+  color: #333;
+}
+.subItem:last-child {
+  border-bottom: none;
+}
+.essayCard {
+  background: linear-gradient(180deg, rgba(80,50,140,0.2), rgba(80,50,140,0.85)),
+    url("https://images.unsplash.com/photo-1495364141860-b0d03eccd065?w=400") center/cover;
+  border-radius: 10px;
+  height: 190px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  color: #fff;
+}
+.essayLabel {
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.essayCard h5 {
+  font-weight: 700;
+  margin: 0;
+}
+
+.archiveBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-top: 1px solid #e6ddf0;
+  border-bottom: 1px solid #e6ddf0;
+  margin-bottom: 26px;
+  font-size: 14px;
+  color: #444;
+}
+.sortRow {
+  display: flex;
+  gap: 20px;
+}
+
+.gridImg {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+.meta {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 6px;
+}
+.tag {
+  color: #5b3fa0;
+  font-weight: 700;
+}
+.postTitle {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.postExcerpt {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.pagination {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 10px 0 50px;
+}
+.pageBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background: #fff;
+  font-size: 13px;
+}
+.pageActive {
+  background: #5b3fa0;
+  color: #fff;
+  border-color: #5b3fa0;
+}
+
+.footer {
+  background: #efe7f7;
+  padding: 40px 0;
+  text-align: center;
+}
+.footerLogo {
+  color: #5b3fa0;
+  font-weight: 800;
+  margin-bottom: 14px;
+}
+.footerLinks {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 10px;
+}
+.footerCopyright {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 14px;
+}
+.socialIcons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}

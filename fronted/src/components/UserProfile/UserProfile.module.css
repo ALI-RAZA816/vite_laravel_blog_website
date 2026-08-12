@@ -1,0 +1,293 @@
+.page {
+  background: #f7f2fb;
+  min-height: 100vh;
+}
+.navbar {
+  padding: 22px 0;
+  background: #fff;
+}
+.navInner {
+  max-width: 1300px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+.logo {
+  font-size: 24px;
+  font-weight: 800;
+  color: #5b3fa0;
+}
+.navLinks {
+  display: flex;
+  gap: 24px;
+  font-size: 14px;
+  color: #333;
+}
+.navLinks a {
+  color: #333;
+}
+.navRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.divider {
+  color: #ddd;
+}
+.navAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profileHeader {
+  display: flex;
+  gap: 30px;
+  padding: 40px 0 10px;
+  align-items: flex-start;
+}
+.avatarWrap {
+  position: relative;
+}
+.avatarWrap img {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #fff;
+}
+.editIcon {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  background: #5b3fa0;
+  color: #fff;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.name {
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.bio {
+  color: #555;
+  max-width: 600px;
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+.statRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.statBtn {
+  background: #fff;
+  border: 1px solid #e0d9ec;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.editProfile {
+  color: #5b3fa0;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.settingsCard {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.settingsCard h5 {
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.settingsActive {
+  background: #5b3fa0;
+  color: #fff;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+.settingsItem {
+  padding: 12px 14px;
+  font-size: 14px;
+  color: #333;
+}
+.signOut {
+  padding: 12px 14px;
+  font-size: 14px;
+  color: #d34848;
+  margin-top: 6px;
+}
+.premiumCard {
+  background: #5b3fa0;
+  color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+}
+.premiumLabel {
+  font-size: 11px;
+  font-weight: 700;
+  opacity: 0.85;
+}
+.premiumCard h4 {
+  font-weight: 700;
+  margin: 10px 0 16px;
+}
+.premiumCard button {
+  background: #fff;
+  color: #5b3fa0;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.tabRow {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  border-bottom: 1px solid #e6ddf0;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+.tab {
+  color: #777;
+  cursor: pointer;
+}
+.tabActive {
+  color: #5b3fa0;
+  font-weight: 700;
+  border-bottom: 2px solid #5b3fa0;
+  padding-bottom: 12px;
+  margin-bottom: -13px;
+  cursor: pointer;
+}
+.gridIcon {
+  margin-left: auto;
+  color: #999;
+}
+
+.featuredPost {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+}
+.featuredPost img {
+  width: 40%;
+  object-fit: cover;
+}
+.featuredContent {
+  padding: 20px;
+  flex: 1;
+}
+.badge {
+  background: #f0d9a0;
+  color: #6b4b0f;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+.featuredContent h4 {
+  font-weight: 700;
+  margin: 12px 0 8px;
+}
+.featuredContent p {
+  color: #666;
+  font-size: 14px;
+  font-style: italic;
+}
+.readRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+  font-size: 13px;
+  color: #777;
+}
+.bookmarkIcon {
+  color: #5b3fa0;
+}
+
+.smallCard {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  padding-bottom: 14px;
+  margin-bottom: 16px;
+}
+.smallCard img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+.smallCard .tag,
+.smallCard h5,
+.smallCard .readRow {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+.tag {
+  color: #5b3fa0;
+  font-size: 11px;
+  font-weight: 700;
+  display: block;
+  margin-top: 12px;
+}
+.smallCard h5 {
+  font-weight: 700;
+  font-size: 15px;
+  margin: 8px 0;
+}
+
+.loadMore {
+  background: #fff;
+  border: 1px solid #e0d9ec;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.footer {
+  background: #efe7f7;
+  padding: 40px 0;
+  text-align: center;
+  margin-top: 50px;
+}
+.footerLogo {
+  color: #5b3fa0;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+.footerLinks {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  font-size: 13px;
+  color: #444;
+  margin-bottom: 10px;
+}
+.footerCopyright {
+  font-size: 12px;
+  color: #888;
+}

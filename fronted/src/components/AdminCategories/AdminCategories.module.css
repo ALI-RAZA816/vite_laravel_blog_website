@@ -1,0 +1,206 @@
+.wrap {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+.mainCol {
+  flex: 1;
+  min-width: 0;
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.headerRow h1 {
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0;
+}
+.breadcrumb {
+  color: #999;
+  font-size: 13px;
+  margin: 4px 0 0;
+}
+.addBtn {
+  background: #5b3fa0;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.tableCard {
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px 20px 20px;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.table th {
+  text-align: left;
+  color: #999;
+  font-size: 11px;
+  padding: 14px 8px;
+  border-bottom: 1px solid #eee;
+}
+.table td {
+  padding: 16px 8px;
+  border-bottom: 1px solid #f2f2f2;
+}
+.nameCell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+}
+.iconBox {
+  width: 30px;
+  height: 30px;
+  background: #f5efe0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.slug {
+  color: #999;
+}
+.countPill {
+  background: #efe6f7;
+  color: #5b3fa0;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 8px 4px;
+  font-size: 13px;
+  color: #888;
+}
+.pageButtons {
+  display: flex;
+  gap: 6px;
+}
+.pageButtons button {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid #e2dbec;
+  background: #fff;
+}
+.pageActive {
+  background: #5b3fa0 !important;
+  color: #fff;
+  border-color: #5b3fa0 !important;
+}
+
+.panel {
+  width: 360px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  flex-shrink: 0;
+}
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.panelHeader h4 {
+  font-weight: 800;
+  margin: 0;
+}
+.panel label {
+  font-size: 13px;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+  margin-top: 16px;
+}
+.panel input,
+.panel textarea {
+  width: 100%;
+  border: 1px solid #e2dbec;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  outline: none;
+}
+.slugRow {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e2dbec;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.slugRow span {
+  background: #f5f2fa;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: #888;
+}
+.slugRow input {
+  border: none;
+  flex: 1;
+}
+.iconGrid {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.iconOption {
+  width: 44px;
+  height: 44px;
+  border: 1px solid #e2dbec;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.iconActive {
+  width: 44px;
+  height: 44px;
+  border: 2px solid #5b3fa0;
+  background: #f5f0fb;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.panelActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 30px;
+}
+.cancelBtn {
+  flex: 1;
+  background: #fff;
+  border: 1px solid #e2dbec;
+  border-radius: 8px;
+  padding: 12px;
+  font-weight: 600;
+}
+.createBtn {
+  flex: 1;
+  background: #5b3fa0;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-weight: 700;
+}
