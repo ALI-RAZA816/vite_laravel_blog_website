@@ -1,0 +1,294 @@
+.content {
+  background-color: #f6f5fb;
+  padding: 32px 36px;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  min-height: 100vh;
+}
+
+/* Heading */
+.headingRow {
+  margin-bottom: 28px;
+}
+
+.pageTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f1b2e;
+  margin-bottom: 6px;
+}
+
+.pageSubtitle {
+  font-size: 14px;
+  color: #8b87a0;
+  margin-bottom: 0;
+}
+
+.exportBtn {
+  background-color: #ffffff;
+  color: #1f1b2e;
+  border: 1px solid #e0dcef;
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.exportBtn:hover {
+  background-color: #f6f5fb;
+}
+
+.addBtn {
+  background-color: #5b3fd9;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.addBtn:hover {
+  background-color: #4c32c2;
+}
+
+/* Stat cards */
+.statCard {
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 20px;
+  height: 100%;
+  box-shadow: 0 1px 3px rgba(30, 20, 60, 0.05);
+}
+
+.statIcon {
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  flex-shrink: 0;
+}
+
+.statLabel {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: #8b87a0;
+  margin-bottom: 4px;
+}
+
+.statValue {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f1b2e;
+  margin-bottom: 0;
+}
+
+/* Table card */
+.tableCard {
+  background-color: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 1px 3px rgba(30, 20, 60, 0.05);
+  overflow: hidden;
+}
+
+.tableHeader {
+  padding: 20px 24px;
+  background-color: #f2effa;
+}
+
+.tableTitle {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #1f1b2e;
+  margin-bottom: 0;
+}
+
+.headerIcon {
+  font-size: 16px;
+  color: #6b6980;
+  cursor: pointer;
+}
+
+.usersTable thead th {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: #8b87a0;
+  background-color: #ffffff;
+  border-bottom: 1px solid #f0eef7;
+  padding: 14px 24px;
+}
+
+.usersTable tbody td {
+  padding: 16px 24px;
+  vertical-align: middle;
+  border-bottom: 1px solid #f0eef7;
+}
+
+.usersTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.rowHighlight {
+  background-color: #fdf3f2;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1f1b2e;
+  flex-shrink: 0;
+}
+
+.userName {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f1b2e;
+  margin-bottom: 2px;
+}
+
+.userHandle {
+  font-size: 13px;
+  color: #8b87a0;
+  margin-bottom: 0;
+}
+
+.emailCell {
+  font-size: 14px;
+  color: #4b4760;
+}
+
+.roleBadge {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #4b4760;
+  background-color: #ece9f0;
+  padding: 6px 14px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.dateCell {
+  font-size: 14px;
+  color: #4b4760;
+}
+
+.statusText {
+  font-size: 14px;
+  font-weight: 600;
+  gap: 6px;
+  width: fit-content;
+}
+
+.statusDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.statusActive {
+  color: #c98a1a;
+}
+
+.statusActive .statusDot {
+  background-color: #c98a1a;
+}
+
+.statusBlocked {
+  color: #d94f4f;
+}
+
+.statusBlocked .statusDot {
+  background-color: #d94f4f;
+}
+
+.actionsIcon {
+  font-size: 16px;
+  color: #8b87a0;
+  cursor: pointer;
+}
+
+.actionsIcon:hover {
+  color: #5b3fd9;
+}
+
+/* Pagination */
+.paginationRow {
+  padding: 20px 24px;
+}
+
+.showingText {
+  font-size: 14px;
+  color: #8b87a0;
+}
+
+.pageBtn {
+  min-width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid #e6e3f0;
+  background-color: #ffffff;
+  color: #4b4760;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pageBtn:hover {
+  background-color: #f6f5fb;
+}
+
+.pageBtnActive {
+  background-color: #5b3fd9;
+  border-color: #5b3fd9;
+  color: #ffffff;
+}
+
+.pageDots {
+  color: #8b87a0;
+  padding: 0 4px;
+}
+
+/* Footer */
+.footer {
+  margin-top: 60px;
+  padding-top: 24px;
+  border-top: 1px solid #e6e3f0;
+}
+
+.footerCopy {
+  font-size: 13px;
+  color: #4b4760;
+  margin-bottom: 0;
+}
+
+.footerLinks {
+  display: flex;
+  gap: 24px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.footerLinks a {
+  color: #4b4760;
+  text-decoration: none;
+}
+
+.footerLinks a:hover {
+  color: #5b3fd9;
+}

@@ -1,0 +1,90 @@
+.sidebar {
+  width: 260px;
+  min-height: 100vh;
+  background-color: #211d2e;
+  padding: 28px 16px;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  overflow-y: auto;
+  align-self: flex-start;
+}
+
+/* Brand */
+.brand {
+  padding: 0 8px 28px 8px;
+}
+
+.brandTitle {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+
+.brandSubtitle {
+  color: #8b87a0;
+  font-size: 13px;
+  margin-bottom: 0;
+}
+
+/* Nav */
+.navList {
+  flex: 1;
+  gap: 4px;
+}
+
+.navLink {
+  color: #b8b5c9;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 11px 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.navLink:hover {
+  background-color: #2c2740;
+  color: #ffffff;
+}
+
+.navLink.active {
+  background-color: #5b3fd9;
+  color: #ffffff;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  margin-right: 12px;
+  font-size: 16px;
+}
+
+/* Logout */
+.logoutWrapper {
+  border-top: 1px solid #322c47;
+  padding: 20px 8px 0 8px;
+  margin-top: 12px;
+}
+
+.logoutLink {
+  color: #b8b5c9;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 8px 4px;
+  transition: color 0.15s ease;
+}
+
+.logoutLink:hover {
+  color: #ffffff;
+}

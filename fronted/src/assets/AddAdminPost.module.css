@@ -1,0 +1,288 @@
+.wrapper {
+  background-color: #f6f5fb;
+  padding: 28px 36px;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  min-height: 100vh;
+}
+
+/* Title */
+.titleCard {
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(30, 20, 60, 0.05);
+}
+
+.titleInput {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 34px;
+  font-weight: 800;
+  color: #1f1b2e;
+}
+
+/* Editor */
+.editorCard {
+  background-color: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 1px 3px rgba(30, 20, 60, 0.05);
+  overflow: hidden;
+}
+
+.toolbar {
+  padding: 14px 22px;
+  border-bottom: 1px solid #f0eef7;
+}
+
+.toolBtn {
+  background: none;
+  border: none;
+  color: #4b4760;
+  font-size: 15px;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toolBtn:hover {
+  background-color: #f6f5fb;
+}
+
+.toolDivider {
+  width: 1px;
+  height: 20px;
+  background-color: #e6e3f0;
+  margin: 0 8px;
+  display: inline-block;
+}
+
+.wordCount {
+  font-size: 13px;
+  color: #8b87a0;
+  white-space: nowrap;
+}
+
+.editorBody {
+  padding: 24px 26px 40px 26px;
+  font-size: 17px;
+  line-height: 1.75;
+  color: #2b2740;
+}
+
+.editorBody p {
+  margin-bottom: 22px;
+}
+
+.editorHeading {
+  font-size: 21px;
+  font-weight: 700;
+  color: #1f1b2e;
+  margin-bottom: 16px;
+  margin-top: 4px;
+}
+
+/* Right rail panels */
+.panel {
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(30, 20, 60, 0.05);
+}
+
+.panelTitle {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #8b87a0;
+  margin-bottom: 18px;
+}
+
+.fieldLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f1b2e;
+}
+
+.linkText {
+  font-size: 14px;
+  font-weight: 700;
+  color: #5b3fd9;
+}
+
+.mutedText {
+  font-size: 14px;
+  color: #4b4760;
+}
+
+.publishedText {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f1b2e;
+}
+
+/* Switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 22px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #d8d5e8;
+  border-radius: 999px;
+  transition: 0.2s;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  transition: 0.2s;
+}
+
+.switch input:checked + .slider {
+  background-color: #5b3fd9;
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(18px);
+}
+
+/* Buttons */
+.updateBtn {
+  width: 100%;
+  background-color: #5b3fd9;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.updateBtn:hover {
+  background-color: #4c32c2;
+}
+
+.draftBtn {
+  width: 100%;
+  background-color: #ffffff;
+  color: #1f1b2e;
+  border: 1px solid #e6e3f0;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.draftBtn:hover {
+  background-color: #f6f5fb;
+}
+
+/* Featured image */
+.removeLink {
+  font-size: 13px;
+  font-weight: 600;
+  color: #5b3fd9;
+  text-decoration: none;
+}
+
+.featuredImage {
+  width: 100%;
+  height: 130px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #e4ddf5 0%, #cfc4ec 100%);
+}
+
+/* Categories */
+.categorySelect {
+  width: 100%;
+  border: 1px solid #e6e3f0;
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-size: 14px;
+  color: #1f1b2e;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.addCategoryLink {
+  font-size: 13px;
+  font-weight: 600;
+  color: #5b3fd9;
+  text-decoration: none;
+}
+
+/* Tags */
+.tagsWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ece9fb;
+  color: #5b3fd9;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+
+.tagRemove {
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.tagInput {
+  width: 100%;
+  border: 1px solid #e6e3f0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #1f1b2e;
+}
+
+.tagInput:focus {
+  outline: none;
+  border-color: #5b3fd9;
+}
+
+/* Move to trash */
+.trashRow {
+  color: #d94f4f;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.trashRow:hover {
+  text-decoration: underline;
+}

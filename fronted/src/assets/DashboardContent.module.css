@@ -1,0 +1,303 @@
+.content {
+  background-color: #f6f5fb;
+  padding: 32px 36px;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  flex: 1;
+  min-height: 100vh;
+}
+
+/* Heading */
+.headingRow {
+  margin-bottom: 28px;
+}
+
+.pageTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f1b2e;
+  margin-bottom: 6px;
+}
+
+.pageSubtitle {
+  font-size: 14px;
+  color: #8b87a0;
+  margin-bottom: 0;
+}
+
+.createBtn {
+  background-color: #5b3fd9;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.createBtn:hover {
+  background-color: #4c32c2;
+}
+
+/* Stat cards */
+.statCard {
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 22px;
+  height: 100%;
+  box-shadow: 0 1px 3px rgba(30, 20, 60, 0.05);
+}
+
+.statIcon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.badge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 999px;
+}
+
+.badgePositive {
+  background-color: #e6f5ec;
+  color: #2f9e5c;
+}
+
+.badgeNeutral {
+  background-color: #eeeef2;
+  color: #6b6980;
+}
+
+.statLabel {
+  font-size: 14px;
+  color: #8b87a0;
+  margin-bottom: 4px;
+}
+
+.statValue {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1f1b2e;
+  margin-bottom: 0;
+}
+
+/* Panels */
+.panel {
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 24px;
+  height: 100%;
+  box-shadow: 0 1px 3px rgba(30, 20, 60, 0.05);
+}
+
+.panelTitle {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #1f1b2e;
+  margin-bottom: 0;
+}
+
+.rangeSelect {
+  font-size: 13px;
+  color: #4b4760;
+  background-color: #f6f5fb;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 12px;
+}
+
+/* Chart */
+.chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 260px;
+  gap: 16px;
+  padding-top: 10px;
+}
+
+.chartCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.chartBar {
+  width: 100%;
+  max-width: 56px;
+  background-color: #e6e3f5;
+  border-radius: 8px 8px 0 0;
+  transition: height 0.3s ease;
+}
+
+.chartBarActive {
+  background-color: #5b3fd9;
+}
+
+.chartLabel {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #8b87a0;
+}
+
+/* Recent comments */
+.commentRow {
+  display: flex;
+  gap: 12px;
+  padding-bottom: 18px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid #f0eef7;
+}
+
+.commentRow:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.avatar {
+  min-width: 38px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.commentBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.commentName {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f1b2e;
+  margin-bottom: 2px;
+}
+
+.commentText {
+  font-size: 13px;
+  color: #8b87a0;
+  margin-bottom: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.commentActions {
+  display: flex;
+  gap: 14px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.approveLink {
+  color: #5b3fd9;
+  text-decoration: none;
+}
+
+.rejectLink {
+  color: #d94f4f;
+  text-decoration: none;
+}
+
+.viewAllBtn {
+  width: 100%;
+  background-color: #f6f5fb;
+  border: none;
+  border-radius: 10px;
+  padding: 11px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f1b2e;
+  margin-top: 18px;
+}
+
+.viewAllBtn:hover {
+  background-color: #ece9fb;
+}
+
+/* Recent posts table */
+.seeFullList {
+  font-size: 13px;
+  font-weight: 600;
+  color: #5b3fd9;
+  text-decoration: none;
+}
+
+.postsTable {
+  margin-bottom: 0;
+}
+
+.postsTable thead th {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: #8b87a0;
+  background-color: #f6f5fb;
+  border: none;
+  padding: 12px 14px;
+}
+
+.postsTable tbody td {
+  font-size: 14px;
+  color: #1f1b2e;
+  vertical-align: middle;
+  padding: 16px 14px;
+  border-bottom: 1px solid #f0eef7;
+}
+
+.postTitleCell {
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.postThumb {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background-color: #ece7db;
+  flex-shrink: 0;
+}
+
+.statusBadge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.3px;
+}
+
+.statusPublished {
+  background-color: #ece9fb;
+  color: #5b3fd9;
+}
+
+.statusDraft {
+  background-color: #fdf3e0;
+  color: #d99a1a;
+}
+
+.actionsDots {
+  font-size: 18px;
+  color: #8b87a0;
+  cursor: pointer;
+}

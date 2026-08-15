@@ -1,0 +1,116 @@
+.page {
+  background: #f7f2fb;
+}
+
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 1rem;
+}
+.pageTitle {
+  font-size: 40px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.pageSubtitle {
+  font-style: italic;
+  color: #555;
+  max-width: 460px;
+}
+.filterPills {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.pillActive {
+  background: #5b3fa0;
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.pill {
+  background: #efe6f7;
+  color: #444;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+}
+
+.featuredCard {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.featuredCard img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+}
+.featuredBadge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: #5b3fa0;
+  color: #fff;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.smallImg {
+  width: 100%;
+  height: 155px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+.gridImg {
+  width: 100%;
+  height: 175px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+.meta {
+  font-size: 12px;
+  color: #5b3fa0;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.postTitle {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 8px;
+}
+.postExcerpt {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 2rem 0;
+}
+.pageBtn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background: #fff;
+  font-size: 13px;
+}
+.pageActive {
+  background: #5b3fa0;
+  color: #fff;
+  border-color: #5b3fa0;
+}
