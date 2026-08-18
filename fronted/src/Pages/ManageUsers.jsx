@@ -1,17 +1,12 @@
 import React from "react";
-import {
-  BsDownload,
-  BsPersonPlusFill,
-  BsPeopleFill,
-  BsShieldFillCheck,
-  BsGraphUpArrow,
-  BsSlashCircleFill,
-  BsFilter,
+import { BsDownload, BsPersonPlusFill, BsPeopleFill, BsShieldFillCheck, BsGraphUpArrow, BsSlashCircleFill, BsFilter,
   BsThreeDotsVertical,
   BsChevronLeft,
   BsChevronRight,
 } from "react-icons/bs";
 import styles from "../assets/ManageUsers.module.css";
+import { MdOutlineModeEdit } from "react-icons/md";
+import { RiDeleteBin5Fill } from "react-icons/ri";
 
 const statCards = [
   {
@@ -189,7 +184,8 @@ const ManageUsers = () => {
                     </span>
                   </td>
                   <td>
-                    <BsThreeDotsVertical className={styles.actionsIcon} />
+                    <MdOutlineModeEdit className={styles.editpencil}/><RiDeleteBin5Fill className={styles.deleteIcon}  />
+                    {/* <BsThreeDotsVertical className={styles.actionsIcon} /> */}
                   </td>
                 </tr>
               ))}

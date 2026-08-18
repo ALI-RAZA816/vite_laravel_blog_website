@@ -62,13 +62,13 @@
   font-weight: 600;
   margin-bottom: 6px;
   display: block;
+  margin-top: 18px;
 }
 .card input {
   width: 100%;
   border: 1px solid #e2dbec;
   border-radius: 8px;
   padding: 12px 14px;
-  margin-bottom: 18px;
   font-size: 14px;
   outline: none;
 }

@@ -3,6 +3,10 @@
 .navbar {
   background: #f7f2fb;
   padding: 20px 0;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 99;
 }
 .navInner {
   max-width: 1200px;
@@ -49,4 +53,50 @@
   padding: 8px 20px;
   border-radius: 6px;
   font-weight: 600;
+}
+
+.profile{
+  height: 40px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  position: relative;
+  border-radius: 100%;
+  background-color: #e0c3f8;
+  cursor: pointer;
+  user-select: none;
+}
+
+.logout{
+  padding:.5rem;
+  border-radius: 5px;
+  position: absolute;
+  top:50px;
+  opacity: 0;
+  transition: top .50s ease;
+  right:0;
+  visibility: hidden;
+  background-color:#e4d5f0;
+}
+
+.show{
+  opacity: 1;
+  visibility: visible;
+}
+
+.logout button{
+  color: #333;
+  border: none;
+  outline: none;
+  height: 40px;
+  width: 150px;
+  border-radius: 5px;
+  cursor: pointer;
+  background:none !important;
+}
+
+.logout button:hover{
+  background-color: #efefef !important;
 }

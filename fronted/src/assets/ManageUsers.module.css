@@ -215,14 +215,23 @@
   background-color: #d94f4f;
 }
 
-.actionsIcon {
-  font-size: 16px;
+.editpencil,
+.deleteIcon {
+  font-size: 18px;
   color: #8b87a0;
   cursor: pointer;
 }
 
-.actionsIcon:hover {
+.editpencil{
+  margin-right: .5rem;
+}
+
+.editpencil:hover {
   color: #5b3fd9;
+}
+
+.deleteIcon:hover {
+  color: #d94f4f;
 }
 
 /* Pagination */
