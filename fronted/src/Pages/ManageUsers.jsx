@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { BsDownload, BsPersonPlusFill, BsPeopleFill, BsShieldFillCheck, BsGraphUpArrow, BsSlashCircleFill, BsFilter,
   BsThreeDotsVertical,
   BsChevronLeft,
@@ -7,6 +7,9 @@ import { BsDownload, BsPersonPlusFill, BsPeopleFill, BsShieldFillCheck, BsGraphU
 import styles from "../assets/ManageUsers.module.css";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { RiDeleteBin5Fill } from "react-icons/ri";
+import { AppContext } from "../Context/AppContext";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { apiUrl, baseUrl } from "../Http/Http";
 
 const statCards = [
   {
@@ -39,54 +42,13 @@ const statCards = [
   },
 ];
 
-const users = [
-  {
-    initials: "JV",
-    color: "#e8c9a0",
-    name: "Julian Veldt",
-    handle: "@julianv",
-    email: "julian.veldt@slowliving.com",
-    role: "ADMIN",
-    joinDate: "Oct 12, 2023",
-    status: "Active",
-    highlight: false,
-  },
-  {
-    initials: "ER",
-    color: "#c9b8dc",
-    name: "Elena Rossi",
-    handle: "@elenar",
-    email: "elena.r@lifestyle.com",
-    role: "EDITOR",
-    joinDate: "Jan 05, 2024",
-    status: "Active",
-    highlight: false,
-  },
-  {
-    initials: "MT",
-    color: "#dcd0b8",
-    name: "Marcus Thorne",
-    handle: "@mthorne",
-    email: "m.thorne@provider.net",
-    role: "SUBSCRIBER",
-    joinDate: "Feb 14, 2024",
-    status: "Active",
-    highlight: false,
-  },
-  {
-    initials: "LS",
-    color: "#c5c2d6",
-    name: "Liam Smith",
-    handle: "@lsmith_01",
-    email: "liam.smith@example.org",
-    role: "SUBSCRIBER",
-    joinDate: "Nov 20, 2023",
-    status: "Blocked",
-    highlight: true,
-  },
-];
+
 
 const ManageUsers = () => {
+
+
+ const {allUsers} = useContext(AppContext);
+
   return (
     <div className={styles.content}>
       {/* Heading */}
@@ -152,39 +114,51 @@ const ManageUsers = () => {
               </tr>
             </thead>
             <tbody>
-              {users.map((user, index) => (
+              {allUsers.map((user, index) => (
                 <tr key={index} className={user.highlight ? styles.rowHighlight : ""}>
                   <td>
                     <div className="d-flex align-items-center gap-3">
                       <div
-                        className={styles.avatar}
-                        style={{ backgroundColor: user.color }}
+                        className={`${styles.avatar} overflow-hidden`}
+                        style={{ backgroundColor: '#c5c2d6', }}
                       >
-                        {user.initials}
+                       {user.image !== null ? (
+                              <img
+                                  src={`${baseUrl}/uploads/${user.image}`}
+                                  alt=""
+                              />
+                          ) : (
+                              <>
+                                  {user.name.split(' ')[0].substr(0, 1)}
+                                  {user.name.split(' ')[1]?.substr(0, 1)}
+                              </>
+                          )}
                       </div>
                       <div>
                         <p className={styles.userName}>{user.name}</p>
-                        <p className={styles.userHandle}>{user.handle}</p>
                       </div>
                     </div>
                   </td>
                   <td className={styles.emailCell}>{user.email}</td>
                   <td>
-                    <span className={styles.roleBadge}>{user.role}</span>
+                    <span style={{color:user.role === 'admin' ? '#165823' :'' || user.role ==='user' ? '#2E2910' :'' || user.role === 'editor' ? '#464B71':'',backgroundColor:user.role === 'admin' ? 'rgba(22, 88, 35,.30)' :'' || user.role ==='user' ? 'rgba(242, 242, 237,.50)' :'' || user.role === 'editor' ? 'rgba(70, 75, 113,.30)':''}} className={`${styles.roleBadge} text-capitalize`}>{user.role}</span>
                   </td>
-                  <td className={styles.dateCell}>{user.joinDate}</td>
+                  <td className={styles.dateCell}>{user.join_date}</td>
                   <td>
                     <span
-                      className={`d-flex align-items-center ${styles.statusText} ${
+                      className={`d-flex align-items-center text-capitalize ${styles.statusText} ${
                         user.status === "Active" ? styles.statusActive : styles.statusBlocked
                       }`}
                     >
-                      <span className={styles.statusDot}></span>
-                      {user.status}
+                      <span style={{backgroundColor:user.status === 'active' ? '#165823' : '' || user.status === 'blocked' ? '#DF301C':'' || user.status === 'inactive' ? '#A8A492':'' }} className={styles.statusDot}></span>
+                      <span style={{color:user.status === 'active' ? '#165823' : '' || user.status === 'blocked' ? '#DF301C':'' || user.status === 'inactive' ? '#A8A492':'' }}>{user.status}</span>
                     </span>
                   </td>
                   <td>
-                    <MdOutlineModeEdit className={styles.editpencil}/><RiDeleteBin5Fill className={styles.deleteIcon}  />
+                    <Link to={`/admin-panel/users/edituser/${user.id}`}>
+                      <MdOutlineModeEdit className={styles.editpencil}/>
+                    </Link>
+                    <RiDeleteBin5Fill className={styles.deleteIcon}  />
                     {/* <BsThreeDotsVertical className={styles.actionsIcon} /> */}
                   </td>
                 </tr>

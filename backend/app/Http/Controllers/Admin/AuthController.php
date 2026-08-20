@@ -10,6 +10,37 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
+    public function createAccount(Request $request){
+         try{
+            $request->validate([
+                'name'=>'required|string|max:50',
+                'emailaddress'=>'required|email',
+                'password'=>'required|min:5|confirmed',
+            ]);
+
+            User::create([
+                'name'=>$request->name,
+                'email'=>$request->emailaddress,
+                'password'=>Hash::make($request->password),
+                'created_at'=>now(),
+                'updated_at'=>now(),
+            ]);
+
+
+            return response()->json([
+                'status'=>200,
+                'message'=>'Account created'
+            ]);
+
+        }catch(ValidationException $e){
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $e->errors(),
+            ], 422);
+        }
+    }
+
+
     public function loginAccount(Request $request){
 
         try{

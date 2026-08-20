@@ -45,10 +45,34 @@ export default function Register() {
 
   const submitHandler = async (event)=>{
     event.preventDefault();
+    if(!formData.name){
+      setFormDataErr({
+        nameErr:'The name field is required'
+      });
+      return;
+    }
+    if(!formData.emailaddress){
+      setFormDataErr({
+        emailaddressErr:'The name field is required'
+      });
+      return;
+    }
+    if(!formData.password){
+      setFormDataErr({
+        passwordErr:'The name field is required'
+      });
+      return;
+    }
+    if(!formData.password_confirmation){
+      setFormDataErr({
+        password_confirmationErr:'The name field is required'
+      });
+      return;
+    }
     setShowLoadingSpinner(true);
     setDisabledField(true);
     try{
-      const response = await fetch(`${apiUrl}/users`,{
+      const response = await fetch(`${apiUrl}/account`,{
         method:'POST',
         headers:{
           'Content-type':'application/json',
@@ -136,15 +160,6 @@ export default function Register() {
             <span>Already have an account? <Link to="/login">Login</Link></span>
             </p>
           </form>
-          <div  className={styles.divider}>
-            <span>OR CONTINUE WITH</span>
-          </div>
-
-          <div className={styles.socialBtns}>
-            <button disabled={disabledField && true} className={styles.socialBtn}>
-              <span className={styles.google}><FcGoogle /></span> Google
-            </button>
-          </div>
         </div>
 
         <p className={styles.terms}>

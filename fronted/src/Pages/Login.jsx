@@ -131,15 +131,6 @@ export default function Login() {
           <p className="mt-2 text-center">
               <span>Don't have an account? <Link to="/register">Register</Link></span>
           </p>
-          <div className={styles.divider}>
-            <span>OR CONTINUE WITH</span>
-          </div>
-
-          <div className={styles.socialBtns}>
-            <button className={styles.socialBtn}>
-              <span className={styles.google}><FcGoogle /></span> Google
-            </button>
-          </div>
         </div>
 
         <p className={styles.terms}>

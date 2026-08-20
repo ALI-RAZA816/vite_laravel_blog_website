@@ -1,0 +1,580 @@
+.pageWrapper {
+  min-height: 100vh;
+  background: #fcf7ff;
+  color: #181722;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+/* ================= TOP HEADER ================= */
+
+.topHeader {
+  height: 81px;
+  background: #fffaff;
+  border-bottom: 1px solid #eee5f3;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 38px 0 29px;
+}
+
+.searchBox {
+  width: 322px;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  padding: 0 16px;
+
+  background: #f5effb;
+  border-radius: 24px;
+
+  color: #6c6680;
+}
+
+.searchBox input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+
+  font-size: 16px;
+  color: #33303d;
+}
+
+.searchBox input::placeholder {
+  color: #746d83;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 37px;
+}
+
+.notificationBtn {
+  border: none;
+  background: transparent;
+  padding: 5px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #282535;
+  cursor: pointer;
+}
+
+.headerAvatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  overflow: hidden;
+
+  border: 2px solid #eee9f3;
+}
+
+.headerAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ================= MAIN ================= */
+
+.mainContent {
+  padding: 32px 39px 50px;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.pageHeading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 39px;
+}
+
+.pageHeading h1 {
+  margin: 0 0 6px;
+
+  font-size: 32px;
+  line-height: 1.2;
+  font-weight: 650;
+  letter-spacing: -0.7px;
+}
+
+.pageHeading p {
+  margin: 0;
+
+  font-size: 17px;
+  color: #393545;
+}
+
+.saveButton {
+  height: 58px;
+  min-width: 203px;
+
+  border: none;
+  border-radius: 30px;
+
+  background: #4848d9;
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.saveButton:hover {
+  background: #3d3dcc;
+  transform: translateY(-1px);
+}
+
+/* ================= CARD ================= */
+
+.card {
+  background: #fffaff;
+
+  border: 1px solid #eee5f2;
+  border-radius: 14px;
+
+  padding: 28px 29px;
+
+  box-shadow: 0 2px 7px rgba(38, 23, 50, 0.025);
+}
+
+.cardHeader {
+  padding-bottom: 22px;
+  margin-bottom: 27px;
+
+  border-bottom: 1px solid #f0e9f3;
+}
+
+.cardHeader h2 {
+  margin: 0;
+
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* ================= PERSONAL INFO ================= */
+
+.profileArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 3px;
+}
+
+.profileImage {
+  width: 118px;
+  height: 118px;
+
+  border-radius: 50%;
+  overflow: hidden;
+
+  border: 2px solid #e6dff0;
+  padding: 3px;
+
+  background: white;
+}
+
+.profileImage img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  border-radius: 50%;
+}
+
+.changePhoto {
+  margin-top: 18px;
+
+  background: transparent;
+  border: none;
+
+  color: #3434d5;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+}
+
+.inputLabel {
+  display: block;
+
+  margin-bottom: 8px;
+
+  font-size: 13px;
+  font-weight: 650;
+
+  letter-spacing: 0.4px;
+  color: #393448;
+}
+
+.formInput {
+  width: 100%;
+  height: 52px;
+
+  padding: 0 16px;
+
+  border: 1px solid #ddd5e6;
+  border-radius: 9px;
+
+  background: #fffaff;
+
+  color: #25222d;
+  font-size: 15px;
+
+  outline: none;
+
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  appearance: none;
+}
+
+.formInput:focus {
+  border-color: #6868dd;
+  box-shadow: 0 0 0 3px rgba(72, 72, 217, 0.08);
+}
+
+.bioCard {
+  margin-top: 30px;
+}
+
+.bioTextarea {
+  width: 100%;
+  min-height: 132px;
+
+  resize: vertical;
+
+  padding: 14px 16px;
+
+  border: 1px solid #ddd5e6;
+  border-radius: 9px;
+
+  background: #fffaff;
+
+  font-size: 15px;
+  line-height: 1.45;
+
+  color: #28242f;
+
+  outline: none;
+
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bioTextarea:focus {
+  border-color: #6868dd;
+  box-shadow: 0 0 0 3px rgba(72, 72, 217, 0.08);
+}
+
+.characterCount {
+  margin-top: 9px;
+
+  text-align: right;
+
+  color: #797184;
+  font-size: 13px;
+}
+
+/* ================= ACCOUNT STATUS ================= */
+
+.statusContent {
+  padding-top: 1px;
+}
+
+.selectWrapper {
+  position: relative;
+}
+
+.selectWrapper select {
+  padding-right: 42px;
+  cursor: pointer;
+}
+
+.selectIcon {
+  position: absolute;
+
+  right: 14px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  color: #726a7c;
+
+  pointer-events: none;
+}
+
+.toggleRow {
+  margin-top: 31px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+}
+
+.toggleRow h3 {
+  margin: 0 0 4px;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  color: #282430;
+}
+
+.toggleRow p {
+  margin: 0;
+
+  font-size: 13px;
+  color: #77707f;
+}
+
+.toggle {
+  width: 50px;
+  height: 28px;
+
+  padding: 3px;
+
+  border: none;
+  border-radius: 20px;
+
+  background: #e5deee;
+
+  cursor: pointer;
+
+  flex-shrink: 0;
+
+  transition: 0.2s ease;
+}
+
+.toggle span {
+  display: block;
+
+  width: 22px;
+  height: 22px;
+
+  border-radius: 50%;
+
+  background: white;
+
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+
+  transition: 0.2s ease;
+}
+
+.toggleActive {
+  background: #4949d9;
+}
+
+.toggleActive span {
+  transform: translateX(22px);
+}
+
+/* ================= SECURITY ================= */
+
+.securityCard {
+  margin-top: 30px;
+}
+
+.securityContent {
+  padding-top: 1px;
+}
+
+.securityLabel {
+  display: block;
+
+  margin-bottom: 11px;
+
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.resetButton {
+  width: 100%;
+  height: 47px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  border: 1px solid #ddd5e6;
+  border-radius: 8px;
+
+  background: #fffaff;
+
+  color: #2b2733;
+
+  font-size: 14px;
+
+  cursor: pointer;
+}
+
+.resetButton:hover {
+  background: #f8f3fa;
+}
+
+.lastChanged {
+  margin: 15px 0 0;
+
+  text-align: center;
+
+  font-size: 13px;
+  color: #837b8b;
+}
+
+.divider {
+  height: 1px;
+
+  margin: 29px 0 19px;
+
+  background: #f0e9f3;
+}
+
+/* ================= FOOTER ================= */
+
+.footer {
+  min-height: 69px;
+
+  padding: 0 39px;
+
+  border-top: 1px solid #eee5f3;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  color: #5d5666;
+  font-size: 14px;
+
+  background: #fffaff;
+}
+
+.footerLinks {
+  display: flex;
+  gap: 23px;
+}
+
+.footerLinks a {
+  color: #514b59;
+  text-decoration: none;
+}
+
+.footerLinks a:hover {
+  color: #3533bd;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 991px) {
+  .mainContent {
+    padding: 28px 25px 40px;
+  }
+
+  .pageHeading {
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .saveButton {
+    min-width: 170px;
+  }
+}
+
+@media (max-width: 767px) {
+  .topHeader {
+    height: 70px;
+    padding: 0 20px;
+  }
+
+  .searchBox {
+    width: 220px;
+  }
+
+  .headerRight {
+    gap: 18px;
+  }
+
+  .mainContent {
+    padding: 25px 16px 35px;
+  }
+
+  .pageHeading {
+    flex-direction: column;
+    margin-bottom: 28px;
+  }
+
+  .pageHeading h1 {
+    font-size: 27px;
+  }
+
+  .pageHeading p {
+    font-size: 15px;
+  }
+
+  .saveButton {
+    width: 100%;
+  }
+
+  .card {
+    padding: 23px 20px;
+  }
+
+  .profileArea {
+    margin-bottom: 25px;
+  }
+
+  .footer {
+    padding: 20px;
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .searchBox {
+    width: 170px;
+  }
+
+  .searchBox input {
+    font-size: 14px;
+  }
+
+  .notificationBtn {
+    display: none;
+  }
+
+  .topHeader {
+    padding: 0 14px;
+  }
+
+  .profileImage {
+    width: 105px;
+    height: 105px;
+  }
+}

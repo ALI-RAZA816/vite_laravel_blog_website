@@ -14,7 +14,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::select('id','name','email','role','join_date','status','image')->get();
+        return response()->json([
+            'status'=>true,
+            'users'=>$users
+        ],200);
     }
 
     /**
@@ -30,33 +34,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        try{
-            $request->validate([
-                'name'=>'required|string|max:50',
-                'emailaddress'=>'required|email',
-                'password'=>'required|min:5|confirmed',
-            ]);
-
-            User::create([
-                'name'=>$request->name,
-                'email'=>$request->emailaddress,
-                'password'=>Hash::make($request->password),
-                'created_at'=>now(),
-                'updated_at'=>now(),
-            ]);
-
-
-            return response()->json([
-                'status'=>200,
-                'message'=>'Account created'
-            ]);
-
-        }catch(ValidationException $e){
-            return response()->json([
-                'message' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
-        }
+       
     }
 
     /**
@@ -64,7 +42,18 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        
+        $user = User::select('id','name','username','email','bio','image','role','status')->where('id',$id)->first();
+        if(!$user){
+            return response()->json([
+                'status'=>401,
+                'user'=>'Unauthorized'
+            ],401);
+        }
+
+        return response()->json([
+            'status'=>200,
+            'user'=>$user
+        ],200);
     }
 
     /**
@@ -78,9 +67,55 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, int $id)
     {
-        //
+        $user = User::where("id",$id)->first();
+        if(!$user){
+            return response()->json([
+                'status'=>401,
+                'message'=>'Unauthorized'
+            ],401);
+        }
+
+        $request->validate([
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:3072',
+        ],[
+            'image'=>'File type must be png,jpeg,jg or 3MB'
+        ]);
+
+        $imageName = $user->image;
+        if($request->hasFile('image')){
+            if($user->image){
+                $path = public_path().'/uploads/';
+                $old_image = $path.$user->image;
+                if(file_exists($old_image)){
+                    unlink($old_image);
+                }
+    
+            }
+            // Upload new image
+            $image = $request->file('image');
+            $ext = $image->getClientOriginalExtension();
+            $imageName = time() . '.' . $ext;
+            $image->move(public_path('uploads'), $imageName);
+        }else{
+            $imageName = $user->image;
+        }
+        User::where('id',$id)->update([
+            'name'=>$request->name,
+            'username'=>$request->username,
+            'email'=>$request->email,
+            'role'=>$request->role,
+            'status'=>$request->status,
+            'bio'=>$request->bio,
+            'image'=>$imageName,
+        ]);
+
+
+        return response()->json([
+            'status'=>200,
+            'message'=>'User updated'
+        ],200);
     }
 
     /**

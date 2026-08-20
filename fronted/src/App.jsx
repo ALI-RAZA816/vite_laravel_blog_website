@@ -21,6 +21,7 @@ import { useContext } from "react";
 import {AppContext} from "./Context/AppContext";
 import ManageUsers from "./Pages/ManageUsers";
 import AdminSetting from "./Pages/AdminSetting";
+import EditUser from "./Pages/EditUser";
 
 function App() {
 
@@ -56,6 +57,7 @@ function App() {
                 </Route>
                 <Route path="users" element={<AdminHeader/>}>
                   <Route index element={<ManageUsers/>}/>
+                  <Route path="edituser/:id" element={<EditUser/>}/>
                 </Route>
                 <Route path="settings" element={<AdminHeader/>}>
                   <Route index element={<AdminSetting/>}/>
