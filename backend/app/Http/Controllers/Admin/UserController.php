@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-use Illuminate\Validation\ValidationException;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Controller;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -15,9 +15,15 @@ class UserController extends Controller
     public function index()
     {
         $users = User::select('id','name','email','role','join_date','status','image')->get();
+        $editor = User::where('role','=','editor')->get();
+        $this_week = User::whereDate('created_at','=',now())->get();
+        $blocked = User::where('status','=','blocked')->get();
         return response()->json([
             'status'=>true,
-            'users'=>$users
+            'users'=>$users,
+            'editor'=>$editor,
+            'this_week'=>$this_week,
+            'blocked'=>$blocked
         ],200);
     }
 

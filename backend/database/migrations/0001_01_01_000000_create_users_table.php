@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('username')->nullable();
             $table->string('email')->unique();
             $table->string('role')->default('user');
-            $table->string('join_date')->default(now()->format('M d, Y'));
+            $table->string('join_date');
             $table->string('status')->default('inactive');
             $table->string('password');
             $table->string('image')->nullable();

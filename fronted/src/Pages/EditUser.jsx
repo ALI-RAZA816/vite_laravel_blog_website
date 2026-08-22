@@ -21,8 +21,9 @@ const EditUser = () => {
 
     const {id} = useParams();
     const navigate = useNavigate();
+    const {setRefresh} = useContext(AppContext);
     const [imageErr, setImageErr]= useState(null);
-    const [accountActive, setAccountActive] = useState(true);
+    const [accountActive, setAccountActive] = useState(false);
     const [twoFactor, setTwoFactor] = useState(false);
     const [imagePreview, setImagePreview] = useState(null);
     const [formData, setFormData] = useState({
@@ -59,6 +60,7 @@ const EditUser = () => {
     // fetch single user data
     const viewSingleUser = async (id)=>{
         try{
+
             const token = localStorage.getItem('token');
             const response = await fetch(`${apiUrl}/users/${id}`,{
             method:'GET',
@@ -122,6 +124,7 @@ const EditUser = () => {
             console.log(data);
             if(response.ok){
                 if(data.status === 200){
+                    setRefresh(prev => prev + 1);
                     navigate('/admin-panel/users');
                 }
             }else if(response.status === 422){

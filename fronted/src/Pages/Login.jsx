@@ -10,6 +10,7 @@ import { AppContext } from "../Context/AppContext";
 
 export default function Login() {
 
+  const [restricted, setRestricted] = useState(null);
   const {showLoadingSpinner} = useContext(AppContext);
   const {setShowLoadingSpinner} = useContext(AppContext);
   const {disabledField} = useContext(AppContext);
@@ -85,6 +86,8 @@ export default function Login() {
           setShowLoadingSpinner(false);
            setDisabledField(false);
         }
+      }else if (data.status === 401){
+        setRestricted(data.message);
       }else{
         navigate('/');
         console.log(data);
@@ -111,6 +114,7 @@ export default function Login() {
         <div className={styles.card}>
           <h2 className={styles.cardTitle}>Welcome back</h2>
           <p className={styles.cardSubtitle}>Sign in to your editorial account</p>
+          <p className="text-danger">{restricted}</p>
           <form onSubmit={loginAccount}>
             <div>
               <label>Email Address</label>

@@ -11,43 +11,46 @@ import { AppContext } from "../Context/AppContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { apiUrl, baseUrl } from "../Http/Http";
 
-const statCards = [
-  {
-    icon: <BsPeopleFill />,
-    iconBg: "#e6e0f8",
-    iconColor: "#5b3fd9",
-    label: "TOTAL USERS",
-    value: "1,284",
-  },
-  {
-    icon: <BsShieldFillCheck />,
-    iconBg: "#faf1d8",
-    iconColor: "#c98a1a",
-    label: "EDITORS",
-    value: "12",
-  },
-  {
-    icon: <BsGraphUpArrow />,
-    iconBg: "#e6e0f8",
-    iconColor: "#5b3fd9",
-    label: "NEW THIS WEEK",
-    value: "+42",
-  },
-  {
-    icon: <BsSlashCircleFill />,
-    iconBg: "#fbe1e1",
-    iconColor: "#d94f4f",
-    label: "BLOCKED",
-    value: "3",
-  },
-];
-
-
 
 const ManageUsers = () => {
 
+  const {allUsers} = useContext(AppContext);
+  const {thisWeek} = useContext(AppContext);
+  const {Blocked} = useContext(AppContext);
+  const {allEditors} = useContext(AppContext);
+  
+  const statCards = [
+    {
+      icon: <BsPeopleFill />,
+      iconBg: "#e6e0f8",
+      iconColor: "#5b3fd9",
+      label: "TOTAL USERS",
+      value: allUsers.length < 9 ? `0${allUsers.length}` : allUsers.length,
+    },
+    {
+      icon: <BsShieldFillCheck />,
+      iconBg: "#faf1d8",
+      iconColor: "#c98a1a",
+      label: "EDITORS",
+      value: allEditors.length < 9 ? `0${allEditors.length}` : allEditors.length,
+    },
+    {
+      icon: <BsGraphUpArrow />,
+      iconBg: "#e6e0f8",
+      iconColor: "#5b3fd9",
+      label: "NEW THIS WEEK",
+      value: thisWeek.length < 9 ? `+0${thisWeek.length}` : `0${thisWeek.length}`,
+    },
+    {
+      icon: <BsSlashCircleFill />,
+      iconBg: "#fbe1e1",
+      iconColor: "#d94f4f",
+      label: "BLOCKED",
+      value: Blocked.length < 9 ? `+0${Blocked.length}` : `0${Blocked.length}`
+    },
+  ];
 
- const {allUsers} = useContext(AppContext);
+ 
 
   return (
     <div className={styles.content}>
@@ -64,10 +67,10 @@ const ManageUsers = () => {
             <BsDownload className="me-2" />
             Export List
           </button>
-          <button className={`d-flex align-items-center ${styles.addBtn}`}>
+          <Link to="/admin-panel/users/add-new-user"><button className={`d-flex align-items-center ${styles.addBtn}`}>
             <BsPersonPlusFill className="me-2" />
             Add New User
-          </button>
+          </button></Link>
         </div>
       </div>
 

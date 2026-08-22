@@ -1,0 +1,377 @@
+.page {
+  background-color: #f5f3fb;
+  min-height: 100vh;
+  width: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* ---------- Header ---------- */
+.header {
+  background-color: #ffffff;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #ececf4;
+}
+
+.brand {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+.searchBox {
+  background-color: #f4f2fb;
+  border-radius: 0.6rem;
+  padding: 0.5rem 0.9rem;
+  width: 260px;
+}
+
+.searchIcon {
+  color: #9b96b5;
+  flex-shrink: 0;
+}
+
+.searchInput {
+  border: none;
+  background: transparent;
+  outline: none;
+  margin-left: 0.5rem;
+  font-size: 0.9rem;
+  width: 100%;
+  color: #33334d;
+}
+
+.searchInput::placeholder {
+  color: #a7a3bd;
+}
+
+.iconBtn {
+  background-color: transparent;
+  border: none;
+  color: #4b4b63;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.iconBtn:hover {
+  background-color: #f1eefa;
+}
+
+/* ---------- Body ---------- */
+.body {
+  padding: 2rem;
+}
+
+.breadcrumb {
+  font-size: 0.85rem;
+  color: #7a7693;
+  margin-bottom: 0.5rem;
+}
+
+.breadcrumbSep {
+  color: #c3c0d6;
+}
+
+.breadcrumbActive {
+  color: #4b4b63;
+  font-weight: 500;
+}
+
+.pageTitle {
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 1.75rem;
+}
+
+.grid {
+  align-items: flex-start;
+}
+
+.leftCol {
+  flex: 2 1 0;
+  min-width: 0;
+}
+
+.rightCol {
+  flex: 1 1 0;
+  min-width: 260px;
+}
+
+/* ---------- Card ---------- */
+.card {
+  background-color: #ffffff;
+  border-radius: 0.9rem;
+  padding: 1.75rem;
+  box-shadow: 0 1px 3px rgba(20, 12, 60, 0.05);
+}
+
+.cardTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 0;
+}
+
+.optionalTag {
+  font-size: 0.8rem;
+  color: #a7a3bd;
+}
+
+/* ---------- Photo upload ---------- */
+.photoRow {
+  margin-top: 1.25rem;
+  gap: 1.25rem;
+}
+
+.photoUpload {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background-color: #efe9fb;
+  color: #9b7fe0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  overflow: hidden;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.photoUpload:hover {
+  background-color: #e5dcf9;
+}
+
+.photoPreview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.uploadLabel {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-top: 0.2rem;
+}
+
+.photoText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.photoTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #2c2c44;
+}
+
+.photoHint {
+  font-size: 0.82rem;
+  color: #9b96b5;
+}
+
+/* ---------- Form fields ---------- */
+.label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #2c2c44;
+  margin-bottom: 0.4rem;
+}
+
+.hint {
+  font-size: 0.8rem;
+  color: #a7a3bd;
+}
+
+.input,
+.select {
+  width: 100%;
+  border: 1px solid #e3e0ef;
+  border-radius: 0.55rem;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.9rem;
+  color: #2c2c44;
+  background-color: #ffffff;
+  outline: none;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.input::placeholder {
+  color: #b7b3cc;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  border-color: #8c6ee0;
+  box-shadow: 0 0 0 3px rgba(140, 110, 224, 0.15);
+}
+
+.select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%237a7693' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  padding-right: 2.2rem;
+  cursor: pointer;
+}
+
+.textarea {
+  width: 100%;
+  border: 1px solid #e3e0ef;
+  border-radius: 0.55rem;
+  padding: 0.75rem 0.85rem;
+  font-size: 0.9rem;
+  color: #2c2c44;
+  resize: vertical;
+  min-height: 120px;
+  outline: none;
+}
+
+.textarea::placeholder {
+  color: #b7b3cc;
+}
+
+.charCount {
+  text-align: right;
+  font-size: 0.78rem;
+  color: #a7a3bd;
+  margin-top: 0.4rem;
+}
+
+/* ---------- Toggle switch ---------- */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #d9d5e8;
+  border-radius: 999px;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  transition: transform 0.15s ease-in-out;
+}
+
+.switch input:checked + .slider {
+  background-color: #6d4fd6;
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(18px);
+}
+
+/* ---------- Generate password button ---------- */
+.generateBtn {
+  width: 100%;
+  background-color: #f4f2fb;
+  border: 1px solid #e3e0ef;
+  color: #6d4fd6;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.55rem 0.9rem;
+  border-radius: 0.55rem;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.generateBtn:hover {
+  background-color: #ece7fa;
+}
+
+/* ---------- Checkbox row ---------- */
+.checkboxRow {
+  align-items: flex-start;
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  margin-top: 0.2rem;
+  accent-color: #6d4fd6;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.checkboxLabel {
+  font-size: 0.85rem;
+  color: #4b4b63;
+  cursor: pointer;
+}
+
+.adduser{
+  height:50px;
+  width: 100%;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-weight: 550;
+  border-radius: 100px;
+  background-color: #4C32C2;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .grid {
+    flex-direction: column;
+  }
+
+  .leftCol,
+  .rightCol {
+    width: 100%;
+    flex: 1 1 100%;
+  }
+
+  .searchBox {
+    width: 160px;
+  }
+}
+
+@media (max-width: 576px) {
+  .body {
+    padding: 1.25rem;
+  }
+
+  .card {
+    padding: 1.25rem;
+  }
+
+  .header {
+    padding: 1rem;
+  }
+
+  .searchBox {
+    display: none !important;
+  }
+}

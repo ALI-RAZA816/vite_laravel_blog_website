@@ -7,7 +7,11 @@ export const AppContext = createContext();
 const AppContextProvider = ({children})=>{
 
     // all users data 
+    const [refresh, setRefresh] = useState(0);
     const [allUsers, setAllUsers] = useState([]);
+    const [Blocked, setBlocked] = useState([]);
+    const [thisWeek, setThisWeek] = useState([]);
+    const [allEditors, setAllEditors] = useState([]);
     // hide and show loading spinner 
     const[showLoadingSpinner, setShowLoadingSpinner] = useState(false); 
     // disabled field on request 
@@ -34,9 +38,13 @@ const AppContextProvider = ({children})=>{
                 }
             });
             const data = await response.json();
+            console.log(data);
             if(response.ok){
                 if(data.status === true){
                     setAllUsers(data.users);
+                    setAllEditors(data.editor);
+                    setThisWeek(data.this_week);
+                    setBlocked(data.blocked);
                 }
             }
         }catch(error){
@@ -47,7 +55,7 @@ const AppContextProvider = ({children})=>{
 
     useEffect(()=>{
         fetchUsers();
-    },[]);
+    },[refresh]);
 
     return (
         <AppContext.Provider value={{
@@ -59,6 +67,10 @@ const AppContextProvider = ({children})=>{
             disabledField,
             setDisabledField,
             allUsers,
+            allEditors,
+            thisWeek,
+            Blocked,
+            setRefresh
         }}>
             {children}
         </AppContext.Provider>
