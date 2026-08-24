@@ -12,8 +12,10 @@ import {
 import styles from "../assets/AdminCategories.module.css";
 import AdminAddCategoryModel from "./AdminAddCategoryModel";
 import { AppContext } from "../Context/AppContext";
+import { LuPalette } from "react-icons/lu";
+import { IoGlobeSharp } from "react-icons/io5";
 
-const categories = [
+const category = [
   {
     icon: <BsFlower1 />,
     iconBg: "#fbeecb",
@@ -51,6 +53,7 @@ const categories = [
 const AdminCategories = () => {
 
     const {CategoryModelHandler} = useContext(AppContext);
+    const {categories} = useContext(AppContext);
 
   return (
     <>
@@ -84,27 +87,27 @@ const AdminCategories = () => {
                 <tbody>
                 {categories.map((cat, index) => (
                     <tr key={index}>
-                    <td>
-                        <div className="d-flex align-items-center gap-3">
-                        <div
-                            className={styles.catIcon}
-                            style={{ backgroundColor: cat.iconBg, color: cat.iconColor }}
-                        >
-                            {cat.icon}
-                        </div>
-                        <span className={styles.catName}>{cat.name}</span>
-                        </div>
-                    </td>
-                    <td className={styles.slugCell}>{cat.slug}</td>
-                    <td>
-                        <span className={styles.postCountBadge}>{cat.posts}</span>
-                    </td>
-                    <td>
-                        <div className="d-flex align-items-center justify-content-end gap-3">
-                        <BsPencilFill className={styles.actionIcon} />
-                        <BsTrashFill className={`${styles.actionIcon} ${styles.deleteIcon}`} />
-                        </div>
-                    </td>
+                        <td>
+                            <div className="d-flex align-items-center gap-3">
+                            <div
+                                className={styles.catIcon}
+                                style={{ backgroundColor: cat.iconBg, color: cat.iconColor }}
+                            >
+                                {cat.icon === 'leaf' ? <BsFlower1 /> : '' || cat.icon === 'sprout' ? <span style={{ fontSize: "14px" }}>&#127807;</span> : '' || cat.icon === 'book' ?  <BsBook />  : '' || cat.icon === 'home' ?  <BsHouseDoor /> : '' || cat.icon === 'palette' ?  <LuPalette /> : '' || cat.icon === 'globe' ?  <IoGlobeSharp /> : ''}
+                            </div>
+                            <span className={styles.catName}>{cat.name}</span>
+                            </div>
+                        </td>
+                        <td className={styles.slugCell}>{cat.slug}</td>
+                        <td>
+                            <span className={styles.postCountBadge}>{cat.post_count}</span>
+                        </td>
+                        <td>
+                            <div className="d-flex align-items-center justify-content-end gap-3">
+                            <BsPencilFill className={styles.actionIcon} />
+                            <BsTrashFill className={`${styles.actionIcon} ${styles.deleteIcon}`} />
+                            </div>
+                        </td>
                     </tr>
                 ))}
                 </tbody>

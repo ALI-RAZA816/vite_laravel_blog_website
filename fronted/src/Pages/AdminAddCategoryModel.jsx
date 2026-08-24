@@ -8,6 +8,7 @@ import { FaHouse } from "react-icons/fa6";
 import { LuPalette } from "react-icons/lu";
 import { IoGlobeSharp } from "react-icons/io5";
 import { AppContext } from "../Context/AppContext";
+import { apiUrl } from "../Http/Http";
 
 
 const icons = [
@@ -20,12 +21,109 @@ const icons = [
 ];
 
 const AdminAddCategoryModel = ({ onClose }) => {
-  const [selectedIcon, setSelectedIcon] = useState("sprout");
+
+  
+  const {setRefresh} = useContext(AppContext);
   const {showCategoryModel} = useContext(AppContext);
   const {CategoryModelHandler} = useContext(AppContext);
+  const [selectedIcon, setSelectedIcon] = useState("sprout");
+
+  const [formData, setFormData] = useState({
+    cat_name:'',
+    slug:'',
+    description:'',
+    icon_name:''
+  });
+  const [formDataErr, setFormDataErr] = useState({
+    cat_nameErr:'',
+    slugErr:'',
+    descriptionErr:'',
+    icon_nameErr:''
+  });
+
+
+  const formHandler = (event)=>{
+    const {name, value} = event.target;
+    setFormData((prev)=>({
+      ...prev,
+      [name]:value
+    }));
+  }
+
+  const submitCategory = async (event)=>{
+    event.preventDefault();
+    if(!formData.cat_name){
+      setFormDataErr({
+        cat_nameErr:'The category name is required'
+      });
+      return;
+    }
+    if(!formData.slug){
+      setFormDataErr({
+        slugErr:'The slug-name is required'
+      });
+      return;
+    }
+    if(!selectedIcon){
+      setFormDataErr({
+        slugErr:'The icon-name is required'
+      });
+      return;
+    }
+
+    const payload = {
+      ...formData,
+      icon_name:selectedIcon
+    }
+
+    const token = localStorage.getItem('token');
+    try{
+      const response = await fetch(`${apiUrl}/categories`,{
+        method:'POST',
+        headers:{
+          'Content-type':'application/json',
+          'Accept':'application/json',
+          'Authorization':`Bearer ${token}`
+        },
+        body:JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+      console.log(data);
+      if(!response.ok){
+        if(data?.errors?.cat_name){
+          setFormDataErr({
+            cat_nameErr:data?.errors.cat_name[0]
+          });
+        }else if(data?.errors.slug){
+          setFormDataErr({
+            slugErr:data?.errors.slug[0]
+          });
+        }
+      }else{
+        setFormData({
+          cat_name:'',
+          slug:'',
+          description:'',
+          icon_name:''
+        });
+        setFormDataErr({
+          cat_nameErr:'',
+          slugErr:'',
+          descriptionErr:'',
+          icon_nameErr:''
+        })
+        setRefresh(prev => prev + 1);
+        CategoryModelHandler();
+      }
+
+    }catch(error){
+      console.log(error);
+    }
+  }
 
   return (
-    <div className={`${styles.panel} ${showCategoryModel && `${styles.hide}`}`}>
+    <div  className={`${styles.panel} ${showCategoryModel && `${styles.hide}`}`}>
       {/* Header */}
       <div className={`d-flex align-items-center justify-content-between ${styles.header}`}>
         <h4 className={styles.title}>Add New Category</h4>
@@ -33,15 +131,19 @@ const AdminAddCategoryModel = ({ onClose }) => {
       </div>
 
       {/* Body */}
-      <div className={styles.body}>
+      <form onSubmit={submitCategory} className={styles.body}>
         {/* Category Name */}
         <div className={styles.field}>
           <label className={styles.label}>Category Name</label>
           <input
             type="text"
+            onChange={formHandler}
+            value={formData.cat_name}
+            name="cat_name"
             className={styles.input}
             placeholder="e.g., Sustainable Living"
           />
+          <span className="text-danger">{formDataErr.cat_nameErr}</span>
         </div>
 
         {/* Slug */}
@@ -51,20 +153,28 @@ const AdminAddCategoryModel = ({ onClose }) => {
             <span className={styles.slugPrefix}>blog.com/</span>
             <input
               type="text"
+              onChange={formHandler}
+              value={formData.slug}
+              name="slug"
               className={styles.slugInput}
               placeholder="sustainable-living"
             />
           </div>
+             <span className="text-danger">{formDataErr.slugErr}</span>
         </div>
 
         {/* Description */}
         <div className={styles.field}>
           <label className={styles.label}>Description</label>
           <textarea
+          onChange={formHandler}
+            value={formData.description}
+            name="description"
             className={styles.textarea}
             rows={4}
             placeholder="Brief overview of this category..."
-          ></textarea>
+          />
+           <span className="text-danger">{formDataErr.descriptionErr}</span>
         </div>
 
         {/* Select Icon */}
@@ -84,16 +194,10 @@ const AdminAddCategoryModel = ({ onClose }) => {
               </button>
             ))}
           </div>
+           {/* <span className="text-danger">{formDataErr.icon_nameErr}</span> */}
         </div>
-      </div>
-
-      {/* Footer */}
-      <div className={`d-flex align-items-center gap-3 ${styles.footer}`}>
-        <button className={styles.cancelBtn} onClick={onClose}>
-          Cancel
-        </button>
-        <button className={styles.createBtn}>Create Category</button>
-      </div>
+        <button type="submit" className={styles.createBtn}>Create Category</button>
+      </form>
     </div>
   );
 };

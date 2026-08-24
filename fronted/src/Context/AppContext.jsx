@@ -10,6 +10,7 @@ const AppContextProvider = ({children})=>{
     const [deleteModel, setDeleteModel] = useState(false);
     const [deletId, setDeleteId] = useState(null);
     const [refresh, setRefresh] = useState(0);
+    const [categories, setCategories] = useState([]);
     const [allUsers, setAllUsers] = useState([]);
     const [Blocked, setBlocked] = useState([]);
     const [thisWeek, setThisWeek] = useState([]);
@@ -45,7 +46,6 @@ const AppContextProvider = ({children})=>{
                 }
             });
             const data = await response.json();
-            console.log(data);
             if(response.ok){
                 if(data.status === true){
                     setAllUsers(data.users);
@@ -59,9 +59,33 @@ const AppContextProvider = ({children})=>{
         }
     }
 
+    // fetch category
+    const fetchCategory = async ()=>{
+        try{
+            const token = localStorage.getItem('token');
+            const response = await fetch(`${apiUrl}/categories`,{
+                method:'GET',
+                headers:{
+                    'Content-type':'application/json',
+                    'Accept':'application/json',
+                    'Authorization':`Bearer ${token}`
+                }
+            });
+            const data = await response.json();
+            console.log(data.category);
+            if(response.ok){
+                setCategories(data.category);
+                
+            }
+        }catch(error){
+            console.log(error);
+        }
+    }
+
 
     useEffect(()=>{
         fetchUsers();
+        fetchCategory();
     },[refresh]);
 
     return (
@@ -82,6 +106,7 @@ const AppContextProvider = ({children})=>{
             setDeleteModel,
             deletId,
             setAllUsers,
+            categories,
             DeleteModelHandler,
         }}>
             {children}
