@@ -46,7 +46,7 @@ class CategoryController extends Controller
         Category::create([
             'name'=>$request->cat_name,
             'slug'=>$request->slug,
-            'description'=>$request->desctiption,
+            'description'=>$request->description,
             'icon'=>$request->icon_name
         ]);
 
@@ -59,7 +59,18 @@ class CategoryController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $category = Category::where('id',$id)->first();
+
+        if(!$category){
+            return response()->json([
+                'message'=>'Category not found'
+            ],404);
+        }
+
+        return response()->json([
+            'category'=>$category
+        ],200);
+    
     }
 
     /**
@@ -75,7 +86,23 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $category = Category::where('id',$id)->first();
+        if(!$category){
+            return response()->json([
+                'message'=>'Category not found'
+            ],404);
+        }
+        
+        Category::where('id',$request->id)->update([
+            'name'=>$request->cat_name,
+            'slug'=>$request->slug,
+            'description'=>$request->description,
+            'icon'=>$request->icon
+        ]);
+
+        return response()->json([
+            'message'=>'Category Updated'
+        ]);
     }
 
     /**

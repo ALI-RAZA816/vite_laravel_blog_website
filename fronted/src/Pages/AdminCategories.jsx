@@ -14,6 +14,7 @@ import AdminAddCategoryModel from "./AdminAddCategoryModel";
 import { AppContext } from "../Context/AppContext";
 import { LuPalette } from "react-icons/lu";
 import { IoGlobeSharp } from "react-icons/io5";
+import EditAdminCategory from '../Pages/EditAdminCategory';
 
 const category = [
   {
@@ -52,11 +53,14 @@ const category = [
 
 const AdminCategories = () => {
 
-    const {CategoryModelHandler} = useContext(AppContext);
     const {categories} = useContext(AppContext);
+    const {viewCategory} = useContext(AppContext);
+    const {CategoryModelHandler} = useContext(AppContext);
+    const {EditCategoryModelHandler} = useContext(AppContext);
 
   return (
     <>
+        
         <div className={styles.content}>
         {/* Heading */}
         <div className="d-flex justify-content-between align-items-start mb-4">
@@ -104,8 +108,8 @@ const AdminCategories = () => {
                         </td>
                         <td>
                             <div className="d-flex align-items-center justify-content-end gap-3">
-                            <BsPencilFill className={styles.actionIcon} />
-                            <BsTrashFill className={`${styles.actionIcon} ${styles.deleteIcon}`} />
+                                <BsPencilFill onClick={()=>{EditCategoryModelHandler(), viewCategory(cat.id)}} className={styles.actionIcon} />
+                                <BsTrashFill className={`${styles.actionIcon} ${styles.deleteIcon}`} />
                             </div>
                         </td>
                     </tr>
@@ -141,6 +145,7 @@ const AdminCategories = () => {
         </div>
         </div>
         <AdminAddCategoryModel/>
+        <EditAdminCategory/>
     </>
   );
 };

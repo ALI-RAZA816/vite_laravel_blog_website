@@ -23,8 +23,12 @@ const AppContextProvider = ({children})=>{
     const isAdmin = location.pathname === '/register' || location.pathname === '/login' || location.pathname === '/admin-login' || location.pathname === '/admin-panel' || location.pathname === '/admin-panel/dashboard' || location.pathname === '/admin-panel/posts' || location.pathname === '/admin-panel/posts/add-post' || location.pathname === '/admin-panel/categories' || location.pathname === '/admin-panel/comments' || location.pathname === '/admin-panel/users' || location.pathname === '/admin-panel/settings' || location.pathname.startsWith('/admin-panel');
 
     const [showCategoryModel, setShowCategoryModel] = useState(false);
+    const [showEditCategoryModel, setShowEditCategoryModel] = useState(false);
     const CategoryModelHandler = ()=>{
         setShowCategoryModel(!showCategoryModel);
+    }
+    const EditCategoryModelHandler = ()=>{
+        setShowEditCategoryModel(!showEditCategoryModel);
     }
 
     // modelHandler 
@@ -83,6 +87,52 @@ const AppContextProvider = ({children})=>{
     }
 
 
+    // view category 
+    const [selectedIcon, setSelectedIcon] = useState("sprout");
+    const [editCategory, setEditCategory] = useState({
+            id:'',
+            cat_name:'',
+            slug:'',
+            description:'',
+            icon_name:''
+    });
+
+    const formHandler = (event)=>{
+        const {name, value} = event.target;
+        setEditCategory((prev)=> ({
+            ...prev,
+            [name]:value
+        }));
+    }
+    const viewCategory = async (cat_id)=>{
+        const token = localStorage.getItem('token');
+        try{
+            const response = await fetch(`${apiUrl}/categories/${cat_id}`,{
+                method:'GET',
+                headers:{
+                    'Content-type':'application/json',
+                    'Accpet':'application/json',
+                    'Authorization':`Bearer ${token}`,
+                }
+            });
+
+            const data = await response.json();
+            console.log(data);
+            if(response.ok){
+                setEditCategory({
+                    id:data.category.id,
+                    cat_name:data.category.name,
+                    slug:data.category.slug,
+                    description:data.category.description,
+                });
+                setSelectedIcon(data.category.icon);
+            }
+        }catch(error){
+            console.log(error);
+        }
+    }
+
+
     useEffect(()=>{
         fetchUsers();
         fetchCategory();
@@ -108,6 +158,14 @@ const AppContextProvider = ({children})=>{
             setAllUsers,
             categories,
             DeleteModelHandler,
+            showEditCategoryModel,
+            EditCategoryModelHandler,
+            viewCategory,
+            editCategory,
+            formHandler,
+            selectedIcon,
+            setSelectedIcon,
+            setShowEditCategoryModel
         }}>
             {children}
         </AppContext.Provider>
