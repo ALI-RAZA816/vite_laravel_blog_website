@@ -1,6 +1,48 @@
+import { useContext, useState } from "react";
 import styles from "../assets/DeleteModel.module.css";
+import { AppContext } from "../Context/AppContext";
+import { apiUrl } from "../Http/Http";
 
 const DeleteModel = () => {
+
+  const {DeleteModelHandler} = useContext(AppContext);
+  const {deletId} = useContext(AppContext);
+  const {deleteModel} = useContext(AppContext);
+  const {setDeleteModel} = useContext(AppContext);
+  const {setRefresh} = useContext(AppContext);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
+  const deleteUser = async (delete_id)=>{
+    const token = localStorage.getItem('token');
+    try{
+      const response = await fetch(`${apiUrl}/users/${delete_id}`,{
+        method:'DELETE',
+        headers:{
+          'Content-type':'application/json',
+          'Accept':'application/json',
+          'Authorization':`Bearer ${token}`
+        }
+      })
+
+      const data = await response.json();
+      console.log(data);
+      if(response.ok){
+        setDeleteModel(!deleteModel);
+        setConfirmDelete(false);
+        setRefresh(prev => prev + 1);
+      }
+    }catch(error){
+      console.log(error);
+    }
+    
+  }
+
+  const confirmDeleteHandler = ()=>{
+    setConfirmDelete(true);
+    if(confirmDelete === true){
+      deleteUser(deletId);
+    }
+  }
   
   return (
     <div
@@ -46,12 +88,13 @@ const DeleteModel = () => {
 
         {/* Actions */}
         <div className="d-flex gap-3">
-          <button
+          <button onClick={confirmDeleteHandler}
             type="button"
             className={`${styles.deleteBtn} btn flex-fill fw-semibold`}
           > Delete
           </button>
           <button
+          onClick={DeleteModelHandler}
             type="button"
             className={`${styles.cancelBtn} btn flex-fill fw-semibold`}
           >

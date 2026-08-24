@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { BsDownload, BsPersonPlusFill, BsPeopleFill, BsShieldFillCheck, BsGraphUpArrow, BsSlashCircleFill, BsFilter,
   BsThreeDotsVertical,
   BsChevronLeft,
@@ -15,9 +15,11 @@ import { apiUrl, baseUrl } from "../Http/Http";
 const ManageUsers = () => {
 
   const {allUsers} = useContext(AppContext);
+  const {setAllUsers} = useContext(AppContext);
   const {thisWeek} = useContext(AppContext);
   const {Blocked} = useContext(AppContext);
   const {allEditors} = useContext(AppContext);
+  const {DeleteModelHandler} = useContext(AppContext);
   
   const statCards = [
     {
@@ -50,6 +52,48 @@ const ManageUsers = () => {
     },
   ];
 
+
+  const searchTimeout = useRef(null);
+  const searchHandler = async (searchTerm)=>{
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${apiUrl}/search?query=${searchTerm}`,{
+      method:'POST',
+      headers:{
+        'Content-type':'application/json',
+        'Accept':'application/json',
+        'Authorization':`Bearer ${token}`,
+      }
+    });
+    const data = await response.json();
+    if(response.ok){
+      setAllUsers(data.users);
+    }
+
+  }
+
+
+  const getValue = (event)=>{
+    const searchTerm = event.target.value;
+    clearTimeout(searchTimeout.current);
+    searchTimeout.current =  setTimeout(()=>{
+      searchHandler(searchTerm);
+    },600);
+  }
+
+  const getRole = (event)=>{
+    const searchTerm = event.target.value;
+    clearTimeout(searchTimeout.current);
+    searchTimeout.current =  setTimeout(()=>{
+      searchHandler(searchTerm);
+    },600);
+  }
+  const getStatus = (event)=>{
+    const searchTerm = event.target.value;
+    clearTimeout(searchTimeout.current);
+    searchTimeout.current =  setTimeout(()=>{
+      searchHandler(searchTerm);
+    },600);
+  }
  
 
   return (
@@ -99,8 +143,24 @@ const ManageUsers = () => {
         <div className={`d-flex justify-content-between align-items-center ${styles.tableHeader}`}>
           <h6 className={styles.tableTitle}>REGISTERED USERS</h6>
           <div className="d-flex align-items-center gap-3">
-            <BsFilter className={styles.headerIcon} />
-            <BsThreeDotsVertical className={styles.headerIcon} />
+            <input type="text" onChange={getValue} className="form-control bg-none shadow-none" style={{width:'200px'}}  placeholder="Search user, email" />
+            {/* <div> */}
+              <select onChange={getRole} className="form-select" name="" id="">
+                <option value="all">Role: All</option>
+                <option value="editor">Editor</option>
+                <option value="admin">Admin</option>
+                <option value="user">User</option>
+                <option value="author">Author</option>
+              </select>
+            {/* </div> */}
+            {/* <div> */}
+              <select onChange={getStatus}  className="form-select" name="" id="">
+                <option value="all">Status: All</option>
+                <option value="blocked">Blocked</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            {/* </div> */}
           </div>
         </div>
 
@@ -161,7 +221,9 @@ const ManageUsers = () => {
                     <Link to={`/admin-panel/users/edituser/${user.id}`}>
                       <MdOutlineModeEdit className={styles.editpencil}/>
                     </Link>
-                    <RiDeleteBin5Fill className={styles.deleteIcon}  />
+                    <button className="p-0" disabled={user.role === 'admin'} style={{background:'none !important',color:'none',backgroundColor:'none !important',outline:'none',border:'none'}}>
+                      <RiDeleteBin5Fill  onClick={()=>DeleteModelHandler(user.id)} className={styles.deleteIcon}  />
+                    </button>
                     {/* <BsThreeDotsVertical className={styles.actionsIcon} /> */}
                   </td>
                 </tr>

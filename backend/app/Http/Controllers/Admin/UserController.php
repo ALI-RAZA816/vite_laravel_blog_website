@@ -129,6 +129,25 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::where('id',$id)->find($id);
+        if(!$user){
+            return response()->json([
+                'message'=>'User not found'
+            ],404);
+        }
+
+        $path = public_path('/uploads/');
+        if($user->image){
+            $old_image = $path. $user->image;
+            if(file_exists($old_image)){
+                unlink($old_image);
+            }
+        }
+
+        $user->delete();
+        return response()->json([
+            'message'=>'User deleted successfully'
+        ],200);
+
     }
 }

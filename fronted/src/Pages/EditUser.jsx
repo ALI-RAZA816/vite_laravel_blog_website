@@ -71,7 +71,6 @@ const EditUser = () => {
             }
             });
             const data = await response.json();
-            console.log(data);
             if(response.ok){
                 if(data.user){
                     const user = data.user;
@@ -93,7 +92,7 @@ const EditUser = () => {
     }
 
     useEffect(()=>{
-    viewSingleUser(id);
+        viewSingleUser(id);
     },[id]);
 
 
@@ -281,7 +280,7 @@ const EditUser = () => {
                                 <p>Disable to prevent login</p>
                             </div>
 
-                            <button type="button" className={`${styles.toggle} ${accountActive ? styles.toggleActive : ""}`}onClick={() => setAccountActive((prev) => !prev)}><span></span></button>
+                            <button type="button" className={`${styles.toggle} ${accountActive ? styles.toggleActive : " "}`} onClick={() => setAccountActive((prev) => !prev)}><span></span></button>
                         </div>
                     </div>
                     </section>

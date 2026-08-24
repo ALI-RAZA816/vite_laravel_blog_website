@@ -110,6 +110,21 @@ class AuthController extends Controller
         }
     }
 
+
+    public function searchUser(Request $request){
+        $search_term = $request->query('query');
+        if($search_term === 'all'){
+            $search_user = User::all();
+            return response()->json([
+                'users'=>$search_user
+            ]);
+        }
+        $search_user = User::where('name','LIKE','%'. $search_term . '%')->orWhere('email','LIKE','%'. $search_term . '%')->orWhere('role','LIKE','%'. $search_term . '%')->orWhere('status',$search_term )->get();
+        return response()->json([
+            'users'=>$search_user
+        ]);
+    }
+
     public function logoutAccount(Request $request){
         if($request->user()){
             $user = $request->user();

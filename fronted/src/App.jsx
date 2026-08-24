@@ -22,7 +22,6 @@ import {AppContext} from "./Context/AppContext";
 import ManageUsers from "./Pages/ManageUsers";
 import AdminSetting from "./Pages/AdminSetting";
 import EditUser from "./Pages/EditUser";
-import DeleteModel from "./Pages/DeleteModel";
 import AddNewUser from "./Pages/AddNewUser";
 
 function App() {
@@ -35,7 +34,6 @@ function App() {
         
             <Routes>
               <Route path='/' element={<Home />} />
-              {/* <Route path='/delete' element={<DeleteModel/>} /> */}
               <Route path='/all-posts' element={<AllPosts/>}/>
               <Route path='/blog-post' element={<BlogPost/>}/>
               <Route path='/about' element={<About/>}/>

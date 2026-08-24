@@ -7,6 +7,8 @@ export const AppContext = createContext();
 const AppContextProvider = ({children})=>{
 
     // all users data 
+    const [deleteModel, setDeleteModel] = useState(false);
+    const [deletId, setDeleteId] = useState(null);
     const [refresh, setRefresh] = useState(0);
     const [allUsers, setAllUsers] = useState([]);
     const [Blocked, setBlocked] = useState([]);
@@ -24,6 +26,11 @@ const AppContextProvider = ({children})=>{
         setShowCategoryModel(!showCategoryModel);
     }
 
+    // modelHandler 
+    const DeleteModelHandler = (deleteId)=>{
+        setDeleteModel(!deleteModel);
+        setDeleteId(deleteId);
+    }
 
     // fetch all users
     const fetchUsers = async ()=>{
@@ -70,7 +77,12 @@ const AppContextProvider = ({children})=>{
             allEditors,
             thisWeek,
             Blocked,
-            setRefresh
+            setRefresh,
+            deleteModel,
+            setDeleteModel,
+            deletId,
+            setAllUsers,
+            DeleteModelHandler,
         }}>
             {children}
         </AppContext.Provider>
