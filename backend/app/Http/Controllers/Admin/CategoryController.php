@@ -110,6 +110,16 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $category = Category::where('id', $id)->first();
+        if(!$category){
+            return response()->json([
+                'message'=>'Category not found'
+            ]);
+        }
+
+        $category->delete();
+        return response()->json([
+            'message'=>'Category Deleted'
+        ]);
     }
 }

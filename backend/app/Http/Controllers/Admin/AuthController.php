@@ -7,11 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
+use App\Events\UserRegistered;
 
 class AuthController extends Controller
 {
     public function createAccount(Request $request){
-         try{
+        try{
             $request->validate([
                 'name'=>'required|string|max:50',
                 'emailaddress'=>'required|email',
@@ -29,7 +30,7 @@ class AuthController extends Controller
                 $image->move(public_path('uploads'),$imageName);
             };
             $date = date('M d, y');
-            User::create([
+            $user = User::create([
                 'name'=>$request->name,
                 'username'=>$request->username ?? null,
                 'role'=>$request->role ?? 'user',
@@ -43,6 +44,7 @@ class AuthController extends Controller
                 'updated_at'=>now(),
             ]);
 
+            UserRegistered::dispatch($user, $request->password, $request->boolean('instruction'));
 
             return response()->json([
                 'status'=>200,

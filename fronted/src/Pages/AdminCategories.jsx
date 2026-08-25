@@ -15,6 +15,7 @@ import { AppContext } from "../Context/AppContext";
 import { LuPalette } from "react-icons/lu";
 import { IoGlobeSharp } from "react-icons/io5";
 import EditAdminCategory from '../Pages/EditAdminCategory';
+import { apiUrl } from "../Http/Http";
 
 const category = [
   {
@@ -54,9 +55,31 @@ const category = [
 const AdminCategories = () => {
 
     const {categories} = useContext(AppContext);
+    const {setRefresh} = useContext(AppContext);
     const {viewCategory} = useContext(AppContext);
     const {CategoryModelHandler} = useContext(AppContext);
     const {EditCategoryModelHandler} = useContext(AppContext);
+
+    const deleteCategory = async (delete_id)=>{
+        const token = localStorage.getItem('token');
+        try{
+            const response = await fetch(`${apiUrl}/categories/${delete_id}`,{
+                method:'DELETE',
+                headers:{
+                    'Content-type':'application/json',
+                    'Accpet':'application/json',
+                    'Authorization':`Bearer ${token}`,
+                }
+            })
+            const data = await response.json();
+            if(response.ok){
+                setRefresh(prev => prev + 1);
+            }
+            console.log(data);
+        }catch(error){
+            console.log(error);
+        }
+    }
 
   return (
     <>
@@ -109,7 +132,7 @@ const AdminCategories = () => {
                         <td>
                             <div className="d-flex align-items-center justify-content-end gap-3">
                                 <BsPencilFill onClick={()=>{EditCategoryModelHandler(), viewCategory(cat.id)}} className={styles.actionIcon} />
-                                <BsTrashFill className={`${styles.actionIcon} ${styles.deleteIcon}`} />
+                                <BsTrashFill onClick={()=> deleteCategory(cat.id)} className={`${styles.actionIcon} ${styles.deleteIcon}`} />
                             </div>
                         </td>
                     </tr>

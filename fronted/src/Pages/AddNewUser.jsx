@@ -18,6 +18,7 @@ const AddNewUser = () => {
   const [imageErr, setImageErr] = useState(null);
   const [Status, setStatus] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [instruction, setInstruction] = useState(false);
   const [formDataErr, setFormDataErr] = useState({
     nameErr:'',
     usernameErr:'',
@@ -66,6 +67,18 @@ const AddNewUser = () => {
       ...prev,
       [name]:value
     }));
+  }
+
+
+  // instructio handler 
+  const instructionHandler = (event)=>{
+    const checkedBox = event.target;
+
+    if(checkedBox.checked){
+      setInstruction(true);
+    }else{
+      setInstruction(false);
+    }
   }
 
 
@@ -135,6 +148,7 @@ const AddNewUser = () => {
     form.append("password",formData.password);
     form.append("password_confirmation",formData.password_confirmation);
     form.append("status",Status);
+    form.append('instruction',instruction);
     if(image instanceof File){
       form.append("image",image);
     }
@@ -366,6 +380,7 @@ const AddNewUser = () => {
               </div>
               <div className={`${styles.checkboxRow} d-flex align-items-start gap-2 mt-4`}>
                 <input
+                  onChange={instructionHandler}
                   id="sendWelcome"
                   type="checkbox"
                   className={styles.checkbox}
