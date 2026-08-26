@@ -25,11 +25,14 @@
 
 /* Editor */
 .editorCard {
-  background-color: #ffffff;
+  /* background-color: #ffffff; */
+  height: 500px;
+  padding: 1px;
   border-radius: 14px;
   box-shadow: 0 1px 3px rgba(30, 20, 60, 0.05);
   overflow: hidden;
 }
+
 
 .toolbar {
   padding: 14px 22px;
@@ -211,9 +214,19 @@
 
 .featuredImage {
   width: 100%;
-  height: 130px;
+  height: 150px;
+  display: flex;
+  overflow: hidden;
+  justify-content: center;
+  /* font-size: 7rem; */
+  /* color: #808080; */
+  align-items: center;
   border-radius: 10px;
   background: linear-gradient(135deg, #e4ddf5 0%, #cfc4ec 100%);
+}
+
+.featuredImage img{
+  object-fit:contain;
 }
 
 /* Categories */

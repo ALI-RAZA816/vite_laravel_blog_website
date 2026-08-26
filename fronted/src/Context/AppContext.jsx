@@ -38,10 +38,11 @@ const AppContextProvider = ({children})=>{
     }
 
     // fetch all users
+    const [currentPage, setCurrentPage] = useState(1);
     const fetchUsers = async ()=>{
         try{
             const token = localStorage.getItem('token');
-            const response = await fetch(`${apiUrl}/users`,{
+            const response = await fetch(`${apiUrl}/users?page=${currentPage}`,{
                 method:'GET',
                 headers:{
                     'Content-type':'application/json',
@@ -52,7 +53,7 @@ const AppContextProvider = ({children})=>{
             const data = await response.json();
             if(response.ok){
                 if(data.status === true){
-                    setAllUsers(data.users);
+                    setAllUsers(data.users.data);
                     setAllEditors(data.editor);
                     setThisWeek(data.this_week);
                     setBlocked(data.blocked);
@@ -76,7 +77,6 @@ const AppContextProvider = ({children})=>{
                 }
             });
             const data = await response.json();
-            console.log(data.category);
             if(response.ok){
                 setCategories(data.category);
                 
@@ -117,7 +117,6 @@ const AppContextProvider = ({children})=>{
             });
 
             const data = await response.json();
-            console.log(data);
             if(response.ok){
                 setEditCategory({
                     id:data.category.id,
@@ -136,7 +135,7 @@ const AppContextProvider = ({children})=>{
     useEffect(()=>{
         fetchUsers();
         fetchCategory();
-    },[refresh]);
+    },[refresh,currentPage]);
 
     return (
         <AppContext.Provider value={{

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useMemo, useRef, useState } from "react";
 import {
   BsTypeBold,
   BsTypeItalic,
@@ -12,24 +12,108 @@ import {
   BsTrashFill,
 } from "react-icons/bs";
 import styles from "../assets/AddAdminPost.module.css";
-
+import { CiImageOn } from "react-icons/ci";
 const initialTags = ["Slow Living", "Wellness", "Rituals"];
+import JoditEditor from 'jodit-react';
+import { AppContext } from "../Context/AppContext";
 
-const AddAdminPost = () => {
-  const [tags, setTags] = useState(initialTags);
-  const [tagInput, setTagInput] = useState("");
+const ImageIcon = ({ size = 100, color = "#808080" }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 20 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <rect
+      x="2"
+      y="3.5"
+      width="16"
+      height="13"
+      rx="2"
+      stroke={color}
+      strokeWidth="1.4"
+    />
+    <circle cx="6.7" cy="8" r="1.5" fill={color} />
+    <path
+      d="M2.8 14.2L7.3 9.8C7.7 9.4 8.3 9.4 8.7 9.8L11.5 12.5"
+      stroke={color}
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M10.5 12.9L13 10.5C13.4 10.1 14 10.1 14.4 10.5L17.2 13.2"
+      stroke={color}
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+
+const AddAdminPost = ({placeholder}) => {
+
+  const {categories} = useContext(AppContext);
+  const config = useMemo(
+    () => ({
+      readonly: false,
+      height:500,
+      placeholder: placeholder || 'Post description......',
+      buttons: [
+        "bold",
+        "italic",
+        "underline",
+        "|",
+        "fontsize",
+        "brush",
+        "|",
+        "ul",
+        "ol",
+        "align",
+        "|",
+        "|",
+        "|",
+        "undo",
+        "redo",
+        "|",
+        "source"
+    ],
+    }),
+    [placeholder]
+  );
   const [isPublished, setIsPublished] = useState(true);
+  const editor = useRef(null);
+  const [content, setContent] = useState('');
 
-  const removeTag = (index) => {
-    setTags(tags.filter((_, i) => i !== index));
-  };
-
-  const addTag = (e) => {
-    if (e.key === "Enter" && tagInput.trim() !== "") {
-      setTags([...tags, tagInput.trim()]);
-      setTagInput("");
+  const [preview, setPreview]= useState(null);
+  
+  const previewHandler = (event)=>{
+    const file = event.target.files[0];
+    if(file){
+      const imagePreview = URL.createObjectURL(file);
+      setPreview(imagePreview);
     }
-  };
+  }
+
+
+  const [tag, setTag] = useState('');
+  const [tags, setTags] = useState([]);
+
+  const tagsHandler = (event)=>{
+    if(event.key === 'Enter'){
+      event.preventDefault();
+      if(tags.includes(tag)) return;
+      setTags([...tags, tag.trim()]);
+    }
+  }
+
+  const deleteTagHandler = (index)=>{
+    const newTags = tags.filter((_, i)=> i !== index);
+    setTags(newTags);
+  }
 
   return (
     <div className={styles.wrapper}>
@@ -44,48 +128,70 @@ const AddAdminPost = () => {
             />
           </div>
 
-          <div className={styles.editorCard}>
-            <div className={`d-flex align-items-center justify-content-between ${styles.toolbar}`}>
-              <div className="d-flex align-items-center">
-                <button className={styles.toolBtn}><BsTypeBold /></button>
-                <button className={styles.toolBtn}><BsTypeItalic /></button>
-                <button className={styles.toolBtn}><BsTypeUnderline /></button>
-                <span className={styles.toolDivider}></span>
-                <button className={styles.toolBtn}><BsBlockquoteLeft /></button>
-                <button className={styles.toolBtn}><BsListUl /></button>
-                <button className={styles.toolBtn}><BsLink45Deg /></button>
-                <button className={styles.toolBtn}><BsImage /></button>
-              </div>
-              <span className={styles.wordCount}>Words: 1,240</span>
-            </div>
-
-            <div className={styles.editorBody}>
-              <p>
-                Slow living isn't just a trend; it's a fundamental shift in how we
-                perceive time and our place in the world. In today's hyper-connected
-                environment, the constant noise of notifications and the pressure of
-                immediate responses can leave us feeling drained and disconnected
-                from our own intentions.
-              </p>
-              <p>
-                By embracing a slower pace, we allow ourselves the space to truly
-                experience the present moment. This doesn't mean doing everything
-                slowly, but rather doing everything at the right speed—finding the
-                'tempo giusto' for every activity.
-              </p>
-              <h5 className={styles.editorHeading}>Creating Rituals of Focus</h5>
-              <p>
-                One of the most effective ways to transition into this lifestyle is
-                through the creation of intentional rituals. Whether it's the
-                meticulous process of brewing a morning coffee or a dedicated...
-              </p>
-            </div>
+          <div className={`${styles.editorCard}`}>
+            {/* <div className={styles.editorBody}> */}
+              <JoditEditor
+                ref={editor}
+                value={content}
+                config={config}
+                // tabIndex={1} // tabIndex of textarea
+                onChange={newContent => setContent(newContent)}
+              />
+            {/* </div> */}
           </div>
         </div>
 
         {/* Right rail */}
         <div className="col-12 col-xl-4">
-          {/* Status & Visibility */}
+        
+
+          {/* Featured Image */}
+          <div className={styles.panel}>
+            <div className="d-flex align-items-center justify-content-between mb-3">
+              <h6 className={styles.panelTitle}>FEATURED IMAGE</h6>
+            </div>
+              <div className={styles.featuredImage}>
+                <label htmlFor="post-image">
+                  {/* <CiImageOn /> */}
+                  {!preview ? <ImageIcon/>:
+                  <img src={preview} alt="" />}
+                  <input type="file" onChange={previewHandler} name="post-image" id="post-image" hidden />
+                </label>
+              </div>
+          </div>
+
+          {/* Categories */}
+          <div className={styles.panel}>
+            <h6 className={styles.panelTitle}>CATEGORIES</h6>
+            <select className={styles.categorySelect} defaultValue="Mindfulness">
+              <option defaultChecked disabled>Select Category</option>
+              {categories.map((category, index)=>{
+                return <option index={index} value={category.id}>{category.name}</option>
+              })}
+            </select>
+          </div>
+
+          {/* Tags */}
+          <div className={styles.panel}>
+            <h6 className={styles.panelTitle}>TAGS</h6>
+            <div className={styles.tagsWrap}>
+                {tags.map((tag, index)=>{
+                  return <span key={index} className={styles.tag}>
+                          {tag}
+                          <BsXLg onClick={()=> deleteTagHandler(index)}/>
+                        </span>
+                })}
+            </div>
+            <input
+              type="text"
+              onChange={(event)=>setTag(event.target.value)}
+              value={tag}
+              onKeyDown={tagsHandler}
+              placeholder="Add a tag..."
+              className={styles.tagInput}
+            />
+          </div>
+            {/* Status & Visibility */}
           <div className={styles.panel}>
             <h6 className={styles.panelTitle}>STATUS &amp; VISIBILITY</h6>
 
@@ -114,62 +220,8 @@ const AddAdminPost = () => {
               <span className={styles.mutedText}>Immediately</span>
             </div>
 
-            <button className={styles.updateBtn}>Update Post</button>
+            <button className={styles.updateBtn}>Add Post</button>
             <button className={styles.draftBtn}>Save Draft</button>
-          </div>
-
-          {/* Featured Image */}
-          <div className={styles.panel}>
-            <div className="d-flex align-items-center justify-content-between mb-3">
-              <h6 className={styles.panelTitle}>FEATURED IMAGE</h6>
-              <a href="#" className={styles.removeLink}>Remove</a>
-            </div>
-            <div className={styles.featuredImage}></div>
-          </div>
-
-          {/* Categories */}
-          <div className={styles.panel}>
-            <h6 className={styles.panelTitle}>CATEGORIES</h6>
-            <select className={styles.categorySelect} defaultValue="Mindfulness">
-              <option>Mindfulness</option>
-              <option>Minimalism</option>
-              <option>Wellness</option>
-              <option>Travel</option>
-            </select>
-            <a href="#" className={`d-inline-flex align-items-center ${styles.addCategoryLink}`}>
-              <BsPlusLg className="me-2" />
-              Add New Category
-            </a>
-          </div>
-
-          {/* Tags */}
-          <div className={styles.panel}>
-            <h6 className={styles.panelTitle}>TAGS</h6>
-            <div className={styles.tagsWrap}>
-              {tags.map((tag, index) => (
-                <span className={styles.tag} key={index}>
-                  {tag}
-                  <BsXLg
-                    className={styles.tagRemove}
-                    onClick={() => removeTag(index)}
-                  />
-                </span>
-              ))}
-            </div>
-            <input
-              type="text"
-              placeholder="Add a tag..."
-              className={styles.tagInput}
-              value={tagInput}
-              onChange={(e) => setTagInput(e.target.value)}
-              onKeyDown={addTag}
-            />
-          </div>
-
-          {/* Move to Trash */}
-          <div className={`d-flex align-items-center justify-content-center ${styles.trashRow}`}>
-            <BsTrashFill className="me-2" />
-            Move to Trash
           </div>
         </div>
       </div>

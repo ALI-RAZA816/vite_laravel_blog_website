@@ -76,10 +76,10 @@ const AdminPosts = () => {
             <span className={styles.crumbActive}>Posts</span>
           </div>
         </div>
-        <button className={`d-flex align-items-center ${styles.addBtn}`}>
+        <Link to="/admin-panel/posts/add-post"><button className={`d-flex align-items-center ${styles.addBtn}`}>
           <BsPlusLg className="me-2" />
           Add New Post
-        </button>
+        </button></Link>
       </div>
 
       {/* Filters */}
