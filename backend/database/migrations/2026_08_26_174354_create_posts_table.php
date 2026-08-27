@@ -16,7 +16,9 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->string('image');
-            $table->unsignedBigInteger('category_id');
+            $table->foreignId('category_id')->referneces('id')->on('categories');
+            $table->foreignId('author')->references('id')->on('users');
+            $table->string('date');
             $table->json('tags')->nullable();
             $table->string('published')->nullable();
             $table->string('draft')->nullable();

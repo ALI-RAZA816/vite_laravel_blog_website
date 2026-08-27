@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\PostController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -19,4 +20,5 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('search',[AuthController::class,'searchUser']);
     Route::apiResource('users', UserController::class);
     Route::apiResource('categories', CategoryController::class);
+    Route::apiResource('posts', PostController::class);
 });

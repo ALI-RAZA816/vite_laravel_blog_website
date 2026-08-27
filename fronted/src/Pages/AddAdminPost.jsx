@@ -16,6 +16,8 @@ import { CiImageOn } from "react-icons/ci";
 const initialTags = ["Slow Living", "Wellness", "Rituals"];
 import JoditEditor from 'jodit-react';
 import { AppContext } from "../Context/AppContext";
+import { apiUrl } from "../Http/Http";
+import { useNavigate } from "react-router-dom";
 
 const ImageIcon = ({ size = 100, color = "#808080" }) => (
   <svg
@@ -56,6 +58,7 @@ const ImageIcon = ({ size = 100, color = "#808080" }) => (
 
 const AddAdminPost = ({placeholder}) => {
 
+  const navigate = useNavigate();
   const {categories} = useContext(AppContext);
   const config = useMemo(
     () => ({
@@ -84,29 +87,41 @@ const AddAdminPost = ({placeholder}) => {
     }),
     [placeholder]
   );
+
   const [isPublished, setIsPublished] = useState(true);
   const editor = useRef(null);
   const [content, setContent] = useState('');
-
   const [preview, setPreview]= useState(null);
+  const [tag, setTag] = useState('');
+  const [tags, setTags] = useState([]);
+  const [image, setImage]= useState(null);
+  const [formData, setFormData] = useState({
+    title:'',
+    category:'',
+  });
+  const [formDataErr, setFormDataErr] = useState({
+    titleErr:'',
+    descriptionErr:'',
+    imageErr:'',
+    categoryErr:'',
+  });
+
   
   const previewHandler = (event)=>{
     const file = event.target.files[0];
-    if(file){
-      const imagePreview = URL.createObjectURL(file);
-      setPreview(imagePreview);
-    }
+    if(!file) return;
+    setImage(file);
+    const imagePreview = URL.createObjectURL(file);
+    setPreview(imagePreview);
   }
-
-
-  const [tag, setTag] = useState('');
-  const [tags, setTags] = useState([]);
 
   const tagsHandler = (event)=>{
     if(event.key === 'Enter'){
       event.preventDefault();
+      if(!tag) return;
       if(tags.includes(tag)) return;
       setTags([...tags, tag.trim()]);
+      setTag('');
     }
   }
 
@@ -115,17 +130,108 @@ const AddAdminPost = ({placeholder}) => {
     setTags(newTags);
   }
 
+  const formHandler = (event)=>{
+    const {name, value} = event.target;
+    setFormData((prev)=>({
+      ...prev,
+      [name]:value
+    }));
+  }
+
+
+  const submitPost = async (event)=>{
+    event.preventDefault();
+    setFormDataErr({
+      titleErr: '',
+      descriptionErr: '',
+      imageErr: '',
+      categoryErr: '',
+    });
+    if(!formData.title){
+      setFormDataErr({
+        titleErr:'Post title is required'
+      });
+      return;
+    }
+    if(!content){
+      setFormDataErr({
+        descriptionErr:'Post description is required'
+      });
+      return;
+    }
+    if(!image){
+      setFormDataErr({
+        imageErr:'Post image is required'
+      });
+      return;
+    }
+    if(!formData.category){
+      setFormDataErr({
+        categoryErr:'Category is required'
+      });
+      return;
+    }
+
+    const publish = isPublished === true ? 'published' : null;
+    const token = localStorage.getItem('token');
+
+
+    const form = new FormData();
+    form.append('title',formData.title);
+    form.append('description',content);
+    form.append('image',image);
+    form.append('category',formData.category);
+    form.append('tags',JSON.stringify(tags));
+    form.append('published',publish);
+
+    try{
+      const response = await fetch(`${apiUrl}/posts`,{
+        method:'POST',
+        headers:{
+          'Accept':'application/json',
+          'Authorization':`Bearer ${token}`,
+        },
+        body:form
+      });
+      const data = await response.json();
+      console.log(data);
+      if(!response.ok){
+        setFormDataErr({
+          titleErr: data?.errors?.title?.[0] || '',
+          descriptionErr: data?.errors?.description?.[0] || '',
+          imageErr: data?.errors?.image?.[0] || '',
+          categoryErr: data?.errors?.category?.[0] || '',
+        });
+      }else{
+          setFormData({
+            title: '',
+            category: '',
+          });
+          setTags([]);
+          setContent('');
+          navigate('/admin-panel/posts');
+      }
+    }catch(error){
+      console.log(error);
+    }
+
+  }
+
   return (
     <div className={styles.wrapper}>
-      <div className="row g-4">
+      <form onSubmit={submitPost} className="row g-4">
         {/* Editor column */}
         <div className="col-12 col-xl-8">
           <div className={styles.titleCard}>
             <input
               type="text"
+              name="title"
+              onChange={formHandler}
+              value={formData.title}
+              placeholder="Post Title..."
               className={styles.titleInput}
-              defaultValue="The Art of Mindful Living: A Guide"
             />
+            <span className="text-danger">{formDataErr.titleErr}</span>
           </div>
 
           <div className={`${styles.editorCard}`}>
@@ -134,11 +240,12 @@ const AddAdminPost = ({placeholder}) => {
                 ref={editor}
                 value={content}
                 config={config}
-                // tabIndex={1} // tabIndex of textarea
+                name="description"
                 onChange={newContent => setContent(newContent)}
               />
             {/* </div> */}
           </div>
+          <span className="text-danger">{formDataErr.descriptionErr}</span>
         </div>
 
         {/* Right rail */}
@@ -158,17 +265,19 @@ const AddAdminPost = ({placeholder}) => {
                   <input type="file" onChange={previewHandler} name="post-image" id="post-image" hidden />
                 </label>
               </div>
+              <span className="text-danger">{formDataErr.imageErr}</span>
           </div>
 
           {/* Categories */}
           <div className={styles.panel}>
             <h6 className={styles.panelTitle}>CATEGORIES</h6>
-            <select className={styles.categorySelect} defaultValue="Mindfulness">
-              <option defaultChecked disabled>Select Category</option>
+            <select onChange={formHandler}  value={formData.category} className={styles.categorySelect} name="category">
+              <option defaultValue disabled>Select Category</option>
               {categories.map((category, index)=>{
                 return <option index={index} value={category.id}>{category.name}</option>
               })}
             </select>
+            <span className="text-danger">{formDataErr.categoryErr}</span>
           </div>
 
           {/* Tags */}
@@ -220,11 +329,11 @@ const AddAdminPost = ({placeholder}) => {
               <span className={styles.mutedText}>Immediately</span>
             </div>
 
-            <button className={styles.updateBtn}>Add Post</button>
-            <button className={styles.draftBtn}>Save Draft</button>
+            <button type="submit" className={styles.updateBtn}>Add Post</button>
+            <button type="button" className={styles.draftBtn}>Save Draft</button>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
