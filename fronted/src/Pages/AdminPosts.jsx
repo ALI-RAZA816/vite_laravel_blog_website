@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   BsPlusLg,
   BsChevronDown,
@@ -11,59 +11,42 @@ import {
 } from "react-icons/bs";
 import styles from "../assets/AdminPosts.module.css";
 import { Link } from "react-router-dom";
+import { AppContext } from "../Context/AppContext";
+import { apiUrl, baseUrl } from "../Http/Http";
 
-const posts = [
+const post = [
   {
-    title: "The Art of Mindful Morning Rituals",
-    url: "slowliving-blog.com/morning-rituals",
-    category: "Philosophy",
-    categoryColor: "#f7d774",
-    author: "Alex Rivera",
-    initials: "AR",
-    avatarColor: "#5b3fd9",
-    status: "Published",
-    date: "May 12, 2024",
-  },
-  {
-    title: "Why We Need to Disconnect in a Digital Age",
-    url: "slowliving-blog.com/digital-age",
-    category: "Minimalism",
-    categoryColor: "#c9b8f0",
-    author: "Sarah Chen",
-    initials: "SC",
-    avatarColor: "#7a6ee0",
-    status: "Draft",
-    date: "May 10, 2024",
-  },
-  {
-    title: "Hidden Gems of Rural Tuscany",
-    url: "slowliving-blog.com/tuscany-travel",
-    category: "Travel",
-    categoryColor: "#f0b8c4",
-    author: "Marcus King",
-    initials: "MK",
-    avatarColor: "#c98a1a",
-    status: "Published",
-    date: "May 08, 2024",
-  },
-  {
-    title: "Sustainable Living: Small Steps to Big Impact",
-    url: "slowliving-blog.com/sustainable-living",
-    category: "Minimalism",
-    categoryColor: "#c9b8f0",
-    author: "Alex Rivera",
-    initials: "AR",
-    avatarColor: "#5b3fd9",
-    status: "Published",
-    date: "May 05, 2024",
-  },
+    categoryColor: "",
+  }
 ];
 
 const chartData = [30, 45, 40, 90, 55, 48, 62];
 
 const AdminPosts = () => {
   const maxValue = Math.max(...chartData);
+  const {posts} = useContext(AppContext);
+  const {setRefresh} = useContext(AppContext);
 
+  const deletePost = async (event, id)=>{
+    event.preventDefault();
+    const token = localStorage.getItem('token');
+    try{
+      const response = await fetch(`${apiUrl}/posts/${id}`,{
+        method:'DELETE',
+        headers:{
+          'Content-type':'application/json',
+          'Accept':'application/json',
+          'Authorization':`Bearer ${token}`
+        }
+      });
+      const data = await response.json();
+      if(response.ok){
+        setRefresh(prev => prev + 1);
+      }
+    }catch(error){
+      console.log(error);
+    }
+  }
   return (
     <div className={styles.content}>
       {/* Heading */}
@@ -125,44 +108,50 @@ const AdminPosts = () => {
                   </td>
                   <td>
                     <p className={styles.postTitle}>{post.title}</p>
-                    <p className={styles.postUrl}>{post.url}</p>
+                    <p className={styles.postUrl}>{post.category.slug}</p>
                   </td>
                   <td>
                     <span
                       className={styles.categoryBadge}
-                      style={{ backgroundColor: post.categoryColor }}
+                      style={{ backgroundColor: '#f7d774'}}
                     >
-                      {post.category}
+                      {post.category.name}
                     </span>
                   </td>
                   <td>
                     <div className="d-flex align-items-center gap-2">
                       <div
                         className={styles.avatar}
-                        style={{ backgroundColor: post.avatarColor }}
+                        style={{ backgroundColor: '#5b3fd9', overflow:'hidden'}}
                       >
-                        {post.initials}
+                        {post.author.image ? <img src={`${baseUrl}/uploads/${post.author.image}`} alt="" />:
+                          <>
+                              {post.author.name.split(' ')[0].substr(0, 1)}
+                              {post.author.name.split(' ')[1]?.substr(0, 1)}
+                          </>
+                        }
                       </div>
-                      <span className={styles.authorName}>{post.author}</span>
+                      <span className={styles.authorName}>{post.author.name}</span>
                     </div>
                   </td>
                   <td>
                     <span
                       className={`d-flex align-items-center ${styles.statusBadge} ${
-                        post.status === "Published"
+                        post.published === "published"
                           ? styles.statusPublished
                           : styles.statusDraft
                       }`}
                     >
-                      <span className={styles.statusDot}></span>
-                      {post.status}
+                      <span className={`${styles.statusDot}`}></span>
+                      <span className='text-capitalize'>{post.published}</span>
+                      
                     </span>
                   </td>
                   <td className={styles.dateCell}>{post.date}</td>
                   <td>
                     <div className="d-flex align-items-center gap-3">
-                      <Link to="/admin-panel/posts/add-post"><BsPencilFill className={styles.actionIcon} /></Link>
-                      <BsTrashFill className={`${styles.actionIcon} ${styles.deleteIcon}`} />
+                      <Link to={`/admin-panel/posts/edit-post/${post.id}`}><BsPencilFill className={styles.actionIcon} /></Link>
+                      <BsTrashFill onClick={(event)=> deletePost(event, post.id)} className={`${styles.actionIcon} ${styles.deleteIcon}`} />
                     </div>
                   </td>
                 </tr>

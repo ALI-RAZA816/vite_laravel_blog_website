@@ -1,23 +1,14 @@
-import React, { useContext, useMemo, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import {
-  BsTypeBold,
-  BsTypeItalic,
-  BsTypeUnderline,
-  BsBlockquoteLeft,
-  BsListUl,
-  BsLink45Deg,
-  BsImage,
   BsXLg,
-  BsPlusLg,
-  BsTrashFill,
 } from "react-icons/bs";
 import styles from "../assets/AddAdminPost.module.css";
 import { CiImageOn } from "react-icons/ci";
 const initialTags = ["Slow Living", "Wellness", "Rituals"];
 import JoditEditor from 'jodit-react';
 import { AppContext } from "../Context/AppContext";
-import { apiUrl } from "../Http/Http";
-import { useNavigate } from "react-router-dom";
+import { apiUrl, baseUrl } from "../Http/Http";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ImageIcon = ({ size = 100, color = "#808080" }) => (
   <svg
@@ -56,9 +47,10 @@ const ImageIcon = ({ size = 100, color = "#808080" }) => (
 );
 
 
-const AddAdminPost = ({placeholder}) => {
+const AdminEditPost = ({placeholder}) => {
 
   const navigate = useNavigate();
+  const {id} = useParams();
   const {categories} = useContext(AppContext);
   const config = useMemo(
     () => ({
@@ -88,18 +80,21 @@ const AddAdminPost = ({placeholder}) => {
     [placeholder]
   );
 
+  const {setRefresh} = useContext(AppContext);
+  const [preview, setPreview]= useState(null);
   const [isPublished, setIsPublished] = useState(true);
   const editor = useRef(null);
-  const {setRefresh} = useContext(AppContext);
   const [content, setContent] = useState('');
-  const [preview, setPreview]= useState(null);
+  const [image, setImage]= useState(null);
   const [tag, setTag] = useState('');
   const [tags, setTags] = useState([]);
-  const [image, setImage]= useState(null);
   const [formData, setFormData] = useState({
+    id:'',
     title:'',
     category:'',
+    image:''
   });
+
   const [formDataErr, setFormDataErr] = useState({
     titleErr:'',
     descriptionErr:'',
@@ -107,7 +102,6 @@ const AddAdminPost = ({placeholder}) => {
     categoryErr:'',
   });
 
-  
   const previewHandler = (event)=>{
     const file = event.target.files[0];
     if(!file) return;
@@ -140,89 +134,84 @@ const AddAdminPost = ({placeholder}) => {
     }));
   }
 
-
-  const submitPost = async (event)=>{
-    event.preventDefault();
-    setFormDataErr({
-      titleErr: '',
-      descriptionErr: '',
-      imageErr: '',
-      categoryErr: '',
-    });
-    if(!formData.title){
-      setFormDataErr({
-        titleErr:'Post title is required'
-      });
-      return;
-    }
-    if(!content){
-      setFormDataErr({
-        descriptionErr:'Post description is required'
-      });
-      return;
-    }
-    if(!image){
-      setFormDataErr({
-        imageErr:'Post image is required'
-      });
-      return;
-    }
-    if(!formData.category){
-      setFormDataErr({
-        categoryErr:'Category is required'
-      });
-      return;
-    }
-
-    const publish = isPublished === true ? 'published' : 'draft';
+  // fetch single post
+  const editHandler = async ()=>{
     const token = localStorage.getItem('token');
-
-
-    const form = new FormData();
-    form.append('title',formData.title);
-    form.append('description',content);
-    form.append('image',image);
-    form.append('category',formData.category);
-    form.append('tags',JSON.stringify(tags));
-    form.append('published',publish);
-
     try{
-      const response = await fetch(`${apiUrl}/posts`,{
-        method:'POST',
+      const response = await fetch(`${apiUrl}/posts/${id}`,{
+        method:'GET',
         headers:{
+          'Content-type':'application/json',
           'Accept':'application/json',
           'Authorization':`Bearer ${token}`,
-        },
-        body:form
+        }
       });
+
       const data = await response.json();
-      console.log(data);
-      if(!response.ok){
-        setFormDataErr({
-          titleErr: data?.errors?.title?.[0] || '',
-          descriptionErr: data?.errors?.description?.[0] || '',
-          imageErr: data?.errors?.image?.[0] || '',
-          categoryErr: data?.errors?.category?.[0] || '',
+      if(response.ok){
+        setFormData({
+          id:data.post.id,
+          title:data.post.title,
+          category:data.post.category_id,
+          image:data.post.image
         });
-      }else{
-          setFormData({
-            title: '',
-            category: '',
-          });
-          setTags([]);
-          setContent('');
-          setRefresh(prev => prev + 1);
-          navigate('/admin-panel/posts');
+        data.post.published === 'published' ? setIsPublished(true) : setIsPublished(false);
+        setTags(JSON.parse(data.post.tags));
+        setContent(data.post.description);
       }
     }catch(error){
       console.log(error);
     }
-
   }
+
+  const updatePost = async (event)=>{
+      event.preventDefault();
+      const publish = isPublished === true ? 'published' : 'draft';
+      const token = localStorage.getItem('token');
+  
+  
+      const form = new FormData();
+      form.append('title',formData.title);
+      form.append('description',content);
+      form.append('image',image);
+      form.append('category',formData.category);
+      form.append('tags',JSON.stringify(tags));
+      form.append('published',publish);
+  
+      try{
+        const response = await fetch(`${apiUrl}/posts/${formData.id}`,{
+          method:'PATCH',
+          headers:{
+            'Accept':'application/json',
+            'Authorization':`Bearer ${token}`,
+          },
+          body:form
+        });
+        const data = await response.json();
+        if(!response.ok){
+          setFormDataErr({
+            titleErr: data?.errors?.title?.[0] || '',
+            descriptionErr: data?.errors?.description?.[0] || '',
+            imageErr: data?.errors?.image?.[0] || '',
+            categoryErr: data?.errors?.category?.[0] || '',
+          });
+        }else{
+          setRefresh(prev => prev + 1);
+          navigate('/admin-panel/posts');
+        }
+      }catch(error){
+        console.log(error);
+      }
+  
+    }
+
+  useEffect(()=>{
+    editHandler();
+  },[]);
 
   return (
     <div className={styles.wrapper}>
-      <form onSubmit={submitPost} className="row g-4">
+      <form onSubmit={updatePost} className="row g-4">
         {/* Editor column */}
         <div className="col-12 col-xl-8">
           <div className={styles.titleCard}>
@@ -263,8 +252,7 @@ const AddAdminPost = ({placeholder}) => {
               <div className={styles.featuredImage}>
                 <label htmlFor="post-image">
                   {/* <CiImageOn /> */}
-                  {!preview ? <ImageIcon/>:
-                  <img src={preview} alt="" />}
+                  {preview ? (<img src={preview} alt="" />): formData.image? (<img src={`${baseUrl}/posts-images/${formData.image}`} alt="" />) : <ImageIcon/>}
                   <input type="file" onChange={previewHandler} name="post-image" id="post-image" hidden />
                 </label>
               </div>
@@ -274,13 +262,12 @@ const AddAdminPost = ({placeholder}) => {
           {/* Categories */}
           <div className={styles.panel}>
             <h6 className={styles.panelTitle}>CATEGORIES</h6>
-            <select onChange={formHandler}  value={formData.category} className={styles.categorySelect} name="category">
+            <select onChange={formHandler} value={formData.category} className={styles.categorySelect} name="category">
               <option defaultValue disabled>Select Category</option>
               {categories.map((category, index)=>{
                 return <option index={index} value={category.id}>{category.name}</option>
               })}
             </select>
-            <span className="text-danger">{formDataErr.categoryErr}</span>
           </div>
 
           {/* Tags */}
@@ -295,12 +282,12 @@ const AddAdminPost = ({placeholder}) => {
                 })}
             </div>
             <input
-              type="text"
-              onChange={(event)=>setTag(event.target.value)}
-              value={tag}
-              onKeyDown={tagsHandler}
-              placeholder="Add a tag..."
-              className={styles.tagInput}
+                type="text"
+                value={tag}
+                onChange={(event)=>setTag(event.target.value)}
+                onKeyDown={tagsHandler}
+                placeholder="Add a tag..."
+                className={styles.tagInput}
             />
           </div>
             {/* Status & Visibility */}
@@ -332,7 +319,7 @@ const AddAdminPost = ({placeholder}) => {
               <span className={styles.mutedText}>Immediately</span>
             </div>
 
-            <button type="submit" className={styles.updateBtn}>Add Post</button>
+            <button type="submit" className={styles.updateBtn}>Update Post</button>
             <button type="button" className={styles.draftBtn}>Save Draft</button>
           </div>
         </div>
@@ -341,4 +328,4 @@ const AddAdminPost = ({placeholder}) => {
   );
 };
 
-export default AddAdminPost;
+export default AdminEditPost;

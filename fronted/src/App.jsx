@@ -23,6 +23,8 @@ import ManageUsers from "./Pages/ManageUsers";
 import AdminSetting from "./Pages/AdminSetting";
 import EditUser from "./Pages/EditUser";
 import AddNewUser from "./Pages/AddNewUser";
+import AdminEditPost from "./Pages/AdminEditPost";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
 
@@ -31,7 +33,7 @@ function App() {
   return (
       <>
         {!isAdmin && <Header />}
-        
+            <ScrollToTop/>
             <Routes>
               <Route path='/' element={<Home />} />
               <Route path='/all-posts' element={<AllPosts/>}/>
@@ -48,6 +50,7 @@ function App() {
                 <Route path="posts" element={<AdminHeader/>}>
                   <Route index element={<AdminPosts/>}/>
                   <Route path="add-post" element={<AddAdminPost/>}/>
+                  <Route path="edit-post/:id" element={<AdminEditPost/>}/>
                   <Route path="add-categories" element={<AdminCategories/>}/>
                 </Route>
                 <Route path="categories" element={<AdminHeader/>}>

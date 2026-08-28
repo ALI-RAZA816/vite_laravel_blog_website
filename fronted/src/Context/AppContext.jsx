@@ -10,8 +10,9 @@ const AppContextProvider = ({children})=>{
     const [deleteModel, setDeleteModel] = useState(false);
     const [deletId, setDeleteId] = useState(null);
     const [refresh, setRefresh] = useState(0);
-    const [categories, setCategories] = useState([]);
     const [allUsers, setAllUsers] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [posts, setPosts] = useState([]);
     const [Blocked, setBlocked] = useState([]);
     const [thisWeek, setThisWeek] = useState([]);
     const [allEditors, setAllEditors] = useState([]);
@@ -85,6 +86,28 @@ const AppContextProvider = ({children})=>{
             console.log(error);
         }
     }
+    // fetch posts
+    const fetchPosts = async ()=>{
+        try{
+            const token = localStorage.getItem('token');
+            const response = await fetch(`${apiUrl}/posts`,{
+                method:'GET',
+                headers:{
+                    'Content-type':'application/json',
+                    'Accept':'application/json',
+                    'Authorization':`Bearer ${token}`
+                }
+            });
+            const data = await response.json();
+            console.log(data.posts);
+            if(response.ok){
+                setPosts(data.posts);
+                
+            }
+        }catch(error){
+            console.log(error);
+        }
+    }
 
 
     // view category 
@@ -134,6 +157,7 @@ const AppContextProvider = ({children})=>{
 
     useEffect(()=>{
         fetchUsers();
+        fetchPosts();
         fetchCategory();
     },[refresh,currentPage]);
 
@@ -164,6 +188,7 @@ const AppContextProvider = ({children})=>{
             formHandler,
             selectedIcon,
             setSelectedIcon,
+            posts,
             setShowEditCategoryModel
         }}>
             {children}

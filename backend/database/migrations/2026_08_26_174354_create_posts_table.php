@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->string('image');
-            $table->foreignId('category_id')->referneces('id')->on('categories');
-            $table->foreignId('author')->references('id')->on('users');
+            $table->foreignId('category_id')->references('id')->on('categories');
+            $table->foreignId('author_id')->references('id')->on('users');
             $table->string('date');
             $table->json('tags')->nullable();
             $table->string('published')->nullable();
