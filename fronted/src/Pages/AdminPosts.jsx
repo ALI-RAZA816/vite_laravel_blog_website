@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   BsPlusLg,
   BsChevronDown,
@@ -13,6 +13,24 @@ import styles from "../assets/AdminPosts.module.css";
 import { Link } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";
 import { apiUrl, baseUrl } from "../Http/Http";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+import { Bar } from "react-chartjs-2";
 
 const post = [
   {
@@ -20,13 +38,39 @@ const post = [
   }
 ];
 
-const chartData = [30, 45, 40, 90, 55, 48, 62];
 
 const AdminPosts = () => {
-  const maxValue = Math.max(...chartData);
+  const chartData2 = [30, 45, 40, 90, 55, 48, 62];
+  
   const {posts} = useContext(AppContext);
+  const {setPosts} = useContext(AppContext);
+  const {categories} = useContext(AppContext);
   const {setRefresh} = useContext(AppContext);
-
+  const chartData = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",'Aug','Sep','Oct','Nov','Dec'],
+    datasets: [
+      {
+        label: "Posts",
+        data: chartData2,
+        borderWidth: 1,
+      },
+    ],
+  };
+  // const maxValue = Math.max(...chartData);
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
   const deletePost = async (event, id)=>{
     event.preventDefault();
     const token = localStorage.getItem('token');
@@ -47,6 +91,110 @@ const AdminPosts = () => {
       console.log(error);
     }
   }
+
+  const [active, setActive] = useState(null);
+  const activeFilter = (name)=>{
+    setActive(name);
+  }
+
+  const searchTimeout = useRef(null);
+  const searchHandler = async (searchTerm)=>{
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${apiUrl}/search-post?query=${searchTerm}`,{
+      method:'POST',
+      headers:{
+        'Content-type':'application/json',
+        'Accept':'application/json',
+        'Authorization':`Bearer ${token}`,
+      }
+    });
+    const data = await response.json();
+    // console.log(data);
+    if(response.ok){
+      setPosts(data.post);
+    }
+
+  }
+
+  const getValue = (event)=>{
+    const searchTerm = event.target.value;
+    clearTimeout(searchTimeout.current);
+    searchTimeout.current =  setTimeout(()=>{
+      searchHandler(searchTerm);
+    },600);
+  }
+
+  const getCategory= (event)=>{
+    const searchTerm = event.target.value;
+    clearTimeout(searchTimeout.current);
+    searchTimeout.current =  setTimeout(()=>{
+      searchHandler(searchTerm);
+    },600);
+  }
+
+  const statusFilter = (searchTerm)=>{
+    searchHandler(searchTerm);
+  }
+
+
+  const [checkDeleted, setCheckDeleted] = useState([]);
+  const DeletedChecked = (event, id)=>{
+    const checked = event.target
+    if(checked.checked){
+      setCheckDeleted([...checkDeleted,id]);
+      console.log(checkDeleted);
+    }else{
+      setCheckDeleted(checkDeleted.filter(item => item !== id));
+      console.log(checkDeleted);
+    }
+  }
+
+
+  const [checkedall, setCheckedAll] = useState(false);
+  const checkedAll = (event)=>{
+    const checked = event.target;
+    if(checked.checked){
+      setCheckedAll(true);
+      setCheckDeleted(posts.map(post => post.id));
+      console.log(checkDeleted);
+    }else{
+      setCheckedAll(false);
+      console.log(checkDeleted);
+    }
+
+  }
+
+
+  const multiDeletePost = async (event)=>{
+    event.preventDefault();
+    const token = localStorage.getItem('token');
+    try{
+      const response = await fetch(`${apiUrl}/multi-delete-post`,{
+        method:'POST',
+        headers:{
+          'Content-type':'application/json',
+          'Accept':'application/json',
+          'Authorization':`Bearer ${token}`
+        },
+        body:JSON.stringify({
+          ids:checkDeleted
+        })
+      });
+      const data = await response.json();
+      console.log(data);
+      if(response.ok){
+        setRefresh(prev => prev + 1);
+        setCheckDeleted([]);
+      }
+    }catch(error){
+      console.log(error);
+    }
+  }
+
+  useEffect(()=>{
+    setActive('all');
+  },[]);
+
   return (
     <div className={styles.content}>
       {/* Heading */}
@@ -68,18 +216,20 @@ const AdminPosts = () => {
       {/* Filters */}
       <div className={`d-flex flex-wrap align-items-center gap-3 ${styles.filterBar}`}>
         <div className={`d-flex align-items-center ${styles.selectBox}`}>
-          <span>Bulk Actions</span>
-          <BsChevronDown className={styles.selectIcon} />
+          <input type="text" onChange={getValue} placeholder="Search post" className="form-control border-0 shadow-none" />
         </div>
-        <button className={styles.applyBtn}>Apply</button>
         <div className={`d-flex align-items-center ${styles.selectBox}`}>
-          <span>All Categories</span>
-          <BsFilter className={styles.selectIcon} />
+          <select name="" id="" onChange={getCategory} className="form-select border-0 shadow-none">
+          <option value="all">All Categories</option>
+            {categories.map((category, index)=>{
+              return <option index={index} value={category.id}>{category.name}</option>
+            })}
+          </select>
         </div>
         <div className={styles.statusTabs}>
-          <span className={`${styles.statusTab} ${styles.statusTabActive}`}>All</span>
-          <span className={styles.statusTab}>Published</span>
-          <span className={styles.statusTab}>Draft</span>
+          <span onClick={()=>{activeFilter('all'), statusFilter('all')}} className={`${styles.statusTab} ${active === 'all' ? `${styles.statusTabActive}` : ''}`}>All</span>
+          <span onClick={()=>{activeFilter('published'), statusFilter('published')}} className={`${styles.statusTab} ${active === 'published' ? `${styles.statusTabActive}` : ''}`}>Published</span>
+          <span onClick={()=>{activeFilter('draft'), statusFilter('draft')}} className={`${styles.statusTab} ${active === 'draft' ? `${styles.statusTabActive}` : ''}`}>Draft</span>
         </div>
       </div>
 
@@ -90,9 +240,9 @@ const AdminPosts = () => {
             <thead>
               <tr>
                 <th style={{ width: "40px" }}>
-                  <input type="checkbox" className={styles.checkbox} />
+                  <input disabled={posts.length === 0 && 'disabled' }  onChange={checkedAll} type="checkbox" className={styles.checkbox} />
                 </th>
-                <th>POST TITLE</th>
+                {checkDeleted.length >=1 ? <th><span onClick={multiDeletePost} className="text-danger" style={{cursor:'pointer'}}>Delete</span></th>:<th>POST TITLE</th>}
                 <th>CATEGORY</th>
                 <th>AUTHOR</th>
                 <th>STATUS</th>
@@ -101,10 +251,10 @@ const AdminPosts = () => {
               </tr>
             </thead>
             <tbody>
-              {posts.map((post, index) => (
+              {posts?.map((post, index) => (
                 <tr key={index}>
                   <td>
-                    <input type="checkbox" className={styles.checkbox} />
+                    <input onChange={(event)=>DeletedChecked(event, post.id)} type="checkbox" checked={checkedall && true} className={styles.checkbox} />
                   </td>
                   <td>
                     <p className={styles.postTitle}>{post.title}</p>
@@ -187,17 +337,9 @@ const AdminPosts = () => {
             <p className={styles.velocitySubtitle}>
               Your publishing frequency is up 12% this month.
             </p>
-            <div className={styles.velocityChart}>
-              {chartData.map((value, index) => (
-                <div
-                  key={index}
-                  className={`${styles.velocityBar} ${
-                    index === 3 ? styles.velocityBarActive : ""
-                  }`}
-                  style={{ height: `${(value / maxValue) * 100}%` }}
-                ></div>
-              ))}
-            </div>
+          <div className={styles.velocityChart}>
+            <Bar data={chartData} options={chartOptions} />
+          </div>
           </div>
         </div>
 

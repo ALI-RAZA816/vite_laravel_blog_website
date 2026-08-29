@@ -155,6 +155,7 @@ const AdminEditPost = ({placeholder}) => {
           category:data.post.category_id,
           image:data.post.image
         });
+        // setImage(data.post.image);
         data.post.published === 'published' ? setIsPublished(true) : setIsPublished(false);
         setTags(JSON.parse(data.post.tags));
         setContent(data.post.description);
@@ -173,14 +174,17 @@ const AdminEditPost = ({placeholder}) => {
       const form = new FormData();
       form.append('title',formData.title);
       form.append('description',content);
-      form.append('image',image);
+      if (image instanceof File) {            
+        form.append('image', image);
+      }
       form.append('category',formData.category);
       form.append('tags',JSON.stringify(tags));
       form.append('published',publish);
+      form.append('_method', 'PATCH');
   
       try{
         const response = await fetch(`${apiUrl}/posts/${formData.id}`,{
-          method:'PATCH',
+          method:'POST',
           headers:{
             'Accept':'application/json',
             'Authorization':`Bearer ${token}`,
@@ -311,7 +315,7 @@ const AdminEditPost = ({placeholder}) => {
 
             <div className="d-flex align-items-center justify-content-between mb-3">
               <span className={styles.fieldLabel}>Visibility</span>
-              {isPublished ? <span className={styles.linkText}>Public</span>:<span className={styles.linkText}>Private</span>}
+              {isPublished ? <span className={styles.linkText}>Public</span>:<span className={styles.linkText}>Draft</span>}
             </div>
 
             <div className="d-flex align-items-center justify-content-between mb-4">
@@ -319,8 +323,8 @@ const AdminEditPost = ({placeholder}) => {
               <span className={styles.mutedText}>Immediately</span>
             </div>
 
-            <button type="submit" className={styles.updateBtn}>Update Post</button>
-            <button type="button" className={styles.draftBtn}>Save Draft</button>
+            {isPublished ? <button type="submit" className={styles.updateBtn}>Add Post</button>:
+            <button type="submit" className={styles.draftBtn}>Save Draft</button>}
           </div>
         </div>
       </form>

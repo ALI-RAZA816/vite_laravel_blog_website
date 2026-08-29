@@ -324,7 +324,7 @@ const AddAdminPost = ({placeholder}) => {
 
             <div className="d-flex align-items-center justify-content-between mb-3">
               <span className={styles.fieldLabel}>Visibility</span>
-              {isPublished ? <span className={styles.linkText}>Public</span>:<span className={styles.linkText}>Private</span>}
+              {isPublished ? <span className={styles.linkText}>Public</span>:<span className={styles.linkText}>Draft</span>}
             </div>
 
             <div className="d-flex align-items-center justify-content-between mb-4">
@@ -332,8 +332,8 @@ const AddAdminPost = ({placeholder}) => {
               <span className={styles.mutedText}>Immediately</span>
             </div>
 
-            <button type="submit" className={styles.updateBtn}>Add Post</button>
-            <button type="button" className={styles.draftBtn}>Save Draft</button>
+            {isPublished ? <button type="submit" className={styles.updateBtn}>Add Post</button>:
+            <button type="submit" className={styles.draftBtn}>Save Draft</button>}
           </div>
         </div>
       </form>

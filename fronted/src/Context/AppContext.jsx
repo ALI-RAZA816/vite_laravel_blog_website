@@ -189,6 +189,7 @@ const AppContextProvider = ({children})=>{
             selectedIcon,
             setSelectedIcon,
             posts,
+            setPosts,
             setShowEditCategoryModel
         }}>
             {children}

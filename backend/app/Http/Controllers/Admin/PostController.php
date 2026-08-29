@@ -39,7 +39,10 @@ class PostController extends Controller
             'category'=>'required',
             'image' => 'required|image|mimes:jpg,jpeg,png|max:3072',
         ],[
-            'image'=>'File type must be png,jpeg,jg & 3MB'
+            'image.required' => 'Image is required.',
+            'image.image' => 'The file must be an image.',
+            'image.mimes' => 'File type must be jpg, jpeg, or png.',
+            'image.max' => 'Image size must not be greater than 3MB.',
         ]);
         $date = date('M d, y');
         $image = $request->file('image');
@@ -95,9 +98,11 @@ class PostController extends Controller
             'title'=>'required',
             'description'=>'required',
             'category'=>'required',
-            'image' => 'required|image|mimes:jpg,jpeg,png|max:3072',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:3072',
         ],[
-            'image'=>'File type must be png,jpeg,jg & 3MB'
+            'image.image' => 'The file must be an image.',
+            'image.mimes' => 'File type must be jpg, jpeg, or png.',
+            'image.max' => 'Image size must not be greater than 3MB.',
         ]);
 
         $post = Post::where('id',$id)->first();
@@ -128,6 +133,7 @@ class PostController extends Controller
         Post::where('id',$id)->update([
             'title'=>$request->title,
             'description'=>$request->description,
+            'published'=>$request->published,
             'image'=>$imageName,
             'category_id'=>$request->category,
             'tags'=>$request->tags,
@@ -162,5 +168,50 @@ class PostController extends Controller
         return response()->json([
             'message' => 'Post deleted successfully'
         ], 200);
+    }
+
+
+    public function searchPost(Request $request){
+        $search_term = $request->query('query');
+        if($search_term === 'all'){
+            $search_post = Post::with('category')->with('author')->get();
+            return response()->json([
+                'post'=>$search_post
+            ]);
+        }
+        $search_post = Post::with('category')->with('author')->where('title','LIKE','%'. $search_term . '%')->orWhere("category_id", '=', $search_term)->orWhere('published','=',$search_term)->get();
+        return response()->json([
+            'post'=>$search_post
+        ]);
+    }
+
+
+    public function multiDeletePost(Request $request){
+
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'integer|exists:posts,id',
+        ]);
+
+        $posts = Post::whereIn('id',$request->ids)->get();
+        if(!$posts){
+            return response()->json([
+                'message'=>'Not found'
+            ],404);
+        }
+        foreach($posts as $post){
+            $path = public_path('posts-images');
+            $previousImage = $path . '/' . $post->image;
+            if($post->image && $previousImage){
+                if(file_exists($previousImage)){
+                    unlink($previousImage);
+                }
+            }
+        }
+        Post::whereIn('id',$request->ids)->delete();
+        return response()->json([
+            'message' => 'Posts deleted successfully'
+        ], 200);
+
     }
 }

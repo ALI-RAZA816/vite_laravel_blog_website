@@ -54,7 +54,7 @@
   background-color: #ffffff;
   border: 1px solid #e6e3f0;
   border-radius: 10px;
-  padding: 11px 16px;
+  padding: 5px 10px;
   font-size: 14px;
   color: #4b4760;
   font-weight: 500;
@@ -277,6 +277,9 @@
   padding: 24px;
   height: 100%;
   box-shadow: 0 1px 3px rgba(30, 20, 60, 0.05);
+}
+.velocityChart{
+  width: 100%;
 }
 
 .velocityTitle {
