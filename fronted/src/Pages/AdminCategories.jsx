@@ -75,7 +75,6 @@ const AdminCategories = () => {
             if(response.ok){
                 setRefresh(prev => prev + 1);
             }
-            console.log(data);
         }catch(error){
             console.log(error);
         }

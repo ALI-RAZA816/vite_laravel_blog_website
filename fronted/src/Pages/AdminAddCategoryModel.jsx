@@ -89,7 +89,6 @@ const AdminAddCategoryModel = ({ onClose }) => {
       });
 
       const data = await response.json();
-      console.log(data);
       if(!response.ok){
         if(data?.errors?.cat_name){
           setFormDataErr({

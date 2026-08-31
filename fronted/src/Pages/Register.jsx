@@ -82,7 +82,6 @@ export default function Register() {
       });
 
       const data = await response.json();
-      console.log(data);
       const error = data.errors;
       if(!response.ok){
         if(data.message && error.name?.[0]){

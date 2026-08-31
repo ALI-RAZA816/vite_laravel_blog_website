@@ -40,19 +40,54 @@ const post = [
 
 
 const AdminPosts = () => {
-  const chartData2 = [30, 45, 40, 90, 55, 48, 62];
-  const months =  ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",'Aug','Sep','Oct','Nov','Dec']
+
+  const [chartData2, setChartData2] =useState([]);
+  const monthReportHandler = async () => {
+    const token = localStorage.getItem('token');
+
+    try {
+      const response = await fetch(`${apiUrl}/month-report`, {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        }
+      });
+
+      const data = await response.json();
+
+      const formattedData = data?.total?.map((item) => {
+        const date = new Date(item.year, item.month - 1);
+
+        return {
+          month: date.toLocaleString('en-US', {
+            month: 'short'
+          }) + ` ${item.year}`,
+          total: Number(item.total_post)
+        };
+      }) || [];
+
+      const latest = formattedData.slice(-12)
+      setChartData2(latest);
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
   
   const {posts} = useContext(AppContext);
   const {setPosts} = useContext(AppContext);
   const {categories} = useContext(AppContext);
   const {setRefresh} = useContext(AppContext);
   const chartData = {
-    labels:months,
+    labels:chartData2.map(item => item.month),
     datasets: [
       {
         label: "Posts",
-        data: chartData2,
+        data: chartData2.map(item => item.total),
+        backgroundColor: "#6366F1",
+        borderColor: "#4F46E5",
         borderWidth: 1,
       },
     ],
@@ -72,6 +107,7 @@ const AdminPosts = () => {
       },
     },
   };
+
   const deletePost = async (event, id)=>{
     event.preventDefault();
     const token = localStorage.getItem('token');
@@ -93,7 +129,7 @@ const AdminPosts = () => {
     }
   }
 
-  const [active, setActive] = useState(null);
+  const [active, setActive] = useState('active');
   const activeFilter = (name)=>{
     setActive(name);
   }
@@ -110,7 +146,6 @@ const AdminPosts = () => {
       }
     });
     const data = await response.json();
-    // console.log(data);
     if(response.ok){
       setPosts(data.post);
     }
@@ -143,10 +178,8 @@ const AdminPosts = () => {
     const checked = event.target
     if(checked.checked){
       setCheckDeleted([...checkDeleted,id]);
-      console.log(checkDeleted);
     }else{
       setCheckDeleted(checkDeleted.filter(item => item !== id));
-      console.log(checkDeleted);
     }
   }
 
@@ -157,10 +190,8 @@ const AdminPosts = () => {
     if(checked.checked){
       setCheckedAll(true);
       setCheckDeleted(posts.map(post => post.id));
-      console.log(checkDeleted);
     }else{
       setCheckedAll(false);
-      console.log(checkDeleted);
     }
 
   }
@@ -182,7 +213,6 @@ const AdminPosts = () => {
         })
       });
       const data = await response.json();
-      console.log(data);
       if(response.ok){
         setRefresh(prev => prev + 1);
         setCheckDeleted([]);
@@ -193,8 +223,8 @@ const AdminPosts = () => {
   }
 
   useEffect(()=>{
-    setActive('all');
-  },[]);
+    monthReportHandler();
+  },[chartData2]);
 
   return (
     <div className={styles.content}>
@@ -339,7 +369,7 @@ const AdminPosts = () => {
               Your publishing frequency is up 12% this month.
             </p>
           <div className={styles.velocityChart}>
-            <Bar data={chartData} options={chartOptions} />
+           <Bar data={chartData} options={chartOptions} />
           </div>
           </div>
         </div>

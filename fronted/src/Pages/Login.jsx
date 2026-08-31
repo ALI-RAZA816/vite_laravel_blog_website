@@ -60,7 +60,6 @@ export default function Login() {
       
       if(!response.ok){
         const error = data.errors;
-        console.log(data);
         if(error?.email?.[0]){
           setFormDataErr({
             emailErr:error.email[0]
@@ -90,7 +89,6 @@ export default function Login() {
         setRestricted(data.message);
       }else{
         navigate('/');
-        console.log(data);
         localStorage.setItem('UserInfo',JSON.stringify(data.user));
         localStorage.setItem('token',data.token);
         setShowLoadingSpinner(false);

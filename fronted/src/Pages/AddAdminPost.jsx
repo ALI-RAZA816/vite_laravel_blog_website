@@ -196,7 +196,6 @@ const AddAdminPost = ({placeholder}) => {
         body:form
       });
       const data = await response.json();
-      console.log(data);
       if(!response.ok){
         setFormDataErr({
           titleErr: data?.errors?.title?.[0] || '',

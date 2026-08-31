@@ -120,16 +120,13 @@ const EditUser = () => {
                 body:form
             });
             const data = await response.json();
-            console.log(data);
             if(response.ok){
                 if(data.status === 200){
                     setRefresh(prev => prev + 1);
                     navigate('/admin-panel/users');
                 }
             }else if(response.status === 422){
-                // if (data?.errors?.image[0]) {
-                    setImageErr(data?.errors?.image[0]);
-                // }
+                setImageErr(data?.errors?.image[0]);
             }
 
         }catch(error){

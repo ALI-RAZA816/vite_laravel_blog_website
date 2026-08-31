@@ -162,7 +162,6 @@ const AddNewUser = () => {
     });
 
     const data = await response.json();
-    console.log(data);
     if(!response.ok){
       if(response.status === 422){
         if(data?.errors?.image[0]){

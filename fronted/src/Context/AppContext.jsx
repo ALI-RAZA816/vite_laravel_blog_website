@@ -98,8 +98,6 @@ const AppContextProvider = ({children})=>{
                 }
             });
             const data = await response.json();
-            console.log(data.posts);
-            // console.log(data.selected);
             if(response.ok){
                 setPosts(data.posts);
                 

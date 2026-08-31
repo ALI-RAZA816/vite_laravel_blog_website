@@ -65,7 +65,7 @@ class PostController extends Controller
         $total = Post::with('category')->with('author')->whereMonth('created_at',now()->month)->whereYear('created_at', now()->year)->count();
 
         MonthlyReport::updateOrCreate([
-            'user_id'=>Auth::id(),
+            'user_id'=>$total->author_id,
             'month'=>now()->month,
             'year'=>now()->year
         ],[

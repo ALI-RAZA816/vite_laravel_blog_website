@@ -54,8 +54,6 @@ const AdminAddCategoryModel = () => {
       if(response.ok){
         setRefresh(prev => prev + 1);
         setShowEditCategoryModel(!showEditCategoryModel);
-      }else{
-        console.log(data);
       }
     }catch(error){
       console.log(error);
