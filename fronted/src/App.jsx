@@ -25,6 +25,7 @@ import EditUser from "./Pages/EditUser";
 import AddNewUser from "./Pages/AddNewUser";
 import AdminEditPost from "./Pages/AdminEditPost";
 import ScrollToTop from "./components/ScrollToTop";
+import AdminPostPreview from "./Pages/AdminPostPreview";
 
 function App() {
 
@@ -49,6 +50,7 @@ function App() {
                 </Route>
                 <Route path="posts" element={<AdminHeader/>}>
                   <Route index element={<AdminPosts/>}/>
+                  <Route path="post-preview/:id" element={<AdminPostPreview/>} />
                   <Route path="add-post" element={<AddAdminPost/>}/>
                   <Route path="edit-post/:id" element={<AdminEditPost/>}/>
                   <Route path="add-categories" element={<AdminCategories/>}/>

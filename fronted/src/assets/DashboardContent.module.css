@@ -301,3 +301,130 @@
   color: #8b87a0;
   cursor: pointer;
 }
+
+.postsTable thead th {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: #8b87a0;
+  background-color: #f6f5fb;
+  border: none;
+  padding: 16px 20px;
+}
+
+.postsTable tbody td {
+  padding: 18px 20px;
+  vertical-align: middle;
+  border-bottom: 1px solid #f0eef7;
+}
+
+.postsTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: #5b3fd9;
+  cursor: pointer;
+}
+
+.postTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f1b2e;
+  margin-bottom: 2px;
+}
+
+.postUrl {
+  font-size: 13px;
+  color: #8b87a0;
+  margin-bottom: 0;
+}
+
+.categoryBadge {
+  font-size: 12px;
+  font-weight: 700;
+  color: #4b3a10;
+  padding: 6px 14px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.authorName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f1b2e;
+}
+
+.statusBadge {
+  font-size: 13px;
+  font-weight: 600;
+  gap: 6px;
+  width: fit-content;
+}
+
+.statusDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.statusPublished {
+  color: #2f9e5c;
+}
+
+.statusPublished .statusDot {
+  background-color: #2f9e5c;
+}
+
+.statusDraft {
+  color: #8b87a0;
+}
+
+.statusDraft .statusDot {
+  background-color: #8b87a0;
+}
+
+.dateCell {
+  font-size: 14px;
+  color: #4b4760;
+}
+
+.actionIcon {
+  font-size: 15px;
+  color: #8b87a0;
+  cursor: pointer;
+}
+
+.actionIcon:hover {
+  color: #5b3fd9;
+}
+
+.deleteIcon:hover {
+  color: #d94f4f;
+}
+
+/* Pagination */
+.paginationRow {
+  padding: 20px;
+}
+
+.showingText {
+  font-size: 14px;
+  color: #8b87a0;
+}
+

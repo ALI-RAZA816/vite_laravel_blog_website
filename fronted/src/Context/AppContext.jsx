@@ -11,6 +11,7 @@ const AppContextProvider = ({children})=>{
     const [deletId, setDeleteId] = useState(null);
     const [refresh, setRefresh] = useState(0);
     const [allUsers, setAllUsers] = useState([]);
+    const [velocity, setVelocity] = useState(null);
     const [categories, setCategories] = useState([]);
     const [posts, setPosts] = useState([]);
     const [Blocked, setBlocked] = useState([]);
@@ -53,7 +54,7 @@ const AppContextProvider = ({children})=>{
             const data = await response.json();
             if(response.ok){
                 if(data.status === true){
-                    setAllUsers(data.users.data);
+                    setAllUsers(data.users);
                     setAllEditors(data.editor);
                     setThisWeek(data.this_week);
                     setBlocked(data.blocked);
@@ -99,6 +100,7 @@ const AppContextProvider = ({children})=>{
             });
             const data = await response.json();
             if(response.ok){
+                setVelocity(data.velocity);
                 setPosts(data.posts);
                 
             }
@@ -188,6 +190,7 @@ const AppContextProvider = ({children})=>{
             setSelectedIcon,
             posts,
             setPosts,
+            velocity,
             setShowEditCategoryModel
         }}>
             {children}

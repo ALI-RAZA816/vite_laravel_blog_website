@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   BsPlusLg,
-  BsChevronDown,
-  BsFilter,
   BsChevronLeft,
   BsChevronRight,
   BsPencilFill,
   BsTrashFill,
   BsStars,
 } from "react-icons/bs";
+import { FaEye } from "react-icons/fa";
+
 import styles from "../assets/AdminPosts.module.css";
 import { Link } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";
@@ -41,6 +41,7 @@ const post = [
 
 const AdminPosts = () => {
 
+  const {velocity} = useContext(AppContext)
   const [chartData2, setChartData2] =useState([]);
   const monthReportHandler = async () => {
     const token = localStorage.getItem('token');
@@ -331,6 +332,7 @@ const AdminPosts = () => {
                   <td className={styles.dateCell}>{post.date}</td>
                   <td>
                     <div className="d-flex align-items-center gap-3">
+                      <Link to={`/admin-panel/posts/post-preview/${post.id}`}><FaEye /></Link>
                       <Link to={`/admin-panel/posts/edit-post/${post.id}`}><BsPencilFill className={styles.actionIcon} /></Link>
                       <BsTrashFill onClick={(event)=> deletePost(event, post.id)} className={`${styles.actionIcon} ${styles.deleteIcon}`} />
                     </div>
@@ -366,7 +368,7 @@ const AdminPosts = () => {
           <div className={styles.velocityCard}>
             <h5 className={styles.velocityTitle}>Content Velocity</h5>
             <p className={styles.velocitySubtitle}>
-              Your publishing frequency is up 12% this month.
+              Your publishing frequency is up {velocity}% this month.
             </p>
           <div className={styles.velocityChart}>
            <Bar data={chartData} options={chartOptions} />

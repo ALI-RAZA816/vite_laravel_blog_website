@@ -14,7 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::select('id','name','email','role','join_date','status','image')->latest()->paginate(3);
+        $users = User::select('id','name','email','role','join_date','status','image')->get();
         $editor = User::where('role','=','editor')->get();
         $this_week = User::whereDate('created_at','=',now())->get();
         $blocked = User::where('status','=','blocked')->get();

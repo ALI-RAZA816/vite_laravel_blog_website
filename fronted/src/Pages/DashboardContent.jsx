@@ -1,51 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   BsFileEarmarkTextFill,
   BsChatSquareTextFill,
   BsPeopleFill,
   BsEyeFill,
   BsPlusLg,
+  BsChevronLeft,
+  BsChevronRight,
+  BsPencilFill,
+  BsTrashFill,
+  BsStars,
 } from "react-icons/bs";
+import { FaEye } from "react-icons/fa";
 import styles from "../assets/DashboardContent.module.css";
+import {Link} from 'react-router-dom';
+import { AppContext } from "../Context/AppContext";
+import { baseUrl } from "../Http/Http";
 
-const statCards = [
-  {
-    icon: <BsFileEarmarkTextFill />,
-    iconBg: "#ece9fb",
-    iconColor: "#5b3fd9",
-    badge: "+12%",
-    badgeType: "positive",
-    label: "Total Posts",
-    value: "1,284",
-  },
-  {
-    icon: <BsChatSquareTextFill />,
-    iconBg: "#fdf3e0",
-    iconColor: "#d99a1a",
-    badge: "+5%",
-    badgeType: "positive",
-    label: "Total Comments",
-    value: "8,432",
-  },
-  {
-    icon: <BsPeopleFill />,
-    iconBg: "#ece9fb",
-    iconColor: "#5b3fd9",
-    badge: "Stable",
-    badgeType: "neutral",
-    label: "Total Users",
-    value: "24,501",
-  },
-  {
-    icon: <BsEyeFill />,
-    iconBg: "#fbe9e9",
-    iconColor: "#d94f4f",
-    badge: "+24%",
-    badgeType: "positive",
-    label: "Total Views",
-    value: "942k",
-  },
-];
 
 const chartData = [
   { month: "Jan", value: 45 },
@@ -93,6 +64,51 @@ const recentPosts = [
 ];
 
 const DashboardContent = () => {
+  const {posts} = useContext(AppContext);
+  const {velocity} = useContext(AppContext);
+  const {allUsers} = useContext(AppContext);
+
+  const recentPost = posts.slice(0,5);
+
+  const totalPost = posts.length;
+  const statCards = [
+    {
+      icon: <BsFileEarmarkTextFill />,
+      iconBg: "#ece9fb",
+      iconColor: "#5b3fd9",
+      badge: `+${velocity}%`,
+      badgeType: "positive",
+      label: "Total Posts",
+      value:totalPost <= 1000 ? `${totalPost}` : `${(totalPost/1000).toFixed(1)}k`,
+    },
+    {
+      icon: <BsChatSquareTextFill />,
+      iconBg: "#fdf3e0",
+      iconColor: "#d99a1a",
+      badge: "+5%",
+      badgeType: "positive",
+      label: "Total Comments",
+      value: "8,432",
+    },
+    {
+      icon: <BsPeopleFill />,
+      iconBg: "#ece9fb",
+      iconColor: "#5b3fd9",
+      badge: "Stable",
+      badgeType: "neutral",
+      label: "Total Users",
+      value:allUsers.length <= 1000 ? `${allUsers.length}` : `${(allUsers.length/1000).toFixed(1)}k`,
+    },
+    {
+      icon: <BsEyeFill />,
+      iconBg: "#fbe9e9",
+      iconColor: "#d94f4f",
+      badge: "+24%",
+      badgeType: "positive",
+      label: "Total Views",
+      value: "942k",
+    },
+  ];
   const maxValue = Math.max(...chartData.map((d) => d.value));
 
   return (
@@ -105,10 +121,10 @@ const DashboardContent = () => {
             Welcome back. Here's what happened in the last 24 hours.
           </p>
         </div>
-        <button className={`d-flex align-items-center ${styles.createBtn}`}>
+        <Link to="/admin-panel/posts/add-post"><button className={`d-flex align-items-center ${styles.createBtn}`}>
           <BsPlusLg className="me-2" />
           Create Post
-        </button>
+        </button></Link>
       </div>
 
       {/* Stat cards */}
@@ -202,49 +218,77 @@ const DashboardContent = () => {
       <div className={`${styles.panel} mt-4`}>
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h6 className={styles.panelTitle}>RECENT POSTS</h6>
-          <a href="#" className={styles.seeFullList}>
+          <Link to="/admin-panel/posts" className={styles.seeFullList}>
             See full list
-          </a>
+          </Link>
         </div>
-        <div className="table-responsive">
-          <table className={`table ${styles.postsTable}`}>
-            <thead>
-              <tr>
-                <th>TITLE</th>
-                <th>STATUS</th>
-                <th>AUTHOR</th>
-                <th>DATE</th>
-                <th>ACTIONS</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recentPosts.map((post, index) => (
-                <tr key={index}>
-                  <td className={styles.postTitleCell}>
-                    <div className={styles.postThumb}></div>
-                    {post.title}
-                  </td>
-                  <td>
-                    <span
-                      className={`${styles.statusBadge} ${
-                        post.status === "PUBLISHED"
-                          ? styles.statusPublished
-                          : styles.statusDraft
-                      }`}
-                    >
-                      {post.status}
-                    </span>
-                  </td>
-                  <td>{post.author}</td>
-                  <td>{post.date}</td>
-                  <td>
-                    <span className={styles.actionsDots}>&#8942;</span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+          {/* Table */}
+              <div className={styles.tableCard}>
+                <div className="table-responsive">
+                  <table className={`table mb-0 ${styles.postsTable}`}>
+                    <thead>
+                      <tr>
+                        <th>POST TITLE</th>
+                        <th>CATEGORY</th>
+                        <th>AUTHOR</th>
+                        <th>STATUS</th>
+                        <th>DATE</th>
+                        <th>ACTIONS</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {recentPost?.map((post, index) => (
+                        <tr key={index}>
+                          <td>
+                            <p className={styles.postTitle}>{post.title}</p>
+                            <p className={styles.postUrl}>{post.category.slug}</p>
+                          </td>
+                          <td>
+                            <span
+                              className={styles.categoryBadge}
+                              style={{ backgroundColor: '#f7d774'}}
+                            >
+                              {post.category.name}
+                            </span>
+                          </td>
+                          <td>
+                            <div className="d-flex align-items-center gap-2">
+                              <div
+                                className={styles.avatar}
+                                style={{ backgroundColor: '#5b3fd9', overflow:'hidden'}}
+                              >
+                                {post.author.image ? <img src={`${baseUrl}/uploads/${post.author.image}`} alt="" />:
+                                  <>
+                                      {post.author.name.split(' ')[0].substr(0, 1)}
+                                      {post.author.name.split(' ')[1]?.substr(0, 1)}
+                                  </>
+                                }
+                              </div>
+                              <span className={styles.authorName}>{post.author.name}</span>
+                            </div>
+                          </td>
+                          <td>
+                            <span
+                              className={`d-flex align-items-center ${styles.statusBadge} ${
+                                post.published === "published"
+                                  ? styles.statusPublished
+                                  : styles.statusDraft
+                              }`}
+                            >
+                              <span className={`${styles.statusDot}`}></span>
+                              <span className='text-capitalize'>{post.published}</span>
+                              
+                            </span>
+                          </td>
+                          <td className={styles.dateCell}>{post.date}</td>
+                          <td className={`${styles.dateCell} `}><Link to={`/admin-panel/posts/post-preview/${post.id}`}><FaEye /></Link></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+        
       </div>
     </div>
   );

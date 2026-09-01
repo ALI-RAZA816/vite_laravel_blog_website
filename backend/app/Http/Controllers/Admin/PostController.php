@@ -16,9 +16,13 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::with('category')->with('author')->get();
+        $total_posts = Post::count();
+        $this_month = Post::whereMonth('created_at',now()->month)->count();
+        $velocity = $total_posts > 0 ? round(($this_month / $total_posts) * 100, 2) : 0;
 
         return response()->json([
             'posts'=>$posts,
+            'velocity'=>$velocity
         ],200);
     }
 
@@ -65,7 +69,7 @@ class PostController extends Controller
         $total = Post::with('category')->with('author')->whereMonth('created_at',now()->month)->whereYear('created_at', now()->year)->count();
 
         MonthlyReport::updateOrCreate([
-            'user_id'=>$total->author_id,
+            'user_id'=>Auth::id(),
             'month'=>now()->month,
             'year'=>now()->year
         ],[
@@ -82,7 +86,7 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        $post = Post::where('id',$id)->first();
+        $post = Post::with('category')->with('author')->where('id',$id)->first();
         if(!$post){
             return response()->json([
                 'messate'=>'Not found'

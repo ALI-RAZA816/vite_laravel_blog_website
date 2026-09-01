@@ -253,13 +253,13 @@ const AdminEditPost = ({placeholder}) => {
             <div className="d-flex align-items-center justify-content-between mb-3">
               <h6 className={styles.panelTitle}>FEATURED IMAGE</h6>
             </div>
-              <div className={styles.featuredImage}>
-                <label htmlFor="post-image">
-                  {/* <CiImageOn /> */}
-                  {preview ? (<img src={preview} alt="" />): formData.image? (<img src={`${baseUrl}/posts-images/${formData.image}`} alt="" />) : <ImageIcon/>}
-                  <input type="file" onChange={previewHandler} name="post-image" id="post-image" hidden />
+                <label htmlFor="post-image" className={styles.featuredImage}>
+                <div className={styles.featuredImage}>
+                    {/* <CiImageOn /> */}
+                    {preview ? (<img src={preview} alt="" />): formData.image? (<img src={`${baseUrl}/posts-images/${formData.image}`} alt="" />) : <ImageIcon/>}
+                    <input type="file" onChange={previewHandler} name="post-image" id="post-image" hidden />
+                </div>
                 </label>
-              </div>
               <span className="text-danger">{formDataErr.imageErr}</span>
           </div>
 

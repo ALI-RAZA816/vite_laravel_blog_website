@@ -27,28 +27,28 @@ const ManageUsers = () => {
       iconBg: "#e6e0f8",
       iconColor: "#5b3fd9",
       label: "TOTAL USERS",
-      value: allUsers.length < 9 ? `0${allUsers.length}` : allUsers.length,
+      value: allUsers.length <= 1000 ? `${allUsers.length}` : `${(allUsers.length/1000).toFixed(1)}k`,
     },
     {
       icon: <BsShieldFillCheck />,
       iconBg: "#faf1d8",
       iconColor: "#c98a1a",
       label: "EDITORS",
-      value: allEditors.length < 9 ? `0${allEditors.length}` : allEditors.length,
+      value: allEditors.length <= 1000 ? `${allEditors.length}` : `${(allEditors.length/1000).toFixed(1)}k`,
     },
     {
       icon: <BsGraphUpArrow />,
       iconBg: "#e6e0f8",
       iconColor: "#5b3fd9",
       label: "NEW THIS WEEK",
-      value: thisWeek.length < 9 ? `+0${thisWeek.length}` : `0${thisWeek.length}`,
+      value: thisWeek.length <= 1000 ? `${thisWeek.length}` :`${(thisWeek.length/1000).toFixed(1)}k`,
     },
     {
       icon: <BsSlashCircleFill />,
       iconBg: "#fbe1e1",
       iconColor: "#d94f4f",
       label: "BLOCKED",
-      value: Blocked.length < 9 ? `+0${Blocked.length}` : `0${Blocked.length}`
+      value: Blocked.length <= 1000 ? `+${Blocked.length}` : `${(Blocked.length/1000).toFixed(1)}k`
     },
   ];
 
