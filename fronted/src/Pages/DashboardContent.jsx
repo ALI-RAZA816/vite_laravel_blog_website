@@ -66,7 +66,7 @@ const recentPosts = [
 const DashboardContent = () => {
   const {posts} = useContext(AppContext);
   const {velocity} = useContext(AppContext);
-  const {allUsers} = useContext(AppContext);
+  const {totalUsers} = useContext(AppContext);
 
   const recentPost = posts.slice(0,5);
 
@@ -97,7 +97,7 @@ const DashboardContent = () => {
       badge: "Stable",
       badgeType: "neutral",
       label: "Total Users",
-      value:allUsers.length <= 1000 ? `${allUsers.length}` : `${(allUsers.length/1000).toFixed(1)}k`,
+      value:totalUsers.length <= 1000 ? `${totalUsers.length}` : `${(totalUsers.length/1000).toFixed(1)}k`,
     },
     {
       icon: <BsEyeFill />,

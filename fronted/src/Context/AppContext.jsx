@@ -9,6 +9,7 @@ const AppContextProvider = ({children})=>{
     // all users data 
     const [deleteModel, setDeleteModel] = useState(false);
     const [deletId, setDeleteId] = useState(null);
+    const [totalUsers, setTotalUsers] = useState(0);
     const [refresh, setRefresh] = useState(0);
     const [allUsers, setAllUsers] = useState([]);
     const [velocity, setVelocity] = useState(null);
@@ -39,11 +40,21 @@ const AppContextProvider = ({children})=>{
         setDeleteId(deleteId);
     }
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pagination, setPagination] = useState({
+        currentPage:'',
+        from:'',
+        lastPage:'',
+        to:'',
+        total:'',
+        perPage:''
+    })
+    
     // fetch all users
     const fetchUsers = async ()=>{
         try{
             const token = localStorage.getItem('token');
-            const response = await fetch(`${apiUrl}/users`,{
+            const response = await fetch(`${apiUrl}/users?page=${currentPage}`,{
                 method:'GET',
                 headers:{
                     'Content-type':'application/json',
@@ -54,10 +65,19 @@ const AppContextProvider = ({children})=>{
             const data = await response.json();
             if(response.ok){
                 if(data.status === true){
-                    setAllUsers(data.users);
+                    setTotalUsers(data.total);
+                    setAllUsers(data.users.data);
                     setAllEditors(data.editor);
                     setThisWeek(data.this_week);
                     setBlocked(data.blocked);
+                    setPagination({
+                        currentPage:data.users.current_page,
+                        from:data.users.from,
+                        lastPage:data.users.last_page,
+                        to:data.users.to,
+                        total:data.users.total,
+                        perPage:data.users.per_page
+                    });
                 }
             }
         }catch(error){
@@ -101,7 +121,7 @@ const AppContextProvider = ({children})=>{
             const data = await response.json();
             if(response.ok){
                 setVelocity(data.velocity);
-                setPosts(data.posts);
+                setPosts(data.posts.data);
                 
             }
         }catch(error){
@@ -154,12 +174,11 @@ const AppContextProvider = ({children})=>{
         }
     }
 
-
     useEffect(()=>{
         fetchUsers();
         fetchPosts();
         fetchCategory();
-    },[refresh]);
+    },[refresh, currentPage]);
 
     return (
         <AppContext.Provider value={{
@@ -179,6 +198,7 @@ const AppContextProvider = ({children})=>{
             setDeleteModel,
             deletId,
             setAllUsers,
+            totalUsers,
             categories,
             DeleteModelHandler,
             showEditCategoryModel,
@@ -191,6 +211,9 @@ const AppContextProvider = ({children})=>{
             posts,
             setPosts,
             velocity,
+            pagination,
+            setCurrentPage,
+            currentPage,
             setShowEditCategoryModel
         }}>
             {children}

@@ -15,6 +15,10 @@ import { apiUrl, baseUrl } from "../Http/Http";
 const ManageUsers = () => {
 
   const {allUsers} = useContext(AppContext);
+  const {totalUsers} = useContext(AppContext);
+  const {pagination} = useContext(AppContext);
+  const {currentPage} = useContext(AppContext);
+  const {setCurrentPage} = useContext(AppContext);
   const {setAllUsers} = useContext(AppContext);
   const {thisWeek} = useContext(AppContext);
   const {Blocked} = useContext(AppContext);
@@ -27,7 +31,7 @@ const ManageUsers = () => {
       iconBg: "#e6e0f8",
       iconColor: "#5b3fd9",
       label: "TOTAL USERS",
-      value: allUsers.length <= 1000 ? `${allUsers.length}` : `${(allUsers.length/1000).toFixed(1)}k`,
+      value: totalUsers.length <= 1000 ? `${totalUsers.length}` : `${(totalUsers.length/1000).toFixed(1)}k`,
     },
     {
       icon: <BsShieldFillCheck />,
@@ -66,7 +70,7 @@ const ManageUsers = () => {
     });
     const data = await response.json();
     if(response.ok){
-      setAllUsers(data.users);
+      setAllUsers(data.users.data);
     }
 
   }
@@ -94,8 +98,23 @@ const ManageUsers = () => {
       searchHandler(searchTerm);
     },600);
   }
- 
 
+  const pages = [];
+  const start = Math.max(1, pagination.currentPage - 2);
+  const end = Math.min(pagination.lastPage, pagination.currentPage + 2);
+  if(start > 1){
+    pages.push(1);
+    if(start > 2) pages.push('...');
+  }
+
+  for (let i = start; i<=end; i++  ){
+    pages.push(i);
+  }
+ 
+  if(end < pagination.lastPage){
+    if(end < pagination.lastPage - 1) pages.push("...");
+    pages.push(pagination.lastPage);
+  }
   return (
     <div className={styles.content}>
       {/* Heading */}
@@ -234,16 +253,17 @@ const ManageUsers = () => {
 
         {/* Pagination */}
         <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
-          <span className={styles.showingText}>Showing 1 to 4 of 1,284 users</span>
+          <span className={styles.showingText}>Showing {pagination.from} to {pagination.to} of {pagination.total} users</span>
           <div className="d-flex align-items-center gap-2">
-            <button className={styles.pageBtn}>
+            <button disabled={pagination.currentPage === 1} onClick={()=> setCurrentPage(pagination.currentPage - 1)} className={styles.pageBtn}>
               <BsChevronLeft />
             </button>
-            <button className={`${styles.pageBtn} ${styles.pageBtnActive}`}>1</button>
-            <button className={styles.pageBtn}>2</button>
-            <button className={styles.pageBtn}>3</button>
-            <span className={styles.pageDots}>...</span>
-            <button className={styles.pageBtn}>
+            {pages.map((page, index)=>{
+              return page === '...' ?(
+                <span className={styles.pageDots}>...</span>
+              ):(<button onClick={()=> setCurrentPage(page)} className={`${styles.pageBtn} ${currentPage === page ? `${styles.pageBtnActive}`: ''}`}>{page}</button>)
+            })}
+            <button onClick={()=> setCurrentPage(pagination.currentPage + 1)} disabled={pagination.currentPage === pagination.lastPage} className={styles.pageBtn}>
               <BsChevronRight />
             </button>
           </div>
