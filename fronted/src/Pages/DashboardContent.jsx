@@ -65,6 +65,7 @@ const recentPosts = [
 
 const DashboardContent = () => {
   const {posts} = useContext(AppContext);
+  const {totalPosts} = useContext(AppContext);
   const {velocity} = useContext(AppContext);
   const {totalUsers} = useContext(AppContext);
 
@@ -79,7 +80,7 @@ const DashboardContent = () => {
       badge: `+${velocity}%`,
       badgeType: "positive",
       label: "Total Posts",
-      value:totalPost <= 1000 ? `${totalPost}` : `${(totalPost/1000).toFixed(1)}k`,
+      value:totalPosts.length <= 1000 ? `${totalPosts.length}` : `${(totalPosts.length/1000).toFixed(1)}k`,
     },
     {
       icon: <BsChatSquareTextFill />,

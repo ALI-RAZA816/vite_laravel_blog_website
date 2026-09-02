@@ -55,6 +55,10 @@ const category = [
 const AdminCategories = () => {
 
     const {categories} = useContext(AppContext);
+    const {catPagination} = useContext(AppContext);
+    const {setCatPagination} = useContext(AppContext);
+    const {currentCatPage} = useContext(AppContext);
+    const {setCurrentCatPage} = useContext(AppContext);
     const {setRefresh} = useContext(AppContext);
     const {viewCategory} = useContext(AppContext);
     const {CategoryModelHandler} = useContext(AppContext);
@@ -79,6 +83,24 @@ const AdminCategories = () => {
             console.log(error);
         }
     }
+
+    const pages = [];
+    const start = Math.max(1, catPagination.currentPage - 2);
+    const end = Math.min(catPagination.lastPage, catPagination.currentPage + 2);
+    if(start > 1){
+        pages.push(1);
+        if(start > 2) pages.push('...');
+    }
+
+    for (let i = start; i<=end; i++  ){
+        pages.push(i);
+    }
+    
+    if(end < catPagination.lastPage){
+        if(end < catPagination.lastPage - 1) pages.push("...");
+        pages.push(catPagination.lastPage);
+    }
+
 
   return (
     <>
@@ -142,18 +164,20 @@ const AdminCategories = () => {
 
             {/* Pagination */}
             <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
-            <span className={styles.showingText}>Showing 1-4 of 12 categories</span>
-            <div className="d-flex align-items-center gap-2">
-                <button className={styles.pageBtn}>
-                <BsChevronLeft />
-                </button>
-                <button className={`${styles.pageBtn} ${styles.pageBtnActive}`}>1</button>
-                <button className={styles.pageBtn}>2</button>
-                <button className={styles.pageBtn}>3</button>
-                <button className={styles.pageBtn}>
-                <BsChevronRight />
-                </button>
-            </div>
+                <span className={styles.showingText}>Showing {catPagination.from} to {catPagination.to} of {catPagination.total} users</span>
+                <div className="d-flex align-items-center gap-2">
+                    <button disabled={catPagination.currentPage === 1} onClick={()=> setCurrentCatPage(catPagination.currentPage - 1)} className={styles.pageBtn}>
+                    <BsChevronLeft />
+                    </button>
+                    {pages.map((page, index)=>{
+                    return page === '...' ?(
+                        <span className={styles.pageDots}>...</span>
+                    ):(<button onClick={()=> setCurrentCatPage(page)} className={`${styles.pageBtn} ${currentCatPage === page ? `${styles.pageBtnActive}`: ''}`}>{page}</button>)
+                    })}
+                    <button onClick={()=> setCurrentCatPage(catPagination.currentPage + 1)} disabled={catPagination.currentPage === catPagination.lastPage} className={styles.pageBtn}>
+                    <BsChevronRight />
+                    </button>
+                </div>
             </div>
         </div>
 

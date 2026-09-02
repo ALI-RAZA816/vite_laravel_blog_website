@@ -15,13 +15,15 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with('category')->with('author')->get();
+        $total = Post::all();
+        $posts = Post::with('category')->with('author')->latest()->paginate(10);
         $total_posts = Post::count();
         $this_month = Post::whereMonth('created_at',now()->month)->count();
         $velocity = $total_posts > 0 ? round(($this_month / $total_posts) * 100, 2) : 0;
 
         return response()->json([
             'posts'=>$posts,
+            'total'=>$total,
             'velocity'=>$velocity
         ],200);
     }
@@ -190,14 +192,14 @@ class PostController extends Controller
     public function searchPost(Request $request){
         $search_term = $request->query('query');
         if($search_term === 'all'){
-            $search_post = Post::with('category')->with('author')->get();
+            $search_post = Post::with('category')->with('author')->latest()->paginate(10);
             return response()->json([
-                'post'=>$search_post
+                'posts'=>$search_post
             ]);
         }
-        $search_post = Post::with('category')->with('author')->where('title','LIKE','%'. $search_term . '%')->orWhere("category_id", '=', $search_term)->orWhere('published','=',$search_term)->get();
+        $search_post = Post::with('category')->with('author')->where('title','LIKE','%'. $search_term . '%')->orWhere("category_id", '=', $search_term)->orWhere('published','=',$search_term)->latest()->paginate(10);
         return response()->json([
-            'post'=>$search_post
+            'posts'=>$search_post
         ]);
     }
 

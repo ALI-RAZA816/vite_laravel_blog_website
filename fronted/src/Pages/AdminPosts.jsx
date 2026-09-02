@@ -41,7 +41,12 @@ const post = [
 
 const AdminPosts = () => {
 
-  const {velocity} = useContext(AppContext)
+  const {velocity} = useContext(AppContext);
+  const {postPagination} = useContext(AppContext);
+  const {setPostPagination}  = useContext(AppContext);
+  const {currentPostPage} = useContext(AppContext);
+  const {setCurrentPostPage} = useContext(AppContext);
+  const {pagination} = useContext(AppContext);
   const [chartData2, setChartData2] =useState([]);
   const monthReportHandler = async () => {
     const token = localStorage.getItem('token');
@@ -138,7 +143,7 @@ const AdminPosts = () => {
   const searchTimeout = useRef(null);
   const searchHandler = async (searchTerm)=>{
     const token = localStorage.getItem('token');
-    const response = await fetch(`${apiUrl}/search-post?query=${searchTerm}`,{
+    const response = await fetch(`${apiUrl}/search-post?query=${searchTerm}&page=${currentPostPage}`,{
       method:'POST',
       headers:{
         'Content-type':'application/json',
@@ -148,7 +153,7 @@ const AdminPosts = () => {
     });
     const data = await response.json();
     if(response.ok){
-      setPosts(data.post);
+      setPosts(data.posts.data);
     }
 
   }
@@ -223,9 +228,26 @@ const AdminPosts = () => {
     }
   }
 
+  const pages = [];
+  const start = Math.max(1, postPagination.currentPage - 2);
+  const end = Math.min(postPagination.lastPage, postPagination.currentPage + 2);
+  if(start > 1){
+    pages.push(1);
+    if(start > 2) pages.push('...');
+  }
+
+  for (let i = start; i<=end; i++  ){
+    pages.push(i);
+  }
+ 
+  if(end < postPagination.lastPage){
+    if(end < postPagination.lastPage - 1) pages.push("...");
+    pages.push(postPagination.lastPage);
+  }
+
   useEffect(()=>{
     monthReportHandler();
-  },[chartData2]);
+  },[]);
 
   return (
     <div className={styles.content}>
@@ -343,19 +365,20 @@ const AdminPosts = () => {
           </table>
         </div>
 
+     
         {/* Pagination */}
         <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
-          <span className={styles.showingText}>Showing 1 to 4 of 24 posts</span>
+          <span className={styles.showingText}>Showing {postPagination.from} to {postPagination.to} of {postPagination.total} users</span>
           <div className="d-flex align-items-center gap-2">
-            <button className={styles.pageBtn}>
+            <button disabled={postPagination.currentPage === 1} onClick={()=> setCurrentPostPage(postPagination.currentPage - 1)} className={styles.pageBtn}>
               <BsChevronLeft />
             </button>
-            <button className={`${styles.pageBtn} ${styles.pageBtnActive}`}>1</button>
-            <button className={styles.pageBtn}>2</button>
-            <button className={styles.pageBtn}>3</button>
-            <span className={styles.pageDots}>...</span>
-            <button className={styles.pageBtn}>6</button>
-            <button className={styles.pageBtn}>
+            {pages.map((page, index)=>{
+              return page === '...' ?(
+                <span className={styles.pageDots}>...</span>
+              ):(<button onClick={()=> setCurrentPostPage(page)} className={`${styles.pageBtn} ${currentPostPage === page ? `${styles.pageBtnActive}`: ''}`}>{page}</button>)
+            })}
+            <button onClick={()=> setCurrentPostPage(postPagination.currentPage + 1)} disabled={postPagination.currentPage === postPagination.lastPage} className={styles.pageBtn}>
               <BsChevronRight />
             </button>
           </div>

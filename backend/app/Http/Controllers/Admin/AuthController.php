@@ -116,12 +116,12 @@ class AuthController extends Controller
     public function searchUser(Request $request){
         $search_term = $request->query('query');
         if($search_term === 'all'){
-            $search_user = User::all();
+            $search_user = User::paginate(10);
             return response()->json([
                 'users'=>$search_user
             ]);
         }
-        $search_user = User::where('name','LIKE','%'. $search_term . '%')->orWhere('email','LIKE','%'. $search_term . '%')->orWhere('role','LIKE','%'. $search_term . '%')->orWhere('status',$search_term )->get();
+        $search_user = User::where('name','LIKE','%'. $search_term . '%')->orWhere('email','LIKE','%'. $search_term . '%')->orWhere('role','LIKE','%'. $search_term . '%')->orWhere('status',$search_term )->latest()->paginate(10);
         return response()->json([
             'users'=>$search_user
         ]);

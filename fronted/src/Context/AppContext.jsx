@@ -10,6 +10,7 @@ const AppContextProvider = ({children})=>{
     const [deleteModel, setDeleteModel] = useState(false);
     const [deletId, setDeleteId] = useState(null);
     const [totalUsers, setTotalUsers] = useState(0);
+    const [totalPosts, setTotalPosts] = useState(0);
     const [refresh, setRefresh] = useState(0);
     const [allUsers, setAllUsers] = useState([]);
     const [velocity, setVelocity] = useState(null);
@@ -48,7 +49,25 @@ const AppContextProvider = ({children})=>{
         to:'',
         total:'',
         perPage:''
-    })
+    });
+    const [currentPostPage, setCurrentPostPage] = useState(1);
+    const [postPagination, setPostPagination] = useState({
+        currentPage:'',
+        from:'',
+        lastPage:'',
+        to:'',
+        total:'',
+        perPage:''
+    });
+    const [currentCatPage, setCurrentCatPage] = useState(1);
+    const [catPagination, setCatPagination] = useState({
+        currentPage:'',
+        from:'',
+        lastPage:'',
+        to:'',
+        total:'',
+        perPage:''
+    });
     
     // fetch all users
     const fetchUsers = async ()=>{
@@ -89,7 +108,7 @@ const AppContextProvider = ({children})=>{
     const fetchCategory = async ()=>{
         try{
             const token = localStorage.getItem('token');
-            const response = await fetch(`${apiUrl}/categories`,{
+            const response = await fetch(`${apiUrl}/categories?page=${currentCatPage}`,{
                 method:'GET',
                 headers:{
                     'Content-type':'application/json',
@@ -99,7 +118,15 @@ const AppContextProvider = ({children})=>{
             });
             const data = await response.json();
             if(response.ok){
-                setCategories(data.category);
+                setCategories(data.category.data);
+                setCatPagination({
+                    currentPage:data.category.current_page,
+                    from:data.category.from,
+                    lastPage:data.category.last_page,
+                    to:data.category.to,
+                    total:data.category.total,
+                    perPage:data.category.per_page
+                });
                 
             }
         }catch(error){
@@ -110,7 +137,7 @@ const AppContextProvider = ({children})=>{
     const fetchPosts = async ()=>{
         try{
             const token = localStorage.getItem('token');
-            const response = await fetch(`${apiUrl}/posts`,{
+            const response = await fetch(`${apiUrl}/posts?page=${currentPostPage}`,{
                 method:'GET',
                 headers:{
                     'Content-type':'application/json',
@@ -120,8 +147,17 @@ const AppContextProvider = ({children})=>{
             });
             const data = await response.json();
             if(response.ok){
+                setTotalPosts(data.total);
                 setVelocity(data.velocity);
                 setPosts(data.posts.data);
+                setPostPagination({
+                    currentPage:data.posts.current_page,
+                    from:data.posts.from,
+                    lastPage:data.posts.last_page,
+                    to:data.posts.to,
+                    total:data.posts.total,
+                    perPage:data.posts.per_page
+                });
                 
             }
         }catch(error){
@@ -178,7 +214,7 @@ const AppContextProvider = ({children})=>{
         fetchUsers();
         fetchPosts();
         fetchCategory();
-    },[refresh, currentPage]);
+    },[refresh, currentPage, currentPostPage, currentCatPage]);
 
     return (
         <AppContext.Provider value={{
@@ -214,6 +250,15 @@ const AppContextProvider = ({children})=>{
             pagination,
             setCurrentPage,
             currentPage,
+            currentPostPage,
+            setCurrentPostPage,
+            currentCatPage,
+            setCurrentCatPage,
+            postPagination,
+            setPostPagination,
+            catPagination,
+            setCatPagination,
+            totalPosts,
             setShowEditCategoryModel
         }}>
             {children}

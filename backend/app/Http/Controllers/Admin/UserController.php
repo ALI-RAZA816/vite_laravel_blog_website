@@ -14,12 +14,14 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::select('id','name','email','role','join_date','status','image')->get();
+        $total = User::all();
+        $users = User::select('id','name','email','role','join_date','status','image')->latest()->paginate(10);
         $editor = User::where('role','=','editor')->get();
         $this_week = User::whereDate('created_at','=',now())->get();
         $blocked = User::where('status','=','blocked')->get();
         return response()->json([
             'status'=>true,
+            'total'=>$total,
             'users'=>$users,
             'editor'=>$editor,
             'this_week'=>$this_week,

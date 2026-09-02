@@ -60,7 +60,7 @@ const ManageUsers = () => {
   const searchTimeout = useRef(null);
   const searchHandler = async (searchTerm)=>{
     const token = localStorage.getItem('token');
-    const response = await fetch(`${apiUrl}/search?query=${searchTerm}`,{
+    const response = await fetch(`${apiUrl}/search?query=${searchTerm}&page=${currentPage}`,{
       method:'POST',
       headers:{
         'Content-type':'application/json',
@@ -115,6 +115,7 @@ const ManageUsers = () => {
     if(end < pagination.lastPage - 1) pages.push("...");
     pages.push(pagination.lastPage);
   }
+
   return (
     <div className={styles.content}>
       {/* Heading */}
@@ -252,7 +253,7 @@ const ManageUsers = () => {
         </div>
 
         {/* Pagination */}
-        <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
+        {pagination.lastPage && <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
           <span className={styles.showingText}>Showing {pagination.from} to {pagination.to} of {pagination.total} users</span>
           <div className="d-flex align-items-center gap-2">
             <button disabled={pagination.currentPage === 1} onClick={()=> setCurrentPage(pagination.currentPage - 1)} className={styles.pageBtn}>
@@ -267,7 +268,7 @@ const ManageUsers = () => {
               <BsChevronRight />
             </button>
           </div>
-        </div>
+        </div>}
       </div>
 
       {/* Footer */}
