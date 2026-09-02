@@ -1,60 +1,13 @@
 import { Link } from "react-router-dom";
 import styles from '../assets/Home.module.css';
 import { IoMdSearch } from "react-icons/io";
-
-
-
-
-const recentStories = [
-  {
-    img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400",
-    category: "LIFESTYLE",
-    date: "March 12, 2024",
-    title: "Morning Rituals: The Hidden Power of Coffee & Contemplation",
-    excerpt:
-      "Mornings are the architect of our days. Exploring why setting an intentional tone at dawn changes...",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=400",
-    category: "TRAVEL",
-    date: "March 10, 2024",
-    title: "Wandering Through the Cobblestone Streets of Tuscany",
-    excerpt:
-      "Beyond the tourist maps lies the true soul of Italy. A journey into the heart of rural villages and ancien...",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1517673132405-a56a62b18caf?w=400",
-    category: "CREATIVITY",
-    date: "March 08, 2024",
-    title: "The Simple Joy of Cursive: Why Writing by Hand Matters",
-    excerpt:
-      "In a world of keyboards, the tactile connection of pen to paper offers a unique mental release and creativ...",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400",
-    category: "WELLNESS",
-    date: "March 05, 2024",
-    title: "Seasonal Eating: Nourishing Your Body with the Earth's Cycles",
-    excerpt:
-      "Understanding the rhythm of agriculture and how aligning our diet with nature improves our...",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400",
-    category: "CURATION",
-    date: "March 01, 2024",
-    title: "Curating a Home Library: Quality Over Quantity Always Wins",
-    excerpt:
-      "How to select books that truly matter to you, creating a sanctuary of knowledge rather than a...",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=400",
-    category: "MINDFULNESS",
-    date: "Feb 28, 2024",
-    title: "The Importance of Staring at the Horizon Every Single Day",
-    excerpt:
-      "Why our eyes and minds need expansive views to counteract the claustrophobia of small digital...",
-  },
-];
+import { useContext, useEffect, useState } from "react";
+import { AppContext } from "../Context/AppContext";
+import { apiUrl, baseUrl } from "../Http/Http";
+import {
+  BsChevronLeft,
+  BsChevronRight
+} from "react-icons/bs";
 
 const popular = [
   { title: "The Philosophy of Wabi-Sabi in Modern Homes", date: "March 04 • 5 min read", img: "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=100" },
@@ -72,6 +25,72 @@ const categories = [
 ];
 
 export default function Home() {
+
+  // const {totalPosts} = useContext(AppContext);
+  const [currentPostPage, setCurrentPostPage] = useState(1);
+  const [totalPosts, setTotalPosts] = useState([]);
+  const [postPagination, setPostPagination] = useState({
+    currentPage:'',
+    from:'',
+    lastPage:'',
+    to:'',
+    total:'',
+    perPage:'',
+  });
+
+  // fetch posts
+  const fetchPosts = async ()=>{
+      try{
+          const token = localStorage.getItem('token');
+          const response = await fetch(`${apiUrl}/posts?page=${currentPostPage}`,{
+              method:'GET',
+              headers:{
+                  'Content-type':'application/json',
+                  'Accept':'application/json',
+                  'Authorization':`Bearer ${token}`
+              }
+          });
+          const data = await response.json();
+          // console.log(data.total);
+          if(response.ok){
+              setTotalPosts(data.posts.data);
+              setPostPagination({
+                  currentPage:data.posts.current_page,
+                  from:data.posts.from,
+                  lastPage:data.posts.last_page,
+                  to:data.posts.to,
+                  total:data.posts.total,
+                  perPage:data.posts.per_page
+              });
+              
+          }
+      }catch(error){
+          console.log(error);
+      }
+  }
+
+  const pages = [];
+  const start = Math.max(1, postPagination.currentPage - 2);
+  const end = Math.min(postPagination.lastPage, postPagination.currentPage + 2);
+  if(start > 1){
+    pages.push(1);
+    if(start > 2) pages.push('...');
+  }
+
+  for (let i = start; i<=end; i++  ){
+    pages.push(i);
+  }
+ 
+  if(end < postPagination.lastPage){
+    if(end < postPagination.lastPage - 1) pages.push("...");
+    pages.push(postPagination.lastPage);
+  }
+
+  useEffect(()=>{
+    fetchPosts();
+  },[currentPostPage]);
+
+
   return (
     <div className={styles.page}>
 
@@ -96,29 +115,38 @@ export default function Home() {
               <Link to="/all-posts" className={styles.viewAll}>View All &rsaquo;</Link>
             </div>
             <div className="row">
-              {recentStories.map((post, i) => (
+              {totalPosts.map((post, i) => (
                 <div className="col-md-6" key={i}>
-                  <div className={styles.card}>
-                    <img src={post.img} alt={post.title} className={styles.cardImg} />
+                  <Link to="/blog-post"><div className={styles.card}>
+                    <img src={`${baseUrl}/posts-images/${post.image}`} alt={post.title} className={styles.cardImg} />
                     <div className={styles.cardMeta}>
-                      <span className={styles.cardCategory}>{post.category}</span>
+                      <span className={styles.cardCategory}>{post.category.name}</span>
                       <span className={styles.cardDot}>•</span>
                       <span>{post.date}</span>
                     </div>
-                    <h3 className={styles.cardTitle}>{post.title}</h3>
-                    <p className={styles.cardExcerpt}>{post.excerpt}</p>
-                  </div>
+                    <h3 className={`${styles.cardTitle} text-dark`}>{post.title}</h3>
+                    {/* <p className={styles.cardExcerpt}>{post.excerpt}</p> */}
+                  </div></Link>
                 </div>
               ))}
             </div>
 
-            <div className={styles.pagination}>
-              <button className={styles.pageBtn}>&lsaquo;</button>
-              <button className={`${styles.pageBtn} ${styles.pageActive}`}>1</button>
-              <button className={styles.pageBtn}>2</button>
-              <button className={styles.pageBtn}>3</button>
-              <span>...</span>
-              <button className={styles.pageBtn}>&rsaquo;</button>
+           {/* Pagination */}
+            <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
+              <span className={styles.showingText}>Showing {postPagination.from} to {postPagination.to} of {postPagination.total} users</span>
+              <div className="d-flex align-items-center gap-2">
+                <button disabled={postPagination.currentPage === 1} onClick={()=> setCurrentPostPage(postPagination.currentPage - 1)} className={styles.pageBtn}>
+                  <BsChevronLeft />
+                </button>
+                {pages.map((page, index)=>{
+                  return page === '...' ?(
+                    <span className={styles.pageDots}>...</span>
+                  ):(<button onClick={()=> setCurrentPostPage(page)} className={`${styles.pageBtn} ${currentPostPage === page ? `${styles.pageBtnActive}`: ''}`}>{page}</button>)
+                })}
+                <button onClick={()=> setCurrentPostPage(postPagination.currentPage + 1)} disabled={postPagination.currentPage === postPagination.lastPage} className={styles.pageBtn}>
+                  <BsChevronRight />
+                </button>
+              </div>
             </div>
           </div>
 

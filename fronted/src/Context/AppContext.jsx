@@ -10,7 +10,7 @@ const AppContextProvider = ({children})=>{
     const [deleteModel, setDeleteModel] = useState(false);
     const [deletId, setDeleteId] = useState(null);
     const [totalUsers, setTotalUsers] = useState(0);
-    const [totalPosts, setTotalPosts] = useState(0);
+    const [totalPosts, setTotalPosts] = useState([]);
     const [refresh, setRefresh] = useState(0);
     const [allUsers, setAllUsers] = useState([]);
     const [velocity, setVelocity] = useState(null);
@@ -133,6 +133,7 @@ const AppContextProvider = ({children})=>{
             console.log(error);
         }
     }
+    
     // fetch posts
     const fetchPosts = async ()=>{
         try{
@@ -146,6 +147,7 @@ const AppContextProvider = ({children})=>{
                 }
             });
             const data = await response.json();
+            console.log(data.total);
             if(response.ok){
                 setTotalPosts(data.total);
                 setVelocity(data.velocity);

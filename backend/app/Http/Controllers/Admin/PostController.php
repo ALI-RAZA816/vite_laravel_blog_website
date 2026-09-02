@@ -15,7 +15,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $total = Post::all();
+        $total = Post::with('category')->with('author')->get();
         $posts = Post::with('category')->with('author')->latest()->paginate(10);
         $total_posts = Post::count();
         $this_month = Post::whereMonth('created_at',now()->month)->count();

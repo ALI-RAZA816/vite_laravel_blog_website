@@ -1,5 +1,11 @@
 import { Link } from "react-router-dom";
 import styles from "../assets/AllPosts.module.css";
+import { useEffect, useState } from "react";
+import { apiUrl } from "../Http/Http";
+import {
+  BsChevronLeft,
+  BsChevronRight
+} from "react-icons/bs";
 
 const posts = [
   {
@@ -33,6 +39,71 @@ const posts = [
 ];
 
 export default function AllPosts() {
+
+  // const {totalPosts} = useContext(AppContext);
+    const [currentPostPage, setCurrentPostPage] = useState(1);
+    const [totalPosts, setTotalPosts] = useState([]);
+    const [postPagination, setPostPagination] = useState({
+      currentPage:'',
+      from:'',
+      lastPage:'',
+      to:'',
+      total:'',
+      perPage:'',
+    });
+  
+    // fetch posts
+    const fetchPosts = async ()=>{
+        try{
+            const token = localStorage.getItem('token');
+            const response = await fetch(`${apiUrl}/posts?page=${currentPostPage}`,{
+                method:'GET',
+                headers:{
+                    'Content-type':'application/json',
+                    'Accept':'application/json',
+                    'Authorization':`Bearer ${token}`
+                }
+            });
+            const data = await response.json();
+            // console.log(data.total);
+            if(response.ok){
+                setTotalPosts(data.posts.data);
+                setPostPagination({
+                    currentPage:data.posts.current_page,
+                    from:data.posts.from,
+                    lastPage:data.posts.last_page,
+                    to:data.posts.to,
+                    total:data.posts.total,
+                    perPage:data.posts.per_page
+                });
+                
+            }
+        }catch(error){
+            console.log(error);
+        }
+    }
+  
+    const pages = [];
+    const start = Math.max(1, postPagination.currentPage - 2);
+    const end = Math.min(postPagination.lastPage, postPagination.currentPage + 2);
+    if(start > 1){
+      pages.push(1);
+      if(start > 2) pages.push('...');
+    }
+  
+    for (let i = start; i<=end; i++  ){
+      pages.push(i);
+    }
+   
+    if(end < postPagination.lastPage){
+      if(end < postPagination.lastPage - 1) pages.push("...");
+      pages.push(postPagination.lastPage);
+    }
+  
+    useEffect(()=>{
+      fetchPosts();
+    },[currentPostPage]);
+
   return (
     <div className={styles.page}>
 
@@ -86,25 +157,32 @@ export default function AllPosts() {
         </div>
 
         <div className="row">
-          {posts.slice(1).map((p, i) => (
+          {totalPosts.map((p, i) => (
             <div className="col-md-4" key={i}>
-              <img src={p.img} alt={p.title} className={styles.gridImg} />
-              <div className={styles.meta}>{p.category} &nbsp;•&nbsp; {p.read}</div>
+              <img src={p.image} alt={p.title} className={styles.gridImg} />
+              <div className={styles.meta}>{p.category.name} &nbsp;</div>
               <h3 className={styles.postTitle}>{p.title}</h3>
-              <p className={styles.postExcerpt}>{p.excerpt}</p>
             </div>
           ))}
         </div>
 
-        <div className={styles.pagination}>
-          <button className={styles.pageBtn}>&lsaquo;</button>
-          <button className={`${styles.pageBtn} ${styles.pageActive}`}>1</button>
-          <button className={styles.pageBtn}>2</button>
-          <button className={styles.pageBtn}>3</button>
-          <span>...</span>
-          <button className={styles.pageBtn}>12</button>
-          <button className={styles.pageBtn}>&rsaquo;</button>
+      {/* Pagination */}
+      <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
+        <span className={styles.showingText}>Showing {postPagination.from} to {postPagination.to} of {postPagination.total} users</span>
+        <div className="d-flex align-items-center gap-2">
+          <button disabled={postPagination.currentPage === 1} onClick={()=> setCurrentPostPage(postPagination.currentPage - 1)} className={styles.pageBtn}>
+            <BsChevronLeft />
+          </button>
+          {pages.map((page, index)=>{
+            return page === '...' ?(
+              <span className={styles.pageDots}>...</span>
+            ):(<button onClick={()=> setCurrentPostPage(page)} className={`${styles.pageBtn} ${currentPostPage === page ? `${styles.pageBtnActive}`: ''}`}>{page}</button>)
+          })}
+          <button onClick={()=> setCurrentPostPage(postPagination.currentPage + 1)} disabled={postPagination.currentPage === postPagination.lastPage} className={styles.pageBtn}>
+            <BsChevronRight />
+          </button>
         </div>
+      </div>
       </div>
     </div>
   );

@@ -1,7 +1,45 @@
 import { Link } from "react-router-dom";
 import styles from "../assets/BlogPost.module.css";
+import { useState } from "react";
 
 export default function BlogPost() {
+  
+  const initialComments = [
+    {
+      id: 1,
+      initials: "JV",
+      name: "Julian Veldt",
+      time: "2 days ago",
+      text: "The section on intentional rituals really resonated with me. I've started a morning tea ritual and it's changed my whole day.",
+    },
+    {
+      id: 2,
+      initials: "ER",
+      name: "Elena Rossi",
+      time: "2 days ago",
+      text: "Beautifully written. The photography in this piece is also stunning.",
+    },
+  ];
+  
+  const [comments, setComments] = useState(initialComments);
+  const [newComment, setNewComment] = useState("");
+ 
+  const handlePostComment = () => {
+    if (!newComment.trim()) return;
+    setComments([
+      ...comments,
+      {
+        id: Date.now(),
+        initials: "YO",
+        name: "You",
+        time: "Just now",
+        text: newComment.trim(),
+      },
+    ]);
+    setNewComment("");
+  };
+  
+
   return (
     <div className={styles.page}>
 
@@ -68,7 +106,47 @@ export default function BlogPost() {
             alt="coffee"
           />
         </div>
-      </div>
+      <div className={styles.commentsSection}>
+        <h5 className={styles.heading}>Comments ({comments.length})</h5>
+ 
+        {/* Add a comment */}
+        <div className={`d-flex align-items-start ${styles.addCommentRow}`}>
+            <img
+              src="https://i.pravatar.cc/64?img=47"
+              alt="You"
+              className={styles.userAvatar}
+            />
+            <div className={styles.addCommentBox}>
+              <textarea
+                className={styles.commentInput}
+                placeholder="Add a comment..."
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                rows={3}
+              />
+              <button className={styles.postBtn} onClick={handlePostComment}>
+                Post Comment
+              </button>
+            </div>
+        </div>
+  
+        {/* Comment list */}
+        <div className={styles.commentList}>
+          {comments.map((comment) => (
+            <div key={comment.id} className={`d-flex align-items-start ${styles.commentRow}`}>
+              <div className={styles.initialsAvatar}>{comment.initials}</div>
+              <div className={styles.commentBody}>
+                <div className="d-flex align-items-center gap-2">
+                  <span className={styles.commentName}>{comment.name}</span>
+                  <span className={styles.commentTime}>{comment.time}</span>
+                </div>
+                <p className={styles.commentText}>{comment.text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        </div>
     </div>
+      </div>
   );
 }

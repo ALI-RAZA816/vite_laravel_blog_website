@@ -91,26 +91,43 @@
   color: #666;
   line-height: 1.5;
 }
+/* Pagination */
+.paginationRow {
+  padding: 20px;
+}
 
-.pagination {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  justify-content: flex-start;
-  margin: 20px 0 50px;
+.showingText {
+  font-size: 14px;
+  color: #8b87a0;
 }
+
 .pageBtn {
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-  background: #fff;
-  font-size: 13px;
+  min-width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid #e6e3f0;
+  background-color: #ffffff;
+  color: #4b4760;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.pageActive {
-  background: #5b3fa0;
-  color: #fff;
-  border-color: #5b3fa0;
+
+.pageBtn:hover {
+  background-color: #f6f5fb;
+}
+
+.pageBtnActive {
+  background-color: #5b3fd9;
+  border-color: #5b3fd9;
+  color: #ffffff;
+}
+
+.pageDots {
+  color: #8b87a0;
+  padding: 0 4px;
 }
 
 /* Sidebar */
@@ -210,9 +227,11 @@
   background: rgba(255,255,255,0.25);
   color: #fff;
 }
+
 .newsletterBox input::placeholder {
   color: #ded4f0;
 }
+
 .newsletterBox button {
   width: 100%;
   background: #fff;
@@ -223,6 +242,7 @@
   font-weight: 700;
   margin-bottom: 10px;
 }
+
 .newsletterNote {
   font-size: 11px;
   color: #d8cdec;
