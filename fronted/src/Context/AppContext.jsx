@@ -15,6 +15,7 @@ const AppContextProvider = ({children})=>{
     const [allUsers, setAllUsers] = useState([]);
     const [velocity, setVelocity] = useState(null);
     const [categories, setCategories] = useState([]);
+    const [allCat, setAllCat] = useState([]);
     const [posts, setPosts] = useState([]);
     const [Blocked, setBlocked] = useState([]);
     const [thisWeek, setThisWeek] = useState([]);
@@ -118,6 +119,7 @@ const AppContextProvider = ({children})=>{
             });
             const data = await response.json();
             if(response.ok){
+                setAllCat(data.allCat);
                 setCategories(data.category.data);
                 setCatPagination({
                     currentPage:data.category.current_page,
@@ -261,6 +263,7 @@ const AppContextProvider = ({children})=>{
             catPagination,
             setCatPagination,
             totalPosts,
+            allCat,
             setShowEditCategoryModel
         }}>
             {children}

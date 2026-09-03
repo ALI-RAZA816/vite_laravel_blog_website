@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\Category;
 use App\Models\MonthlyReport;
 
 class PostController extends Controller
@@ -68,6 +69,8 @@ class PostController extends Controller
             'image'=>$imageName
         ]);
 
+        Category::where('id', $request->category)->increment('post_count');
+
         $total = Post::with('category')->with('author')->whereMonth('created_at',now()->month)->whereYear('created_at', now()->year)->count();
 
         MonthlyReport::updateOrCreate([
@@ -124,11 +127,18 @@ class PostController extends Controller
         ]);
 
         $post = Post::where('id',$id)->first();
+        
+
         if(!$post){
             return response()->json([
                 'message'=>'Not found'
             ],404);
         }
+
+        $oldCategory = $post->category_id;
+        $NewCategory = $request->category;
+
+       
 
         $imageName = $post->image;
         if($request->hasFile('image')){
@@ -146,6 +156,11 @@ class PostController extends Controller
             $image->move(public_path('posts-images'), $imageName);
         }else{
             $imageName = $post->image;
+        }
+
+        if($oldCategory != $NewCategory){
+            Category::where('id', $oldCategory)->decrement('post_count');
+            Category::where('id', $NewCategory)->increment('post_count');
         }
 
         Post::where('id',$id)->update([
@@ -168,6 +183,7 @@ class PostController extends Controller
     public function destroy(string $id)
     {
         $post = Post::where('id',$id)->first();
+        $categoryId = $post->category_id;
         if(!$post){
             return response()->json([
                 'message'=>'Not found'
@@ -183,6 +199,7 @@ class PostController extends Controller
         }
 
         $post->delete();
+        Category::where('id',$categoryId)->decrement('post_count');
         return response()->json([
             'message' => 'Post deleted successfully'
         ], 200);

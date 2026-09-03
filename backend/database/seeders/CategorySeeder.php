@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
 use App\Models\Category;
 
+
 class CategorySeeder extends Seeder
 {
     /**

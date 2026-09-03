@@ -51,7 +51,7 @@ const AdminEditPost = ({placeholder}) => {
 
   const navigate = useNavigate();
   const {id} = useParams();
-  const {categories} = useContext(AppContext);
+  const {allCat} = useContext(AppContext);
   const config = useMemo(
     () => ({
       readonly: false,
@@ -268,8 +268,8 @@ const AdminEditPost = ({placeholder}) => {
             <h6 className={styles.panelTitle}>CATEGORIES</h6>
             <select onChange={formHandler} value={formData.category} className={styles.categorySelect} name="category">
               <option defaultValue disabled>Select Category</option>
-              {categories.map((category, index)=>{
-                return <option index={index} value={category.id}>{category.name}</option>
+              {allCat.map((category, index)=>{
+                return <><option index={index} value={category.id}>{category.name}</option></>
               })}
             </select>
           </div>
@@ -323,7 +323,7 @@ const AdminEditPost = ({placeholder}) => {
               <span className={styles.mutedText}>Immediately</span>
             </div>
 
-            {isPublished ? <button type="submit" className={styles.updateBtn}>Add Post</button>:
+            {isPublished ? <button type="submit" className={styles.updateBtn}>Update Post</button>:
             <button type="submit" className={styles.draftBtn}>Save Draft</button>}
           </div>
         </div>

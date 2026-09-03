@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
 use App\Models\Post;
+use App\Models\Category;
 
 class PostSeeder extends Seeder
 {
@@ -28,6 +29,12 @@ class PostSeeder extends Seeder
                 'tags'=>json_encode($post->tags),
                 'published'=>$post->published,
             ]);
+        });
+
+        $allposts = Post::all();
+        $allposts->each(function ($post) {
+            Category::where('id', $post->category_id)
+                ->increment('post_count');
         });
     }
 }

@@ -15,18 +15,18 @@ const popular = [
   { title: "Sourdough Secrets: Why Slow Bread is Better", date: "Feb 15 • 12 min read", img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=100" },
 ];
 
-const categories = [
-  "Travel (12)",
-  "Lifestyle (8)",
-  "Wellness (15)",
-  "Creativity (7)",
-  "Food (10)",
-  "Minimalism (22)",
-];
+// const categories = [
+//   "Travel (12)",
+//   "Lifestyle (8)",
+//   "Wellness (15)",
+//   "Creativity (7)",
+//   "Food (10)",
+//   "Minimalism (22)",
+// ];
 
 export default function Home() {
 
-  // const {totalPosts} = useContext(AppContext);
+  const {allCat} = useContext(AppContext);
   const [currentPostPage, setCurrentPostPage] = useState(1);
   const [totalPosts, setTotalPosts] = useState([]);
   const [postPagination, setPostPagination] = useState({
@@ -117,15 +117,14 @@ export default function Home() {
             <div className="row">
               {totalPosts.map((post, i) => (
                 <div className="col-md-6" key={i}>
-                  <Link to="/blog-post"><div className={styles.card}>
+                  <Link to={`blog-post/${post.id}`}><div className={styles.card}>
                     <img src={`${baseUrl}/posts-images/${post.image}`} alt={post.title} className={styles.cardImg} />
                     <div className={styles.cardMeta}>
                       <span className={styles.cardCategory}>{post.category.name}</span>
                       <span className={styles.cardDot}>•</span>
                       <span>{post.date}</span>
                     </div>
-                    <h3 className={`${styles.cardTitle} text-dark`}>{post.title}</h3>
-                    {/* <p className={styles.cardExcerpt}>{post.excerpt}</p> */}
+                    <h3 className={`${styles.cardTitle} text-dark`}>{post.title.length > 40 ? `${post.title.substr(0,40)}...` : post.title }</h3>
                   </div></Link>
                 </div>
               ))}
@@ -163,9 +162,9 @@ export default function Home() {
             <div className={styles.sidebarBlock}>
               <h4 className={styles.sidebarTitle}>CATEGORIES</h4>
               <div className={styles.categoryPills}>
-                {categories.map((c, i) => (
-                  <span key={i} className={styles.pill}>{c}</span>
-                ))}
+                {allCat.map((cat, index)=>{
+                  return <span key={index} className={styles.pill}>{cat.name} ({cat.post_count})</span>
+                })}
               </div>
             </div>
 

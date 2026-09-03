@@ -60,6 +60,7 @@ const AddAdminPost = ({placeholder}) => {
 
   const navigate = useNavigate();
   const {categories} = useContext(AppContext);
+  const {allCat} = useContext(AppContext);
   const config = useMemo(
     () => ({
       readonly: false,
@@ -275,7 +276,7 @@ const AddAdminPost = ({placeholder}) => {
             <h6 className={styles.panelTitle}>CATEGORIES</h6>
             <select onChange={formHandler}  value={formData.category} className={styles.categorySelect} name="category">
               <option defaultValue disabled>Select Category</option>
-              {categories.map((category, index)=>{
+              {allCat.map((category, index)=>{
                 return <option index={index} value={category.id}>{category.name}</option>
               })}
             </select>

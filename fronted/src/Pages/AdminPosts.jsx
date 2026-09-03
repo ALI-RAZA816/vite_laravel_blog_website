@@ -43,10 +43,8 @@ const AdminPosts = () => {
 
   const {velocity} = useContext(AppContext);
   const {postPagination} = useContext(AppContext);
-  const {setPostPagination}  = useContext(AppContext);
   const {currentPostPage} = useContext(AppContext);
   const {setCurrentPostPage} = useContext(AppContext);
-  const {pagination} = useContext(AppContext);
   const [chartData2, setChartData2] =useState([]);
   const monthReportHandler = async () => {
     const token = localStorage.getItem('token');
@@ -84,7 +82,7 @@ const AdminPosts = () => {
   
   const {posts} = useContext(AppContext);
   const {setPosts} = useContext(AppContext);
-  const {categories} = useContext(AppContext);
+  const {allCat} = useContext(AppContext);
   const {setRefresh} = useContext(AppContext);
   const chartData = {
     labels:chartData2.map(item => item.month),
@@ -275,7 +273,7 @@ const AdminPosts = () => {
         <div className={`d-flex align-items-center ${styles.selectBox}`}>
           <select name="" id="" onChange={getCategory} className="form-select border-0 shadow-none">
           <option value="all">All Categories</option>
-            {categories.map((category, index)=>{
+            {allCat.map((category, index)=>{
               return <option index={index} value={category.id}>{category.name}</option>
             })}
           </select>
@@ -311,7 +309,7 @@ const AdminPosts = () => {
                     <input onChange={(event)=>DeletedChecked(event, post.id)} type="checkbox" checked={checkedall && true} className={styles.checkbox} />
                   </td>
                   <td>
-                    <p className={styles.postTitle}>{post.title}</p>
+                    <p className={styles.postTitle}>{post.title.length > 40 ? `${post.title.substr(0, 40)}...`: post.title}</p>
                     <p className={styles.postUrl}>{post.category.slug}</p>
                   </td>
                   <td>
@@ -368,7 +366,7 @@ const AdminPosts = () => {
      
         {/* Pagination */}
         <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
-          <span className={styles.showingText}>Showing {postPagination.from} to {postPagination.to} of {postPagination.total} users</span>
+          <span className={styles.showingText}>Showing {postPagination.from} to {postPagination.to} of {postPagination.total} posts</span>
           <div className="d-flex align-items-center gap-2">
             <button disabled={postPagination.currentPage === 1} onClick={()=> setCurrentPostPage(postPagination.currentPage - 1)} className={styles.pageBtn}>
               <BsChevronLeft />

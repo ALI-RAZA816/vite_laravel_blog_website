@@ -1,8 +1,59 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import styles from "../assets/BlogPost.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { apiUrl, baseUrl } from "../Http/Http";
 
 export default function BlogPost() {
+
+  const {id} = useParams();
+  const [formData, setFormData] = useState({
+    category:'',
+    title:'',
+    author_image:'',
+    author_name:'',
+    date:'',
+    tags:[],
+    published:'',
+    post_image:'',
+    description:''
+  })
+
+  // fetch single post
+  const previewPost = async ()=>{
+    const token = localStorage.getItem('token');
+    try{
+      const response = await fetch(`${apiUrl}/posts/${id}`,{
+        method:'GET',
+        headers:{
+          'Content-type':'application/json',
+          'Accept':'application/json',
+          'Authorization':`Bearer ${token}`,
+        }
+      });
+
+      const data = await response.json();
+      console.log(data);
+      if(response.ok){
+        setFormData({
+          category:data.post.category.name,
+          title:data.post.title,
+          author_image:data.post.author.image,
+          author_name:data.post.author.name,
+          date:data.post.date,
+          published:data.post.published,
+          post_image:data.post.image,
+          tags:JSON.parse(data.post.tags),
+          description:data.post.description
+        });
+      }
+    }catch(error){
+      console.log(error);
+    }
+  }
+
+  useEffect(()=>{
+    previewPost();
+  },[]);
   
   const initialComments = [
     {
@@ -44,14 +95,13 @@ export default function BlogPost() {
     <div className={styles.page}>
 
       <div className={styles.hero}>
-        <img
-          src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=1200"
+        {formData.post_image && <img
+          src={`${baseUrl}/posts-images/${formData.post_image}`}
           alt="hero"
-        />
+        />}
         <div className={styles.heroContent}>
-          <span className={styles.badge}>MINDFULNESS</span>
-          <h1 className={styles.heroTitle}>
-            The Art of Intentional Living: Reclaiming Time in a Digital Age
+          <span className={styles.badge}>{formData.category}</span>
+          <h1 className={styles.heroTitle}>{formData.title}
           </h1>
         </div>
       </div>
@@ -59,51 +109,26 @@ export default function BlogPost() {
       <div className="container">
         <div className={styles.authorRow}>
           <div className={styles.authorInfo}>
-            <img
-              src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100"
+           {formData.author_image ? <img
+              src={`${baseUrl}/uploads/${formData.author_image}`}
               alt="Elena Vance"
-              className={styles.avatar}
-            />
+              className={styles.authorAvatar}
+            />: <div className="rounded-5 text-center text-white" style={{lineHeight:'40px',height:'40px', width:'40px', backgroundColor: '#5b3fd9', overflow:'hidden'}}>
+                    {formData.author_name.split(' ')[0]?.substr(0, 1)}
+                    {formData.author_name.split(' ')[1]?.substr(0, 1)}
+                </div>
+            }
             <div>
-              <p className={styles.authorName}>Elena Vance</p>
-              <span className={styles.authorMeta}>Nov 12, 2024 • 5 min read</span>
+              <p className={styles.authorName}>{formData.author_name}</p>
+              <span className={styles.authorMeta}>{formData.date}</span>
             </div>
           </div>
         </div>
         <hr className={styles.divider} />
 
         <div className={styles.articleBody}>
-          <p>
-            In an era where every second is auctioned to the highest bidder of attention, the
-            act of simply being has become a radical rebellion. We are tethered to
-            notifications, measured by our productivity, and often lost in the digital static of
-            constant availability.
-          </p>
-
-          <h2 className={styles.subheading}>The Quiet Rebellion of Presence</h2>
-
-          <p>
-            Intentional living is not about retreating to a cabin in the woods (though that has
-            its charms). It is about the conscious choice to filter the noise. It's the decision
-            to put the phone in another room during dinner, to walk without a podcast, and to
-            look at the sky instead of a screen during a commute.
-          </p>
-
-          <blockquote className={styles.quote}>
-            "The quality of your life is determined by the quality of your attention. Where you
-            look is where you live."
-          </blockquote>
-
-          <p>
-            When we reclaimed our mornings from the scroll, we found hours we didn't know
-            existed. We found that a single cup of coffee, sipped in silence, provides more
-            energy than ten minutes of frantic email checking.
-          </p>
-
-          <img
-            className={styles.bodyImage}
-            src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=900"
-            alt="coffee"
+          <div
+            dangerouslySetInnerHTML={{ __html: formData.description }}
           />
         </div>
       <div className={styles.commentsSection}>

@@ -164,7 +164,7 @@ const AdminCategories = () => {
 
             {/* Pagination */}
             <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
-                <span className={styles.showingText}>Showing {catPagination.from} to {catPagination.to} of {catPagination.total} users</span>
+                <span className={styles.showingText}>Showing {catPagination.from} to {catPagination.to} of {catPagination.total} categories</span>
                 <div className="d-flex align-items-center gap-2">
                     <button disabled={catPagination.currentPage === 1} onClick={()=> setCurrentCatPage(catPagination.currentPage - 1)} className={styles.pageBtn}>
                     <BsChevronLeft />

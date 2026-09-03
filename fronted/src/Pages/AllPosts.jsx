@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import styles from "../assets/AllPosts.module.css";
 import { useEffect, useState } from "react";
-import { apiUrl } from "../Http/Http";
+import { apiUrl, baseUrl } from "../Http/Http";
 import {
   BsChevronLeft,
   BsChevronRight
@@ -159,9 +159,11 @@ export default function AllPosts() {
         <div className="row">
           {totalPosts.map((p, i) => (
             <div className="col-md-4" key={i}>
-              <img src={p.image} alt={p.title} className={styles.gridImg} />
-              <div className={styles.meta}>{p.category.name} &nbsp;</div>
-              <h3 className={styles.postTitle}>{p.title}</h3>
+              <Link to={`/blog-post/${p.id}`}><div className={styles.card}>
+                <img src={`${baseUrl}/posts-images/${p.image}`} alt={p.title} className={styles.gridImg} />
+                <div className={styles.meta}>{p.category.name} &nbsp;</div>
+                <h3 className={styles.postTitle}>{p.title.length > 40 ? `${p.title.substr(0,40)}...` : p.title }</h3>
+              </div></Link>
             </div>
           ))}
         </div>
