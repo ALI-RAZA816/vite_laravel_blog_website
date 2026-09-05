@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -15,6 +16,7 @@ class UserController extends Controller
     public function index()
     {
         $total = User::all();
+        $loggedUser = User::where('id',Auth::id())->select('id','name','email','role','join_date','status','image')->first();
         $users = User::select('id','name','email','role','join_date','status','image')->latest()->paginate(10);
         $editor = User::where('role','=','editor')->get();
         $this_week = User::whereDate('created_at','=',now())->get();
@@ -22,6 +24,7 @@ class UserController extends Controller
         return response()->json([
             'status'=>true,
             'total'=>$total,
+            'loggedUser'=>$loggedUser,
             'users'=>$users,
             'editor'=>$editor,
             'this_week'=>$this_week,

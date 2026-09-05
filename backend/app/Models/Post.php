@@ -8,11 +8,16 @@ use App\Models\Category;
 class Post extends Model
 {
     protected $guarded = [];
+
     public function category(){
         return $this->belongsTo(Category::class);
     }
-      public function author()
-    {
+
+    public function author(){
         return $this->belongsTo(User::class);
+    }
+
+    public function comments(){
+        return $this->hasMany(Comment::class);
     }
 }

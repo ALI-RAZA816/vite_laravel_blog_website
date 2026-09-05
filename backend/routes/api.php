@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\MonthlyReportController;
 
 Route::get('/user', function (Request $request) {
@@ -25,4 +26,5 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::apiResource('users', UserController::class);
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('posts', PostController::class);
+    Route::apiResource('comments', CommentController::class);
 });

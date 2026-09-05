@@ -1,6 +1,14 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { BsChevronLeft, BsChevronRight, BsPersonFill } from "react-icons/bs";
 import styles from "../assets/ManageComments.module.css";
+import { apiUrl, baseUrl } from "../Http/Http";
+import { AppContext } from "../Context/AppContext";
+import { IoMdCheckmark } from "react-icons/io";
+import { FaXmark } from "react-icons/fa6";
+import { IoWarningOutline } from "react-icons/io5";
+import { RiDeleteBinLine } from "react-icons/ri";
+
+
 
 const tabs = [
   { label: "All", count: 128, active: true },
@@ -9,64 +17,31 @@ const tabs = [
   { label: "Spam", count: 12 },
 ];
 
-const comments = [
-  {
-    initials: "EV",
-    color: "#c9e4d8",
-    name: "Elena Vance",
-    email: "elena.v@example.com",
-    excerpt: '"This piece on slow mornings real...',
-    post: "The Art of the Slow Morning",
-    status: "PENDING",
-    date: "Oct 24, 2023",
-    highlight: false,
-    isBot: false,
-  },
-  {
-    initials: "JR",
-    color: "#c9d8ec",
-    name: "Dr. Julian Reed",
-    email: "j.reed@university.edu",
-    excerpt: '"Excellent citations. It\'s rare to se...',
-    post: "Neuroscience of Focus",
-    status: "APPROVED",
-    date: "Oct 22, 2023",
-    highlight: false,
-    isBot: false,
-  },
-  {
-    initials: "",
-    color: "#e2dff0",
-    name: "Bot_User_99",
-    email: "spam@domain.net",
-    excerpt: '"BUY CHEAP COFFEE NOW AT H...',
-    post: "Coffee Roasting Tips",
-    status: "SPAM",
-    date: "Oct 21, 2023",
-    highlight: true,
-    isBot: true,
-  },
-  {
-    initials: "MT",
-    color: "#dcd0e8",
-    name: "Marcus Thorne",
-    email: "m.thorne@design.co",
-    excerpt: '"I\'d love to see a follow-up on mi...',
-    post: "Simplicity at Work",
-    status: "APPROVED",
-    date: "Oct 20, 2023",
-    highlight: false,
-    isBot: false,
-  },
-];
-
-const statusClass = {
-  PENDING: "statusPending",
-  APPROVED: "statusApproved",
-  SPAM: "statusSpam",
-};
 
 const ManageComments = () => {
+
+  const {comments} = useContext(AppContext);
+  const {commentsPagination} = useContext(AppContext);
+  const {currentComments} = useContext(AppContext);
+  const {setCurrentComments} = useContext(AppContext);
+
+  const pages = [];
+  const start = Math.max(1, commentsPagination.currentPage - 2);
+  const end = Math.min(commentsPagination.lastPage, commentsPagination.currentPage + 2);
+  if(start > 1){
+    pages.push(1);
+    if(start > 2) pages.push('...');
+  }
+
+  for (let i = start; i<=end; i++  ){
+    pages.push(i);
+  }
+ 
+  if(end < commentsPagination.lastPage){
+    if(end < commentsPagination.lastPage - 1) pages.push("...");
+    pages.push(commentsPagination.lastPage);
+  }
+  
   return (
     <div className={styles.content}>
       {/* Heading + tabs */}
@@ -100,48 +75,54 @@ const ManageComments = () => {
                 <th>On Post</th>
                 <th>Status</th>
                 <th>Date</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {comments.map((c, index) => (
+              {comments?.map((comment, index) => (
                 <tr
-                  key={index}
-                  className={c.highlight ? styles.rowHighlight : ""}
-                >
+                  key={index}>
                   <td>
                     <div className="d-flex align-items-center gap-3">
-                      <div
-                        className={styles.avatar}
-                        style={{ backgroundColor: c.color }}
-                      >
-                        {c.isBot ? (
-                          <BsPersonFill color="#8b87a0" />
+                      <div className={styles.avatar} style={{ backgroundColor: '#c5c2d6', }}>
+                        {comment.image ? (
+                          <img src={`${baseUrl}/uploads/${comment.user.image}`} alt="" />
                         ) : (
-                          c.initials
+                          <>
+                          {comment.user.name.split(' ')[0].substr(0,1)}
+                          {comment.user.name.split(' ')[1].substr(0,1)}
+                          </>
                         )}
                       </div>
                       <div>
-                        <p className={styles.authorName}>{c.name}</p>
-                        <p className={styles.authorEmail}>{c.email}</p>
+                        <p className={styles.authorName}>{comment.name}</p>
+                        <p className={styles.authorEmail}>{comment.email}</p>
                       </div>
                     </div>
                   </td>
-                  <td className={styles.excerptCell}>{c.excerpt}</td>
+                  <td className={styles.excerptCell}>{comment.comment.length > 20 ? `${comment.comment.substr(0, 20)}...` : comment.comment}</td>
                   <td>
                     <a href="#" className={styles.postLink}>
-                      {c.post}
+                      {comment.on_post.length > 20 ? `${comment.on_post.substr(0, 20)}...` : comment.on_post}
                     </a>
                   </td>
                   <td>
                     <span
-                      className={`${styles.statusBadge} ${
-                        styles[statusClass[c.status]]
-                      }`}
+                      className={`${styles.statusBadge} text-capitalize`}
+                      style={{color:comment.status === 'approved' ? '#45218B' : '' || comment.status === 'spam' ? '#940E11' :'',backgroundColor:comment.status === 'pending' ? '#C9A74D' : '' || comment.status === 'approved' ? '#EDEBF3' : '' || comment.status === 'spam' ? '#FFDAD6' : ''}}
                     >
-                      {c.status}
+                      {comment.status}
                     </span>
                   </td>
-                  <td className={styles.dateCell}>{c.date}</td>
+                  <td className={styles.dateCell}>{comment.date}</td>
+                  <td>
+                    <div className="d-flex">
+                      <div className={`${styles.actions} me-2`}><IoMdCheckmark /></div>
+                      <div className={`${styles.actions} me-2`}><FaXmark /></div>
+                      <div className={`${styles.actions} me-2`}><IoWarningOutline /></div>
+                      <div className={`${styles.actions}`}><RiDeleteBinLine /></div>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -149,20 +130,22 @@ const ManageComments = () => {
         </div>
 
         {/* Pagination */}
-        <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
-          <span className={styles.showingText}>Showing 1 to 10 of 128 comments</span>
+        {commentsPagination.lastPage && <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
+          <span className={styles.showingText}>Showing {commentsPagination.from} to {commentsPagination.to} of {commentsPagination.total} users</span>
           <div className="d-flex align-items-center gap-2">
-            <button className={styles.pageBtn}>
+            <button disabled={commentsPagination.currentPage === 1} onClick={()=> setCurrentComments(commentsPagination.currentPage - 1)} className={styles.pageBtn}>
               <BsChevronLeft />
             </button>
-            <button className={`${styles.pageBtn} ${styles.pageBtnActive}`}>1</button>
-            <button className={styles.pageBtn}>2</button>
-            <button className={styles.pageBtn}>3</button>
-            <button className={styles.pageBtn}>
+            {pages.map((page, index)=>{
+              return page === '...' ?(
+                <span className={styles.pageDots}>...</span>
+              ):(<button onClick={()=> setCurrentComments(page)} className={`${styles.pageBtn} ${currentComments === page ? `${styles.pageBtnActive}`: ''}`}>{page}</button>)
+            })}
+            <button onClick={()=> setCurrentComments(commentsPagination.currentPage + 1)} disabled={commentsPagination.currentPage === commentsPagination.lastPage} className={styles.pageBtn}>
               <BsChevronRight />
             </button>
           </div>
-        </div>
+        </div>}
       </div>
 
       {/* Footer */}

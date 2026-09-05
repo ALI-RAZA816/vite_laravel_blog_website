@@ -1,11 +1,15 @@
 import { Link, useParams } from "react-router-dom";
 import styles from "../assets/BlogPost.module.css";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { apiUrl, baseUrl } from "../Http/Http";
+import { AppContext } from "../Context/AppContext";
 
 export default function BlogPost() {
 
   const {id} = useParams();
+  const {loggedUser} = useContext(AppContext);
+  const {setRefresh} = useContext(AppContext);
+  // console.log(loggedUser);
   const [formData, setFormData] = useState({
     category:'',
     title:'',
@@ -51,44 +55,45 @@ export default function BlogPost() {
     }
   }
 
+  
+  const [comment, setComment] = useState('');
+  const [commentErr, setCommentErr] = useState('');
+  const addComment = async (event)=>{
+    event.preventDefault();
+    if(!comment){
+      setCommentErr('Express your vision');
+      return;
+    }
+    const token = localStorage.getItem('token');
+    const payload ={
+        comment:comment,
+        post_id:id
+    }
+    try{
+      const response = await fetch(`${apiUrl}/comments`,{
+        method:'POST',
+        headers:{
+          'Content-type':'application/json',
+          'Accept':'application/json',
+          'Authorization':`Bearer ${token}`,
+        },
+        body:JSON.stringify(payload)
+      });
+      const data = await response.json();
+      if(response.ok){
+        setRefresh(prev => prev + 1);
+        setComment('');
+        setCommentErr('');
+      }
+
+    }catch(error){
+      console.log(error);
+    }
+  }
+
   useEffect(()=>{
     previewPost();
   },[]);
-  
-  const initialComments = [
-    {
-      id: 1,
-      initials: "JV",
-      name: "Julian Veldt",
-      time: "2 days ago",
-      text: "The section on intentional rituals really resonated with me. I've started a morning tea ritual and it's changed my whole day.",
-    },
-    {
-      id: 2,
-      initials: "ER",
-      name: "Elena Rossi",
-      time: "2 days ago",
-      text: "Beautifully written. The photography in this piece is also stunning.",
-    },
-  ];
-  
-  const [comments, setComments] = useState(initialComments);
-  const [newComment, setNewComment] = useState("");
- 
-  const handlePostComment = () => {
-    if (!newComment.trim()) return;
-    setComments([
-      ...comments,
-      {
-        id: Date.now(),
-        initials: "YO",
-        name: "You",
-        time: "Just now",
-        text: newComment.trim(),
-      },
-    ]);
-    setNewComment("");
-  };
   
 
   return (
@@ -132,24 +137,29 @@ export default function BlogPost() {
           />
         </div>
       <div className={styles.commentsSection}>
-        <h5 className={styles.heading}>Comments ({comments.length})</h5>
+        <h5 className={styles.heading}>Comments ()</h5>
  
         {/* Add a comment */}
         <div className={`d-flex align-items-start ${styles.addCommentRow}`}>
-            <img
-              src="https://i.pravatar.cc/64?img=47"
-              alt="You"
-              className={styles.userAvatar}
-            />
-            <div className={styles.addCommentBox}>
+           {loggedUser.image != null? <img
+              src={`${baseUrl}/uploads/${formData.author_image}`}
+              alt="Elena Vance"
+              className={styles.authorAvatar}
+            />: <div className="rounded-5 text-center text-white" style={{lineHeight:'40px',height:'40px', width:'40px', backgroundColor: '#5b3fd9', overflow:'hidden'}}>
+                    {loggedUser?.name?.split(' ')[0].substr(0, 1)}
+                    {loggedUser?.name?.split(' ')[1].substr(0, 1)}
+                </div>
+            }
+            <div className={`${styles.addCommentBox} d-flex flex-column`}>
               <textarea
                 className={styles.commentInput}
                 placeholder="Add a comment..."
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
                 rows={3}
+                value={comment}
+                onChange={(event)=>setComment(event.target.value)}
               />
-              <button className={styles.postBtn} onClick={handlePostComment}>
+              <span className="text-danger">{commentErr}</span>
+              <button onClick={addComment} className={styles.postBtn} >
                 Post Comment
               </button>
             </div>
@@ -157,18 +167,6 @@ export default function BlogPost() {
   
         {/* Comment list */}
         <div className={styles.commentList}>
-          {comments.map((comment) => (
-            <div key={comment.id} className={`d-flex align-items-start ${styles.commentRow}`}>
-              <div className={styles.initialsAvatar}>{comment.initials}</div>
-              <div className={styles.commentBody}>
-                <div className="d-flex align-items-center gap-2">
-                  <span className={styles.commentName}>{comment.name}</span>
-                  <span className={styles.commentTime}>{comment.time}</span>
-                </div>
-                <p className={styles.commentText}>{comment.text}</p>
-              </div>
-            </div>
-          ))}
         </div>
         </div>
     </div>

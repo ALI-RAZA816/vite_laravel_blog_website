@@ -75,7 +75,7 @@ class AuthController extends Controller
                     'message'=>"You can't login. Your account may be restriced or blocked"
                 ],401);
             }
-            $user = User::where('email',$request->email)->select('id','name','email','role','join_date','status','password')->first();
+            $user = User::where('email',$request->email)->select('id','name','email','role','join_date','status','password','image')->first();
 
             if(!$user){
                 return response()->json([

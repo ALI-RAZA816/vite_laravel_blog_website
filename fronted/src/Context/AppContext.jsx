@@ -5,9 +5,9 @@ import { apiUrl } from "../Http/Http";
 export const AppContext = createContext();
 
 const AppContextProvider = ({children})=>{
-
     // all users data 
     const [deleteModel, setDeleteModel] = useState(false);
+    const [loggedUser, setLoggedUser] = useState([]);
     const [deletId, setDeleteId] = useState(null);
     const [totalUsers, setTotalUsers] = useState(0);
     const [totalPosts, setTotalPosts] = useState([]);
@@ -85,6 +85,7 @@ const AppContextProvider = ({children})=>{
             const data = await response.json();
             if(response.ok){
                 if(data.status === true){
+                    setLoggedUser(data.loggedUser);
                     setTotalUsers(data.total);
                     setAllUsers(data.users.data);
                     setAllEditors(data.editor);
@@ -214,11 +215,55 @@ const AppContextProvider = ({children})=>{
         }
     }
 
+    const [comments, setComments] = useState([]);
+    const [currentComments, setCurrentComments] = useState(1);
+    const [commentsPagination, setCommentsPagination] = useState({
+        currentPage:'',
+        from:'',
+        lastPage:'',
+        to:'',
+        total:'',
+        perPage:''
+    });
+    const fetchcomments = async () => {
+
+        const token = localStorage.getItem("token");
+
+        try {
+            const response = await fetch(`${apiUrl}/comments?page=${currentComments}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setComments(data.comments.data);
+                setCommentsPagination({
+                    currentPage:data.comments.current_page,
+                    from:data.comments.from,
+                    lastPage:data.comments.last_page,
+                    to:data.comments.to,
+                    total:data.comments.total,
+                    perPage:data.comments.per_page
+                });
+            }
+
+        } catch (error) {
+            console.log("9. ERROR:", error);
+        }
+    };
+    
     useEffect(()=>{
         fetchUsers();
         fetchPosts();
         fetchCategory();
-    },[refresh, currentPage, currentPostPage, currentCatPage]);
+        fetchcomments();
+    },[refresh, currentComments, currentPage, currentPostPage, currentCatPage]);
 
     return (
         <AppContext.Provider value={{
@@ -264,6 +309,11 @@ const AppContextProvider = ({children})=>{
             setCatPagination,
             totalPosts,
             allCat,
+            comments,
+            loggedUser,
+            commentsPagination,
+            currentComments,
+            setCurrentComments,
             setShowEditCategoryModel
         }}>
             {children}
