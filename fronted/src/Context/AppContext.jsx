@@ -10,10 +10,13 @@ const AppContextProvider = ({children})=>{
     const [loggedUser, setLoggedUser] = useState([]);
     const [deletId, setDeleteId] = useState(null);
     const [totalUsers, setTotalUsers] = useState(0);
+    const [avgViews, setAvgViews] = useState(0);
     const [totalPosts, setTotalPosts] = useState([]);
+    const [totalViews, setTotalViews] = useState(0);
     const [refresh, setRefresh] = useState(0);
     const [allUsers, setAllUsers] = useState([]);
-    const [velocity, setVelocity] = useState(null);
+    const [velocity, setVelocity] = useState(0);
+    const [commentAvg, setCommentAvg] = useState(0);
     const [categories, setCategories] = useState([]);
     const [allCat, setAllCat] = useState([]);
     const [posts, setPosts] = useState([]);
@@ -152,7 +155,9 @@ const AppContextProvider = ({children})=>{
             const data = await response.json();
             console.log(data.total);
             if(response.ok){
+                setAvgViews(data.averageViews);
                 setTotalPosts(data.total);
+                setTotalViews(data.views);
                 setVelocity(data.velocity);
                 setPosts(data.posts.data);
                 setPostPagination({
@@ -216,6 +221,7 @@ const AppContextProvider = ({children})=>{
     }
 
     const [comments, setComments] = useState([]);
+    const [allComments, setAllComments] = useState([]);
     const [currentComments, setCurrentComments] = useState(1);
     const [commentsPagination, setCommentsPagination] = useState({
         currentPage:'',
@@ -225,6 +231,7 @@ const AppContextProvider = ({children})=>{
         total:'',
         perPage:''
     });
+    
     const fetchcomments = async () => {
 
         const token = localStorage.getItem("token");
@@ -242,6 +249,8 @@ const AppContextProvider = ({children})=>{
             const data = await response.json();
 
             if (response.ok) {
+                setCommentAvg(data.average);
+                setAllComments(data.allComments);
                 setComments(data.comments.data);
                 setCommentsPagination({
                     currentPage:data.comments.current_page,
@@ -298,6 +307,7 @@ const AppContextProvider = ({children})=>{
             velocity,
             pagination,
             setCurrentPage,
+            avgViews,
             currentPage,
             currentPostPage,
             setCurrentPostPage,
@@ -314,6 +324,11 @@ const AppContextProvider = ({children})=>{
             commentsPagination,
             currentComments,
             setCurrentComments,
+            allComments,
+            setComments,
+            totalViews,
+            refresh,
+            commentAvg,
             setShowEditCategoryModel
         }}>
             {children}

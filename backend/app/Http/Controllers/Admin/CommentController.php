@@ -15,10 +15,12 @@ class CommentController extends Controller
      */
     public function index()
     {
+        $allComments = Comment::all();
         $comments = Comment::with(['user','post'])->paginate(10);
 
         return response()->json([
-            'comments' => $comments
+            'comments' => $comments,
+            'allComments' => $allComments
         ]);
     }
 
@@ -57,7 +59,16 @@ class CommentController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $comment = Comment::with(['user','post'])->where('id', $id)->first();
+        if(!$comment){
+            return response()->json([
+                'message'=>'Not found'
+            ],404);
+        }
+
+        return response()->json([
+            'comment'=>$comment
+        ],200);
     }
 
     /**
@@ -65,7 +76,7 @@ class CommentController extends Controller
      */
     public function edit(string $id)
     {
-        //
+       
     }
 
     /**
@@ -73,7 +84,20 @@ class CommentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $status = Comment::where('id', $id)->first();
+        if(!$status){
+            return response()->json([
+                'message'=>'Not found'
+            ],404);
+        }
+
+        Comment::where('id',$id)->update([
+            'status'=>$request->status
+        ]);
+
+        return response()->json([
+            'message'=>'Status updated'
+        ],200);
     }
 
     /**
@@ -81,6 +105,59 @@ class CommentController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $status = Comment::where('id', $id)->first();
+        if(!$status){
+            return response()->json([
+                'message'=>'Not found'
+            ],404);
+        }
+        $status->delete();
+        return response()->json([
+            'message'=>'Comment deleted'
+        ],200);
+    }
+
+
+    public function searchComments(Request $request){
+        $search_term = $request->query('query');
+        if($search_term === 'all'){
+            $search_comment = Comment::with(['user','post'])->paginate(10);
+        }else{
+            $search_comment = Comment::with(['user','post'])->where('status', $search_term )->latest()->paginate(10);
+
+        }
+        return response()->json([
+            'searchComments'=>$search_comment
+        ]);
+
+    }
+
+    public function fetchPostComments(int $id){
+        $postComment = Comment::with(['user','post'])->where('post_id',$id)->get();
+        if(!$postComment){
+            return response()->json([
+                'message'=>'Not found'
+            ],404);
+        }
+        return response()->json([
+            'postComment'=>$postComment
+        ],200);
+    }
+
+    public function updateComment (Request $request, int $id){
+        $status = Comment::where('id', $id)->first();
+        if(!$status){
+            return response()->json([
+                'message'=>'Not found'
+            ],404);
+        }
+
+        Comment::where('id',$id)->update([
+            'comment'=>$request->comment
+        ]);
+
+        return response()->json([
+            'message'=>'Comment updated'
+        ],200);
     }
 }

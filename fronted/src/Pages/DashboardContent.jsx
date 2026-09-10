@@ -5,11 +5,6 @@ import {
   BsPeopleFill,
   BsEyeFill,
   BsPlusLg,
-  BsChevronLeft,
-  BsChevronRight,
-  BsPencilFill,
-  BsTrashFill,
-  BsStars,
 } from "react-icons/bs";
 import { FaEye } from "react-icons/fa";
 import styles from "../assets/DashboardContent.module.css";
@@ -27,51 +22,20 @@ const chartData = [
   { month: "Jun", value: 100 },
 ];
 
-const recentComments = [
-  {
-    initials: "SJ",
-    color: "#f4b6c2",
-    name: "Sarah Jenkins",
-    text: '"The piece on slow living really...',
-  },
-  {
-    initials: "MT",
-    color: "#a9c9e8",
-    name: "Mark Thompson",
-    text: '"Can you share the camera settin...',
-  },
-  {
-    initials: "ER",
-    color: "#cfd6e6",
-    name: "Elena R.",
-    text: '"Great article, shared with my...',
-  },
-];
-
-const recentPosts = [
-  {
-    title: "The Art of Ritual: Morning Coffee",
-    status: "PUBLISHED",
-    author: "Alex Rivera",
-    date: "Oct 12, 2024",
-  },
-  {
-    title: "Curating a Minimalist Living Room",
-    status: "DRAFT",
-    author: "Sophie Chen",
-    date: "Oct 10, 2024",
-  },
-];
 
 const DashboardContent = () => {
   const {posts} = useContext(AppContext);
+  const {totalViews} = useContext(AppContext);
+  const {comments} = useContext(AppContext);
+  const {allComments} = useContext(AppContext);
+  const {commentAvg} = useContext(AppContext);
   const {totalPosts} = useContext(AppContext);
   const {velocity} = useContext(AppContext);
+  const {avgViews} = useContext(AppContext);
   const {totalUsers} = useContext(AppContext);
 
+  const recentComments = comments.slice(0,5);
   const recentPost = posts.slice(0,5);
-
-  const totalPost = posts.length;
   const statCards = [
     {
       icon: <BsFileEarmarkTextFill />,
@@ -86,10 +50,10 @@ const DashboardContent = () => {
       icon: <BsChatSquareTextFill />,
       iconBg: "#fdf3e0",
       iconColor: "#d99a1a",
-      badge: "+5%",
+      badge: `+${commentAvg}%`,
       badgeType: "positive",
       label: "Total Comments",
-      value: "8,432",
+      value:allComments.length <= 1000 ? `${allComments.length}` : `${(allComments.length/1000).toFixed(1)}k`
     },
     {
       icon: <BsPeopleFill />,
@@ -104,10 +68,10 @@ const DashboardContent = () => {
       icon: <BsEyeFill />,
       iconBg: "#fbe9e9",
       iconColor: "#d94f4f",
-      badge: "+24%",
+      badge: `+${avgViews}%`,
       badgeType: "positive",
       label: "Total Views",
-      value: "942k",
+      value:totalViews <= 1000 ? `${totalViews}` : `${(totalViews/1000).toFixed(1)}k`,
     },
   ];
   const maxValue = Math.max(...chartData.map((d) => d.value));
@@ -189,28 +153,24 @@ const DashboardContent = () => {
             <div className="flex-grow-1">
               {recentComments.map((comment, index) => (
                 <div className={styles.commentRow} key={index}>
-                  <div
-                    className={styles.avatar}
-                    style={{ backgroundColor: comment.color }}
-                  >
-                    {comment.initials}
-                  </div>
-                  <div className={styles.commentBody}>
-                    <p className={styles.commentName}>{comment.name}</p>
-                    <p className={styles.commentText}>{comment.text}</p>
-                    <div className={styles.commentActions}>
-                      <a href="#" className={styles.approveLink}>
-                        Approve
-                      </a>
-                      <a href="#" className={styles.rejectLink}>
-                        Reject
-                      </a>
+                   <div className={styles.avatar} style={{ backgroundColor: '#c5c2d6', }}>
+                      {comment.user.image ? (
+                        <img src={`${baseUrl}/uploads/${comment.user.image}`} alt="" />
+                      ) : (
+                        <>
+                        {comment.user.name.split(' ')[0].substr(0,1)}
+                        {comment.user.name.split(' ')[1].substr(0,1)}
+                        </>
+                      )}
                     </div>
+                  <div className={styles.commentBody}>
+                    <p className={styles.commentName}>{comment.user.name}</p>
+                    <p className={styles.commentText}>{comment.comment.length > 20 ? `${comment.comment.substr(0, 20)}...` : comment.comment}</p>
                   </div>
                 </div>
               ))}
             </div>
-            <button className={styles.viewAllBtn}>View All Comments</button>
+            <Link to="/admin-panel/comments"><button className={styles.viewAllBtn}>View All Comments</button></Link>
           </div>
         </div>
       </div>

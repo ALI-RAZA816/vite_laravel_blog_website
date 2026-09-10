@@ -3,7 +3,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Home from "./Pages/Home";
 import Footer from "./components/Footer";
 import { BrowserRouter, Route,Routes} from "react-router-dom";
-import AllPosts from "./Pages/AllPosts";
 import BlogPost from "./Pages/BlogPost";
 import About from "./Pages/About";
 import Contact from "./Pages/Contact";
@@ -37,7 +36,6 @@ function App() {
             <ScrollToTop/>
             <Routes>
               <Route path='/' element={<Home />} />
-              <Route path='/all-posts' element={<AllPosts/>}/>
               <Route path='/blog-post/:id' element={<BlogPost/>}/>
               <Route path='/about' element={<About/>}/>
               <Route path='/contact' element={<Contact/>}/>

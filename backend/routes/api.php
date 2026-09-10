@@ -16,8 +16,11 @@ Route::get('/user', function (Request $request) {
 
 Route::post('login',[AuthController::class,'loginAccount']);
 Route::post('account',[AuthController::class, 'createAccount']);
+Route::get('post-comments/{id}',[CommentController::class, 'fetchPostComments']);
 
 Route::middleware('auth:sanctum')->group(function(){
+    Route::put('update-comments/{id}',[CommentController::class,'updateComment']);
+    Route::get('filter-comments',[CommentController::class,'searchComments']);
     Route::post('logout',[AuthController::class,'logoutAccount']);
     Route::post('search',[AuthController::class,'searchUser']);
     Route::post('search-post',[PostController::class,'searchPost']);

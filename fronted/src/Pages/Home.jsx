@@ -26,70 +26,56 @@ const popular = [
 
 export default function Home() {
 
-  const {allCat} = useContext(AppContext);
-  const [currentPostPage, setCurrentPostPage] = useState(1);
   const [totalPosts, setTotalPosts] = useState([]);
-  const [postPagination, setPostPagination] = useState({
-    currentPage:'',
-    from:'',
-    lastPage:'',
-    to:'',
-    total:'',
-    perPage:'',
-  });
+  const [categories, setCategories] = useState([]);
 
-  // fetch posts
-  const fetchPosts = async ()=>{
-      try{
-          const token = localStorage.getItem('token');
-          const response = await fetch(`${apiUrl}/posts?page=${currentPostPage}`,{
-              method:'GET',
-              headers:{
-                  'Content-type':'application/json',
-                  'Accept':'application/json',
-                  'Authorization':`Bearer ${token}`
-              }
-          });
-          const data = await response.json();
-          // console.log(data.total);
-          if(response.ok){
-              setTotalPosts(data.posts.data);
-              setPostPagination({
-                  currentPage:data.posts.current_page,
-                  from:data.posts.from,
-                  lastPage:data.posts.last_page,
-                  to:data.posts.to,
-                  total:data.posts.total,
-                  perPage:data.posts.per_page
-              });
-              
-          }
-      }catch(error){
-          console.log(error);
-      }
-  }
+  const fetchPosts = async () => {
+    try {
+        const response = await fetch(`${apiUrl}/public-posts`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+        });
 
-  const pages = [];
-  const start = Math.max(1, postPagination.currentPage - 2);
-  const end = Math.min(postPagination.lastPage, postPagination.currentPage + 2);
-  if(start > 1){
-    pages.push(1);
-    if(start > 2) pages.push('...');
-  }
+        const data = await response.json();
 
-  for (let i = start; i<=end; i++  ){
-    pages.push(i);
-  }
- 
-  if(end < postPagination.lastPage){
-    if(end < postPagination.lastPage - 1) pages.push("...");
-    pages.push(postPagination.lastPage);
-  }
+        if (response.ok) {
+          setTotalPosts(data.allPost);
+        }
+
+    } catch (error) {
+        console.log("ERROR:", error);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+        const response = await fetch(`${apiUrl}/public-category`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          console.log(data.allCategories);
+          setCategories(data.allCategories);
+        }
+
+    } catch (error) {
+        console.log("ERROR:", error);
+    }
+  };
 
   useEffect(()=>{
     fetchPosts();
-  },[currentPostPage]);
-
+    fetchCategories()
+  },[]);
 
   return (
     <div className={styles.page}>
@@ -112,7 +98,6 @@ export default function Home() {
           <div className="col-lg-8">
             <div className={styles.sectionHeader}>
               <h2 className={styles.sectionTitle}>Recent Stories</h2>
-              <Link to="/all-posts" className={styles.viewAll}>View All &rsaquo;</Link>
             </div>
             <div className="row">
               {totalPosts.map((post, i) => (
@@ -131,7 +116,7 @@ export default function Home() {
             </div>
 
            {/* Pagination */}
-            <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
+            {/* <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
               <span className={styles.showingText}>Showing {postPagination.from} to {postPagination.to} of {postPagination.total} users</span>
               <div className="d-flex align-items-center gap-2">
                 <button disabled={postPagination.currentPage === 1} onClick={()=> setCurrentPostPage(postPagination.currentPage - 1)} className={styles.pageBtn}>
@@ -146,7 +131,7 @@ export default function Home() {
                   <BsChevronRight />
                 </button>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* Sidebar */}
@@ -162,7 +147,7 @@ export default function Home() {
             <div className={styles.sidebarBlock}>
               <h4 className={styles.sidebarTitle}>CATEGORIES</h4>
               <div className={styles.categoryPills}>
-                {allCat.map((cat, index)=>{
+                {categories.map((cat, index)=>{
                   return <span key={index} className={styles.pill}>{cat.name} ({cat.post_count})</span>
                 })}
               </div>
