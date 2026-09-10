@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('image');
             $table->foreignId('category_id')->references('id')->on('categories');
             $table->foreignId('author_id')->references('id')->on('users');
+            $table->unsignedBigInteger('views_counter')->default(0);
             $table->string('date');
             $table->json('tags')->nullable();
             $table->string('published')->nullable();

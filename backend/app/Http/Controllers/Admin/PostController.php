@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Post;
 use App\Models\Category;
 use App\Models\MonthlyReport;
+use App\Models\Post;
+use App\Models\PostView;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -17,15 +18,24 @@ class PostController extends Controller
     public function index()
     {
         $total = Post::with('category')->with('author')->get();
+        $views = Post::sum('views_counter');
         $posts = Post::with('category')->with('author')->latest()->paginate(10);
         $total_posts = Post::count();
         $this_month = Post::whereMonth('created_at',now()->month)->count();
         $velocity = $total_posts > 0 ? round(($this_month / $total_posts) * 100, 2) : 0;
 
+        $total_views = PostView::count();
+        $view_per_month = PostView::whereDate('created_at', today())->count();
+        $average_views = $total_views > 0 ? round(($view_per_month / $total_views) * 100, 2) : 0;
+
+
+
         return response()->json([
             'posts'=>$posts,
             'total'=>$total,
-            'velocity'=>$velocity
+            'views'=>$views,
+            'velocity'=>$velocity,
+            'averageViews'=>$average_views,
         ],200);
     }
 
@@ -91,15 +101,7 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        $post = Post::with('category')->with('author')->where('id',$id)->first();
-        if(!$post){
-            return response()->json([
-                'messate'=>'Not found'
-            ],404);
-        }
-        return response()->json([
-            'post'=>$post
-        ],200);
+       
     }
 
     /**

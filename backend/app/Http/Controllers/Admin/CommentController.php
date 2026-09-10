@@ -16,12 +16,20 @@ class CommentController extends Controller
     public function index()
     {
         $allComments = Comment::all();
+        $total_comment = Comment::count();
+        $this_month = Comment::whereMonth('created_at',now()->month)->count();
+        $average = $total_comment > 0 ? round(($this_month / $total_comment) * 100, 2) : 0;
         $comments = Comment::with(['user','post'])->paginate(10);
 
         return response()->json([
             'comments' => $comments,
-            'allComments' => $allComments
+            'allComments' => $allComments,
+            'average'=>$average
         ]);
+    }
+
+    public function publicComments(){
+        
     }
 
     /**
