@@ -3,7 +3,7 @@ import styles from '../assets/Header.module.css';
 import {Link, useLocation, useNavigate} from 'react-router-dom'
 import { IoLogOutOutline } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
-import { apiUrl } from '../Http/Http';
+import { apiUrl, baseUrl } from '../Http/Http';
 import { AppContext } from '../Context/AppContext';
 
 
@@ -12,6 +12,8 @@ export default function Header() {
   
   const location = useLocation();
   const navigate = useNavigate();
+  const {logo} = useContext(AppContext);
+  const {settingData} = useContext(AppContext);
   const {loggedUser} = useContext(AppContext);
   const [showProfile, setShowProfile] = useState(false);
   const profileHandler = ()=>{
@@ -44,7 +46,8 @@ export default function Header() {
   return (
     <header className={`${styles.navbar} shadow-sm`}>
         <div className={`${styles.navInner}`}>
-            <Link to="/" className={styles.logo}>SlowLiving Blog</Link>
+          {logo ? <div className={`${styles.logoImg} overflow-hidden`}><img src={`${baseUrl}/posts-images/${logo}`} alt="" /></div> : <Link to="/" className={styles.logo}>{settingData.site_title}</Link>}
+            
             <nav className={styles.navLinks}>
               <Link to="/" className={location.pathname === '/' ? styles.navActive : ''}>Home</Link>
               <Link to="/about" className={location.pathname === '/about' ? styles.navActive : ''}>About</Link>

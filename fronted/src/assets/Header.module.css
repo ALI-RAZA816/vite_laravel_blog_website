@@ -1,8 +1,10 @@
 
 /* Navbar */
 .navbar {
-  background: #f7f2fb;
-  padding: 20px 0;
+  background: #ffffff;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  padding: 10px 0;
   position: sticky;
   top: 0;
   left: 0;
@@ -21,6 +23,12 @@
   font-weight: 800;
   color: #5b3fa0;
 }
+
+.logoImg img{
+  height:50px;
+  object-fit: contain;
+}
+
 .navLinks {
   display: flex;
   gap: 28px;

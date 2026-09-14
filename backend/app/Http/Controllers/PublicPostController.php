@@ -12,8 +12,10 @@ class PublicPostController extends Controller
 {
     public function publicPosts(){
         $publicPost = Post::with(['category','author'])->get();
+        $popularPost = Post::with(['category','author'])->orderBy('views_counter','desc')->limit(5)->get();
         return response()->json([
-            'allPost'=>$publicPost
+            'allPost'=>$publicPost,
+            'popularPost'=>$popularPost,
         ],200);
     }
 

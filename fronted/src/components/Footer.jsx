@@ -1,11 +1,19 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styles from '../assets/Footer.module.css'
 import { FaEarthAfrica } from "react-icons/fa6";
 import { FiCamera } from "react-icons/fi";
 import { MdOutlineMail } from "react-icons/md";
+import { AppContext } from '../Context/AppContext';
+import { FaFacebookF } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
+import { IoLogoInstagram } from "react-icons/io";
+import { GrLinkedinOption } from "react-icons/gr";
 
 
 export default function Footer() {
+
+  const {settingData} = useContext(AppContext);
+
   return (
     <div>
       {/* Footer */}
@@ -13,28 +21,25 @@ export default function Footer() {
         <div className="container">
           <div className="row">
             <div className="col-md-4">
-              <h3 className={styles.footerLogo}>SlowLiving</h3>
-              <p className={styles.footerText}>
-                A digital garden dedicated to the pursuit of intentionality, simplicity, and the
-                beauty found in the everyday. We explore what it means to live well in a
-                fast-paced world.
+              <h3 className={styles.footerLogo}>{settingData.site_title}</h3>
+              <p className={styles.footerText}>{settingData.site_desc}
               </p>
             </div>
             <div className="col-md-4 text-center">
               <h5 className={styles.footerHeading}>NAVIGATION</h5>
               <ul className={styles.footerList}>
                 <li>Home</li>
-                <li>Archive</li>
-                <li>The Shop</li>
-                <li>About Us</li>
+                <li>About</li>
+                <li>Contact</li>
               </ul>
             </div>
             <div className="col-md-4 text-center">
               <h5 className={styles.footerHeading}>CONNECT</h5>
               <div className={styles.socialIcons}>
-                <span><FaEarthAfrica /></span>
-                <span><FiCamera /></span>
-                <span><MdOutlineMail /></span>
+                <a className='text-dark' href={settingData.f_url}><FaFacebookF /></a>
+                <a className='text-dark' href={settingData.t_url}><FaXTwitter /></a>
+                <a className='text-dark' href={settingData.i_url}><IoLogoInstagram /></a>
+                <a className='text-dark' href={settingData.l_url}><GrLinkedinOption /></a>
               </div>
             </div>
           </div>
@@ -44,7 +49,7 @@ export default function Footer() {
             <span>Privacy Policy</span>
           </div>
           <p className={styles.footerCopyright}>
-            © 2024 SlowLiving Blog. All rights reserved. Crafting quiet moments for your screen.
+            {settingData.site_copyright}
           </p>
         </div>
       </footer>

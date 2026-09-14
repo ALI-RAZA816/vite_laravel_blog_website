@@ -26,6 +26,7 @@ class PostSeeder extends Seeder
                 'description'=>$post->description,
                 'category_id'=>$post->category_id,
                 'author_id'=>$post->author_id,
+                'views_counter'=>$post->views_counter,
                 'tags'=>json_encode($post->tags),
                 'published'=>$post->published,
             ]);

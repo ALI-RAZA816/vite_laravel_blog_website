@@ -9,24 +9,10 @@ import {
   BsChevronRight
 } from "react-icons/bs";
 
-const popular = [
-  { title: "The Philosophy of Wabi-Sabi in Modern Homes", date: "March 04 • 5 min read", img: "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=100" },
-  { title: "Unplugging: My 30-Day Digital Detox Journey", date: "Feb 22 • 8 min read", img: "https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?w=100" },
-  { title: "Sourdough Secrets: Why Slow Bread is Better", date: "Feb 15 • 12 min read", img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=100" },
-];
-
-// const categories = [
-//   "Travel (12)",
-//   "Lifestyle (8)",
-//   "Wellness (15)",
-//   "Creativity (7)",
-//   "Food (10)",
-//   "Minimalism (22)",
-// ];
-
 export default function Home() {
 
   const [totalPosts, setTotalPosts] = useState([]);
+  const [popularPosts, setPopularPosts] = useState([]);
   const [categories, setCategories] = useState([]);
 
   const fetchPosts = async () => {
@@ -42,6 +28,8 @@ export default function Home() {
         const data = await response.json();
 
         if (response.ok) {
+          console.log(data.popularPost);
+          setPopularPosts(data.popularPost);
           setTotalPosts(data.allPost);
         }
 
@@ -155,12 +143,12 @@ export default function Home() {
 
             <div className={styles.sidebarBlock}>
               <h4 className={styles.sidebarTitle}>POPULAR THIS WEEK</h4>
-              {popular.map((p, i) => (
+              {popularPosts.map((p, i) => (
                 <div className={styles.popularItem} key={i}>
-                  <img src={p.img} alt={p.title} />
+                  <img src={`${baseUrl}/posts-images/${p.image}`} />
                   <div>
-                    <p className={styles.popularTitle}>{p.title}</p>
-                    <span className={styles.popularDate}>{p.date}</span>
+                    <p className={styles.popularTitle}>{p.title.length > 40 ? `${p.title.substr(0, 40)}...` : p.title}</p>
+                    <span className={styles.popularDate}>{p.date} <span class="badge ms-3 text-bg-secondary">{p.category.name}</span></span>
                   </div>
                 </div>
               ))}
