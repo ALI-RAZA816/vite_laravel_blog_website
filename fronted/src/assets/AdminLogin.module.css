@@ -137,3 +137,31 @@
   color: #999;
   line-height: 1.5;
 }
+
+/* ===== Responsive ===== */
+
+@media (max-width: 768px) {
+  .bgText {
+    display: none;
+  }
+
+  .center {
+    padding: 40px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 22px;
+  }
+
+  .title {
+    font-size: 22px;
+  }
+
+  .linksRow {
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+}

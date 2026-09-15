@@ -259,8 +259,67 @@
 
 
 /* ===== Responsive ===== */
+
+@media (max-width: 992px) {
+  .hero {
+    height: 340px;
+  }
+
+  .heroTitle {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero {
+    height: 260px;
+  }
+
+  .heroContent {
+    bottom: 24px;
+    padding: 0 16px;
+  }
+
+  .heroTitle {
+    font-size: 24px;
+  }
+
+  .articleBody {
+    font-size: 15px;
+  }
+
+  .subheading {
+    font-size: 20px;
+  }
+
+  .authorRow {
+    padding: 18px 0;
+  }
+}
+
 @media (max-width: 576px) {
   .commentsSection {
     padding: 20px;
+  }
+
+  .hero {
+    height: 200px;
+  }
+
+  .heroTitle {
+    font-size: 19px;
+  }
+
+  .badge {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+
+  .postBtn {
+    width: 100%;
+  }
+
+  .commentItem {
+    gap: 8px;
   }
 }

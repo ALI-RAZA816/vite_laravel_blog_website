@@ -23,6 +23,7 @@ Route::get('public-posts',[PublicPostController::class, 'publicPosts']);
 Route::get('public-category',[PublicCategryController::class, 'publicCategory']);
 Route::get('post-comments/{id}',[CommentController::class, 'fetchPostComments']);
 Route::get('post-view/{id}',[PublicPostController::class, 'singleView']);
+Route::get('show-setting', [SettingController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function(){
     Route::put('update-comments/{id}',[CommentController::class,'updateComment']);
@@ -36,7 +37,6 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('posts', PostController::class);
     Route::post('settings', [SettingController::class, 'update']);
-    Route::get('show-setting', [SettingController::class, 'index']);
     Route::delete('logo', [SettingController::class, 'destroy']);
     Route::apiResource('comments', CommentController::class);
 });

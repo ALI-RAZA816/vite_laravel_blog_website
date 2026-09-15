@@ -375,3 +375,51 @@
     display: none !important;
   }
 }
+/* ===== Responsive ===== */
+
+@media (max-width: 992px) {
+  .body {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .searchBox {
+    width: 100%;
+    order: 3;
+  }
+
+  .body {
+    padding: 1.25rem;
+  }
+
+  .grid {
+    flex-direction: column;
+  }
+
+  .rightCol {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .pageTitle {
+    font-size: 1.35rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 1rem;
+  }
+
+  .photoRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

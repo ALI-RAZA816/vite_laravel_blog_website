@@ -194,3 +194,35 @@
 .createBtn:hover {
   background-color: #4c32c2;
 }
+/* ===== Responsive ===== */
+
+@media (max-width: 480px) {
+  .panel {
+    width: 100%;
+  }
+
+  .header,
+  .footer {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .body {
+    padding: 0 18px;
+  }
+
+  .iconGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .footer {
+    display: flex;
+    gap: 10px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 576px) {
+  .panel {
+    width: 90%;
+  }
+}

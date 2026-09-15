@@ -10,6 +10,7 @@ import {
   BsImages,
   BsGearFill,
   BsBoxArrowRight,
+  BsXLg,
 } from "react-icons/bs";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";
@@ -27,16 +28,20 @@ const navItems = [
 const Sidebar = () => {
 
     const location = useLocation();
-    const {deleteModel} = useContext(AppContext);
+    const {deleteModel, sidebarOpen, closeSidebar} = useContext(AppContext);
 
   return (
     <>
         {deleteModel && <DeleteModel/>}
         <div className="container-fluid p-0">
-            <div className="row p-0">
-                <div className={`col-2 d-flex flex-column ${styles.sidebar} ${styles.sticky}`}>
+            <div className="row p-0 g-0">
+                {sidebarOpen && <div className={styles.overlay} onClick={closeSidebar}></div>}
+                <div className={`col-2 d-flex flex-column ${styles.sidebar} ${styles.sticky} ${sidebarOpen ? styles.open : ''}`}>
                 {/* Brand */}
                 <div className={styles.brand}>
+                    <button type="button" className={styles.closeBtn} onClick={closeSidebar} aria-label="Close sidebar">
+                        <BsXLg />
+                    </button>
                     <h5 className={styles.brandTitle}>
                     Admin
                     <br />
@@ -51,6 +56,7 @@ const Sidebar = () => {
                     <li className="nav-item" key={index}>
                         <Link
                         to={`/admin-panel/${item.label}`}
+                        onClick={closeSidebar}
                         className={`nav-link text-capitalize d-flex align-items-center ${styles.navLink} ${
                             location.pathname === `/admin-panel/${item.label}` ? styles.active : ""
                         }`}
@@ -72,7 +78,7 @@ const Sidebar = () => {
                     </a>
                 </div>
                 </div>
-                <div className="col-10 p-0">
+                <div className={`col-10 p-0 ${styles.content}`}>
                     <Outlet/>
                 </div>
             </div>

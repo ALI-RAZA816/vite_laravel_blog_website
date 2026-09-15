@@ -428,3 +428,72 @@
   color: #8b87a0;
 }
 
+
+/* ===== Responsive ===== */
+
+@media (max-width: 992px) {
+  .content {
+    padding: 24px 20px;
+  }
+
+  .pageTitle {
+    font-size: 24px;
+  }
+
+  .chart {
+    height: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: 20px 16px;
+  }
+
+  .headingRow {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .createBtn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .panel {
+    padding: 18px;
+  }
+
+  .statCard {
+    padding: 18px;
+  }
+
+  .commentText {
+    white-space: normal;
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: 16px 12px;
+  }
+
+  .pageTitle {
+    font-size: 20px;
+  }
+
+  .statValue {
+    font-size: 22px;
+  }
+
+  .chart {
+    height: 160px;
+    gap: 8px;
+  }
+
+  .postThumb {
+    display: none;
+  }
+}

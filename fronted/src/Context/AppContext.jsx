@@ -26,6 +26,14 @@ const AppContextProvider = ({children})=>{
     const [allEditors, setAllEditors] = useState([]);
     // hide and show loading spinner 
     const[showLoadingSpinner, setShowLoadingSpinner] = useState(false); 
+    // admin sidebar open/close (mobile & tablet)
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const toggleSidebar = () => setSidebarOpen((prev) => !prev);
+    const closeSidebar = () => setSidebarOpen(false);
+    // public header mobile menu open/close
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const toggleMobileMenu = () => setMobileMenuOpen((prev) => !prev);
+    const closeMobileMenu = () => setMobileMenuOpen(false);
     // disabled field on request 
     const [disabledField, setDisabledField] = useState(false);
     const location = useLocation();
@@ -425,6 +433,14 @@ const AppContextProvider = ({children})=>{
             CategoryModelHandler,
             showLoadingSpinner,
             setShowLoadingSpinner,
+            sidebarOpen,
+            setSidebarOpen,
+            toggleSidebar,
+            closeSidebar,
+            mobileMenuOpen,
+            setMobileMenuOpen,
+            toggleMobileMenu,
+            closeMobileMenu,
             disabledField,
             setDisabledField,
             allUsers,
@@ -463,7 +479,6 @@ const AppContextProvider = ({children})=>{
             catPagination,
             setCatPagination,
             totalPosts,
-            lastMonthViews,
             allCat,
             comments,
             loggedUser,

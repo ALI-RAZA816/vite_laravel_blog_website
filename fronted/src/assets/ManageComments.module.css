@@ -419,3 +419,64 @@
  color: #940E2F;
   background-color: #FFDAD6;
 }
+/* ===== Responsive ===== */
+
+@media (max-width: 992px) {
+  .content {
+    padding: 24px 20px;
+  }
+
+  .pageTitle {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: 20px 16px;
+  }
+
+  .filterBar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .tabs {
+    flex-wrap: wrap;
+  }
+
+  .controls {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .paginationRow {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start !important;
+  }
+
+  .footerLinks {
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: 16px 12px;
+  }
+
+  .pageTitle {
+    font-size: 20px;
+  }
+
+  .card {
+    flex: 1 1 100%;
+  }
+
+  .excerptCell {
+    max-width: 160px;
+  }
+}

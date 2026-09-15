@@ -183,3 +183,50 @@
 .footerLinks a:hover {
   color: #5b3fd9;
 }
+/* ===== Responsive ===== */
+
+@media (max-width: 992px) {
+  .content {
+    padding: 24px 20px;
+  }
+
+  .pageTitle {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: 20px 16px;
+  }
+
+  .addBtn {
+    width: 100%;
+  }
+
+  .paginationRow {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start !important;
+  }
+
+  .footerLinks {
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: 16px 12px;
+  }
+
+  .pageTitle {
+    font-size: 20px;
+  }
+
+  .categoriesTable thead th,
+  .categoriesTable tbody td {
+    padding: 12px 14px;
+  }
+}

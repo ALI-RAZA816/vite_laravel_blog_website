@@ -578,3 +578,69 @@
     height: 105px;
   }
 }
+/* ===== Responsive ===== */
+
+@media (max-width: 992px) {
+  .mainContent {
+    padding: 24px 20px 40px;
+  }
+
+  .searchBox {
+    width: 220px;
+  }
+
+  .pageHeading h1 {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 768px) {
+  .topHeader {
+    padding: 0 16px;
+    flex-wrap: wrap;
+    height: auto;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    gap: 10px;
+  }
+
+  .searchBox {
+    width: 100%;
+    order: 3;
+  }
+
+  .mainContent {
+    padding: 20px 16px 32px;
+  }
+
+  .pageHeading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .saveButton {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .card {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pageHeading h1 {
+    font-size: 22px;
+  }
+
+  .profileImage {
+    width: 96px;
+    height: 96px;
+  }
+
+  .footerLinks {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}

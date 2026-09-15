@@ -19,6 +19,9 @@ class SettingController extends Controller
                 'setting'=>$setting
             ],200);
         }
+        return response()->json([
+            'setting'=>$setting
+        ],200);
     }
 
     /**

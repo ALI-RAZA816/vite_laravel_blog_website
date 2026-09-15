@@ -360,3 +360,63 @@
 .aiBtn:hover {
   background-color: #ece9fb;
 }
+/* ===== Responsive ===== */
+
+@media (max-width: 992px) {
+  .content {
+    padding: 24px 20px;
+  }
+
+  .pageTitle {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: 20px 16px;
+  }
+
+  .filterBar {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .statusTabs {
+    flex-wrap: wrap;
+  }
+
+  .addBtn {
+    width: 100%;
+  }
+
+  .paginationRow {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start !important;
+  }
+
+  .aiCard {
+    padding: 24px 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: 16px 12px;
+  }
+
+  .pageTitle {
+    font-size: 20px;
+  }
+
+  .statusTab {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .velocityChart {
+    height: 120px;
+    gap: 8px;
+  }
+}

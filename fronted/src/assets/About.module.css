@@ -168,3 +168,49 @@
   font-size: 13px;
   color: #555;
 }
+
+/* ===== Responsive ===== */
+
+@media (max-width: 992px) {
+  .title {
+    font-size: 28px;
+  }
+
+  .heroImg {
+    height: 260px;
+    margin-top: 24px;
+  }
+}
+
+@media (max-width: 767px) {
+  .title {
+    font-size: 24px;
+  }
+
+  .heroImg {
+    height: 220px;
+    margin-top: 20px;
+  }
+
+  .journeyTitle {
+    font-size: 18px;
+  }
+
+  .fillDaysTitle {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 20px;
+  }
+
+  .quoteBox {
+    padding: 14px 16px;
+  }
+
+  .pillarCard {
+    padding: 16px;
+  }
+}

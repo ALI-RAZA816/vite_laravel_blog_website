@@ -1,9 +1,11 @@
-import React from "react";
-import { BsSearch, BsBell } from "react-icons/bs";
+import React, { useContext } from "react";
+import { BsSearch, BsBell, BsList } from "react-icons/bs";
 import styles from "../assets/AdminHeader.module.css";
 import { Outlet } from "react-router-dom";
+import { AppContext } from "../Context/AppContext";
 
 const AdminHeader = () => {
+  const { toggleSidebar } = useContext(AppContext);
   return (
     <>
     <div className="container-fluid">
@@ -12,6 +14,15 @@ const AdminHeader = () => {
                 <div
                 className={`d-flex align-items-center justify-content-between ${styles.header} ${styles.sticky}`}
                 >
+                {/* Sidebar toggle (tablet & mobile only) */}
+                <button
+                  type="button"
+                  className={styles.menuBtn}
+                  onClick={toggleSidebar}
+                  aria-label="Toggle menu"
+                >
+                  <BsList />
+                </button>
                 {/* Search */}
                 <div className={styles.searchWrapper}>
                     <BsSearch className={styles.searchIcon} />

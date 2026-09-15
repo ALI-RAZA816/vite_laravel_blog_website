@@ -299,3 +299,61 @@
 .trashRow:hover {
   text-decoration: underline;
 }
+/* ===== Responsive ===== */
+
+@media (max-width: 992px) {
+  .wrapper {
+    padding: 22px 20px;
+  }
+
+  .titleInput {
+    font-size: 26px;
+  }
+
+  .editorCard {
+    height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    padding: 18px 14px;
+  }
+
+  .titleCard {
+    padding: 16px 18px;
+  }
+
+  .titleInput {
+    font-size: 22px;
+  }
+
+  .toolbar {
+    padding: 10px 14px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
+  .editorCard {
+    height: 320px;
+  }
+
+  .panel {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .titleInput {
+    font-size: 19px;
+  }
+
+  .updateBtn,
+  .draftBtn {
+    width: 100%;
+  }
+
+  .featuredImage {
+    height: auto;
+  }
+}

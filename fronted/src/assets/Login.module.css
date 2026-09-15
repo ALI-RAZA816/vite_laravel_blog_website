@@ -143,3 +143,29 @@
   color: #5b3fa0;
   font-weight: 600;
 }
+
+/* ===== Responsive ===== */
+
+@media (max-width: 576px) {
+  .center {
+    padding: 24px 14px;
+  }
+
+  .card {
+    padding: 24px 20px;
+  }
+
+  .cardTitle {
+    font-size: 22px;
+  }
+
+  .tab,
+  .tabActive {
+    padding: 10px 18px;
+    font-size: 14px;
+  }
+
+  .socialBtns {
+    flex-direction: column;
+  }
+}
