@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FiSearch,
   FiBell,
@@ -11,7 +11,7 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "../assets/EditUser.module.css";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
-import { AppContext } from "../Context/AppContext";
+import { useUser } from "../Context/UserContext";
 import { LuUserRound } from "react-icons/lu";
 import { apiUrl, baseUrl } from "../Http/Http";
 
@@ -21,7 +21,7 @@ const EditUser = () => {
 
     const {id} = useParams();
     const navigate = useNavigate();
-    const {setRefresh} = useContext(AppContext);
+    const {triggerUserRefresh} = useUser();
     const [imageErr, setImageErr]= useState(null);
     const [accountActive, setAccountActive] = useState(false);
     const [twoFactor, setTwoFactor] = useState(false);
@@ -122,7 +122,7 @@ const EditUser = () => {
             const data = await response.json();
             if(response.ok){
                 if(data.status === 200){
-                    setRefresh(prev => prev + 1);
+                    triggerUserRefresh();
                     navigate('/admin-panel/users');
                 }
             }else if(response.status === 422){

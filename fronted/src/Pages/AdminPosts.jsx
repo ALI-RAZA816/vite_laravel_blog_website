@@ -9,7 +9,7 @@ import {
 } from "react-icons/bs";
 import { FaEye } from "react-icons/fa";
 import { Bar } from "react-chartjs-2";
-
+import { usePost } from "../Context/PostContext";
 import styles from "../assets/AdminPosts.module.css";
 import { Link } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";
@@ -35,10 +35,19 @@ ChartJS.register(
 
 const AdminPosts = () => {
 
-  const {velocity} = useContext(AppContext);
-  const {postPagination} = useContext(AppContext);
-  const {currentPostPage} = useContext(AppContext);
-  const {setCurrentPostPage} = useContext(AppContext);
+  const {
+    velocity,
+    postPagination,
+    currentPostPage,
+    setCurrentPostPage,
+    posts,
+    setPosts,
+    deletePost,
+    multiDeletePost,
+    searchPosts,
+  } = usePost();
+const {allCat} = useContext(AppContext);
+
   const [chartData2, setChartData2] =useState([]);
   const monthReportHandler = async () => {
     const token = localStorage.getItem('token');
@@ -74,11 +83,6 @@ const AdminPosts = () => {
     }
   };
   
-  const {posts} = useContext(AppContext);
-  const {setPosts} = useContext(AppContext);
-  const {allCat} = useContext(AppContext);
-  const {setRefresh} = useContext(AppContext);
-  
   const chartData = {
     labels:chartData2.map(item => item.month),
     datasets: [
@@ -107,48 +111,14 @@ const AdminPosts = () => {
     },
   };
 
-  const deletePost = async (event, id)=>{
-    event.preventDefault();
-    const token = localStorage.getItem('token');
-    try{
-      const response = await fetch(`${apiUrl}/posts/${id}`,{
-        method:'DELETE',
-        headers:{
-          'Content-type':'application/json',
-          'Accept':'application/json',
-          'Authorization':`Bearer ${token}`
-        }
-      });
-      const data = await response.json();
-      if(response.ok){
-        setRefresh(prev => prev + 1);
-      }
-    }catch(error){
-      console.log(error);
-    }
-  }
-
   const [active, setActive] = useState('active');
   const activeFilter = (name)=>{
     setActive(name);
   }
 
   const searchTimeout = useRef(null);
-  const searchHandler = async (searchTerm)=>{
-    const token = localStorage.getItem('token');
-    const response = await fetch(`${apiUrl}/search-post?query=${searchTerm}&page=${currentPostPage}`,{
-      method:'POST',
-      headers:{
-        'Content-type':'application/json',
-        'Accept':'application/json',
-        'Authorization':`Bearer ${token}`,
-      }
-    });
-    const data = await response.json();
-    if(response.ok){
-      setPosts(data.posts.data);
-    }
-
+  const searchHandler = (searchTerm)=>{
+    searchPosts(searchTerm);
   }
 
   const getValue = (event)=>{
@@ -174,7 +144,7 @@ const AdminPosts = () => {
 
   const [checkDeleted, setCheckDeleted] = useState([]);
   const DeletedChecked = (event, id)=>{
-    const checked = event.target
+    const checked = event.target;
     if(checked.checked){
       setCheckDeleted([...checkDeleted,id]);
     }else{
@@ -190,35 +160,16 @@ const AdminPosts = () => {
       setCheckedAll(true);
       setCheckDeleted(posts.map(post => post.id));
     }else{
+      setCheckDeleted([]);
       setCheckedAll(false);
     }
 
   }
 
 
-  const multiDeletePost = async (event)=>{
-    event.preventDefault();
-    const token = localStorage.getItem('token');
-    try{
-      const response = await fetch(`${apiUrl}/multi-delete-post`,{
-        method:'POST',
-        headers:{
-          'Content-type':'application/json',
-          'Accept':'application/json',
-          'Authorization':`Bearer ${token}`
-        },
-        body:JSON.stringify({
-          ids:checkDeleted
-        })
-      });
-      const data = await response.json();
-      if(response.ok){
-        setRefresh(prev => prev + 1);
-        setCheckDeleted([]);
-      }
-    }catch(error){
-      console.log(error);
-    }
+  const multiDeleteHandler = async (event) => {
+    const ok = await multiDeletePost(event, checkDeleted);
+    if (ok) setCheckDeleted([]);
   }
 
   const pages = [];
@@ -289,7 +240,7 @@ const AdminPosts = () => {
                 <th style={{ width: "40px" }}>
                   <input disabled={posts.length === 0 && 'disabled' }  onChange={checkedAll} type="checkbox" className={styles.checkbox} />
                 </th>
-                {checkDeleted.length >=1 ? <th><span onClick={multiDeletePost} className="text-danger" style={{cursor:'pointer'}}>Delete</span></th>:<th>POST TITLE</th>}
+                {checkDeleted.length >=1 ? <th><span onClick={multiDeleteHandler} className="text-danger" style={{cursor:'pointer'}}>Delete</span></th>:<th>POST TITLE</th>}
                 <th>CATEGORY</th>
                 <th>AUTHOR</th>
                 <th>STATUS</th>

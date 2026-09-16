@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import styles from '../assets/Home.module.css';
 import { IoMdSearch } from "react-icons/io";
-import { useContext, useEffect, useState } from "react";
-import { AppContext } from "../Context/AppContext";
-import { apiUrl, baseUrl } from "../Http/Http";
+import { usePublicCategory } from "../Context/PublicCategoryContext";
+import { usePublicPost } from "../Context/PublicPostContext";
+import { baseUrl } from "../Http/Http";
+
 import {
   BsChevronLeft,
   BsChevronRight
@@ -11,59 +12,13 @@ import {
 
 export default function Home() {
 
-  const [totalPosts, setTotalPosts] = useState([]);
-  const [popularPosts, setPopularPosts] = useState([]);
-  const [categories, setCategories] = useState([]);
 
-  const fetchPosts = async () => {
-    try {
-        const response = await fetch(`${apiUrl}/public-posts`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-            },
-        });
+  const { publicCategories: categories } = usePublicCategory();
+  const { publicPosts: totalPosts, popularPosts } = usePublicPost();
 
-        const data = await response.json();
-
-        if (response.ok) {
-          console.log(data.popularPost);
-          setPopularPosts(data.popularPost);
-          setTotalPosts(data.allPost);
-        }
-
-    } catch (error) {
-        console.log("ERROR:", error);
-    }
-  };
-
-  const fetchCategories = async () => {
-    try {
-        const response = await fetch(`${apiUrl}/public-category`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-            },
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          console.log(data.allCategories);
-          setCategories(data.allCategories);
-        }
-
-    } catch (error) {
-        console.log("ERROR:", error);
-    }
-  };
-
-  useEffect(()=>{
-    fetchPosts();
-    fetchCategories()
-  },[]);
+  // useEffect(()=>{
+  //   fetchPosts();
+  // },[]);
 
   return (
     <div className={styles.page}>

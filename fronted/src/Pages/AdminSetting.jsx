@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 import {
   BsSave2Fill,
   BsPalette2,
@@ -13,19 +13,19 @@ import {
 } from "react-icons/bs";
 import styles from "../assets/AdminSetting.module.css";
 import { apiUrl, baseUrl } from "../Http/Http";
-import { AppContext } from "../Context/AppContext";
+import { useSetting } from "../Context/SettingContext";
 
 const GeneralSetting = () => {
 
   const {
-      maintenance, setMaintenance,
-      logoPreview, logo,
-      settingData: formData,       // 👈 rename here
-      settingFormHandler: formHandler,
-      siteLogo,
-      settingHandler,
-      logoHandler,
-    } = useContext(AppContext);
+    maintenance, setMaintenance,
+    logoPreview, logo,
+    settingData: formData,   
+    settingFormHandler: formHandler,
+    siteLogo,
+    settingHandler,
+    logoHandler,
+  } = useSetting();
     
   return (
     <div className={styles.content}>

@@ -25,6 +25,9 @@ import { FaEye } from "react-icons/fa";
 import styles from "../assets/DashboardContent.module.css";
 import {Link} from 'react-router-dom';
 import { AppContext } from "../Context/AppContext";
+import { useComment } from "../Context/CommentContext";
+import { usePost } from "../Context/PostContext";
+import { useUser } from "../Context/UserContext";
 import { baseUrl } from "../Http/Http";
 
 
@@ -41,16 +44,11 @@ const chartData = [
 const DashboardContent = () => {
 
   const [monthlyRecord, setMonthlyRecord] = useState('');
-  const {lastMonthViews} = useContext(AppContext);
-  const {posts} = useContext(AppContext);
-  const {totalViews} = useContext(AppContext);
-  const {comments} = useContext(AppContext);
-  const {allComments} = useContext(AppContext);
-  const {commentAvg} = useContext(AppContext);
-  const {totalPosts} = useContext(AppContext);
-  const {velocity} = useContext(AppContext);
-  const {avgViews} = useContext(AppContext);
-  const {totalUsers} = useContext(AppContext);
+  // const {totalUsers} = useContext(AppContext);
+
+  const { lastMonthViews, posts, totalViews, totalPosts, velocity, avgViews } = usePost();
+  const { comments, allComments, commentAvg } = useComment();
+  const { totalUsers } = useUser();
 
   const recentPost = posts.slice(0,5);
   const recentComments = comments.slice(0,5);
@@ -141,7 +139,7 @@ const DashboardContent = () => {
       </div>
 
       {/* Stat cards */}
-      <div className="row g-4">
+      <div className="row ">
         {statCards.map((card, index) => (
           <div className="col-12 col-sm-6 col-xl-3" key={index}>
             <div className={styles.statCard}>

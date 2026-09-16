@@ -8,21 +8,25 @@ import styles from "../assets/ManageUsers.module.css";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 import { AppContext } from "../Context/AppContext";
+import { useUser } from "../Context/UserContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { apiUrl, baseUrl } from "../Http/Http";
+import { baseUrl } from "../Http/Http";
 
 
 const ManageUsers = () => {
 
-  const {allUsers} = useContext(AppContext);
-  const {totalUsers} = useContext(AppContext);
-  const {pagination} = useContext(AppContext);
-  const {currentPage} = useContext(AppContext);
-  const {setCurrentPage} = useContext(AppContext);
-  const {setAllUsers} = useContext(AppContext);
-  const {thisWeek} = useContext(AppContext);
-  const {Blocked} = useContext(AppContext);
-  const {allEditors} = useContext(AppContext);
+    const {
+    allUsers,
+    setAllUsers,
+    totalUsers,
+    pagination,
+    currentPage,
+    setCurrentPage,
+    thisWeek,
+    Blocked,
+    allEditors,
+    searchUsers,
+  } = useUser();
   const {DeleteModelHandler} = useContext(AppContext);
   
   const statCards = [
@@ -58,21 +62,8 @@ const ManageUsers = () => {
 
 
   const searchTimeout = useRef(null);
-  const searchHandler = async (searchTerm)=>{
-    const token = localStorage.getItem('token');
-    const response = await fetch(`${apiUrl}/search?query=${searchTerm}&page=${currentPage}`,{
-      method:'POST',
-      headers:{
-        'Content-type':'application/json',
-        'Accept':'application/json',
-        'Authorization':`Bearer ${token}`,
-      }
-    });
-    const data = await response.json();
-    if(response.ok){
-      setAllUsers(data.users.data);
-    }
-
+  const searchHandler = (searchTerm)=>{
+    searchUsers(searchTerm);
   }
 
 

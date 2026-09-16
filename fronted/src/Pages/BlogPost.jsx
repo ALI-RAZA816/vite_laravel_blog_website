@@ -6,30 +6,21 @@ import { AppContext } from "../Context/AppContext";
 import { IoEllipsisVerticalSharp } from "react-icons/io5";
 import { MdOutlineEdit } from "react-icons/md";
 import { RiDeleteBinLine } from "react-icons/ri";
-
-
+import { useUser } from "../Context/UserContext";
+import { usePublicPost } from "../Context/PublicPostContext";
 
 export default function BlogPost() {
 
   const {id} = useParams();
-  const {loggedUser} = useContext(AppContext);
+  const {loggedUser} = useUser();
   const {setRefresh} = useContext(AppContext);
   const {refresh} = useContext(AppContext);
   const [active, setActive] = useState(null);
   const [activeEdit, setActiveEdit] = useState(null);
   const [EditComment, setEditComment] = useState('');
   const userInfo = JSON.parse(localStorage.getItem('UserInfo'));
-  const [formData, setFormData] = useState({
-    category:'',
-    title:'',
-    author_image:'',
-    author_name:'',
-    date:'',
-    tags:[],
-    published:'',
-    post_image:'',
-    description:''
-  })
+
+  const { postView: formData, fetchPostView } = usePublicPost();
 
   // fetch single comment
   const fetchComment = async (id)=>{
@@ -78,35 +69,8 @@ export default function BlogPost() {
   }
 
   // fetch single post
-  const previewPost = async ()=>{
-    const token = localStorage.getItem('token');
-    try{
-      const response = await fetch(`${apiUrl}/post-view/${id}`,{
-        method:'GET',
-        headers:{
-          'Content-type':'application/json',
-          'Accept':'application/json',
-          ...(token ? {'Authorization':`Bearer ${token}`} : {})
-        }
-      });
-
-      const data = await response.json();
-      if(response.ok){
-        setFormData({
-          category:data.post.category.name,
-          title:data.post.title,
-          author_image:data.post.author.image,
-          author_name:data.post.author.name,
-          date:data.post.date,
-          published:data.post.published,
-          post_image:data.post.image,
-          tags:JSON.parse(data.post.tags),
-          description:data.post.description
-        });
-      }
-    }catch(error){
-      console.log(error);
-    }
+  const previewPost = ()=>{
+    fetchPostView(id);
   }
 
   const timeAgo = (date) => {

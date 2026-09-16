@@ -6,16 +6,16 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
 import { apiUrl, baseUrl } from '../Http/Http';
 import { AppContext } from '../Context/AppContext';
-
+import { useSetting } from '../Context/SettingContext';
+import { useUser } from '../Context/UserContext';
 
 
 export default function Header() {
   
   const location = useLocation();
   const navigate = useNavigate();
-  const {logo} = useContext(AppContext);
-  const {settingData} = useContext(AppContext);
-  const {loggedUser} = useContext(AppContext);
+  const {logo, settingData} = useSetting();
+  const {loggedUser} = useUser();
   const {mobileMenuOpen, toggleMobileMenu, closeMobileMenu} = useContext(AppContext);
   const [showProfile, setShowProfile] = useState(false);
   const profileHandler = ()=>{

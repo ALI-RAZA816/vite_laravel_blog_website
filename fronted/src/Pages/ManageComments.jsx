@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 import { BsChevronLeft, BsChevronRight, BsPersonFill } from "react-icons/bs";
 import styles from "../assets/ManageComments.module.css";
-import { apiUrl, baseUrl } from "../Http/Http";
-import { AppContext } from "../Context/AppContext";
+import { baseUrl } from "../Http/Http";
+import { useComment } from "../Context/CommentContext";
 import { IoMdCheckmark } from "react-icons/io";
 import { FaXmark } from "react-icons/fa6";
 import { IoWarningOutline } from "react-icons/io5";
@@ -10,85 +10,20 @@ import { RiDeleteBinLine } from "react-icons/ri";
 
 const ManageComments = () => {
 
-  const {comments} = useContext(AppContext);
-  const {setComments} = useContext(AppContext);
-  const {allComments} = useContext(AppContext);
-  const {setRefresh} = useContext(AppContext);
-  const {commentsPagination} = useContext(AppContext);
-  const {currentComments} = useContext(AppContext);
-  const {setCurrentComments} = useContext(AppContext);
-  const pendingComments = allComments.filter(comment => comment.status === 'pending');
-  const approvedComments = allComments.filter(comment => comment.status === 'approved');
-  const spamComments = allComments.filter(comment => comment.status === 'spam');
-
-
-  const commentStatus = async (name, id)=>{
-    const token = localStorage.getItem('token');
-
-    try{
-      const response = await fetch(`${apiUrl}/comments/${id}`,{
-        method:'PUT',
-        headers:{
-          'Content-type':'application/json',
-          'Accept':'application/json',
-          'Authorization':`Bearer ${token}`,
-        },
-        body:JSON.stringify({
-          status:name
-        })
-      });
-      const data = await response.json();
-      if(response.ok){
-        setRefresh(prev => prev + 1);
-      }
-    }catch(error){
-      console.log(error);
-    }
-  }
-
-  const Deletecomment = async (id)=>{
-    const token = localStorage.getItem('token');
-
-    try{
-      const response = await fetch(`${apiUrl}/comments/${id}`,{
-        method:'DELETE',
-        headers:{
-          'Content-type':'application/json',
-          'Accept':'application/json',
-          'Authorization':`Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-      if(response.ok){
-        setRefresh(prev => prev + 1);
-      }
-    }catch(error){
-      console.log(error);
-    }
-  }
-
-  const [activeFilter, setActiveFilter] = useState('all');
-  const Searchcomment = async (search_term)=>{
-    const token = localStorage.getItem('token');
-    setActiveFilter(search_term);
-    try{
-      const response = await fetch(`${apiUrl}/filter-comments?page=${currentComments}&query=${search_term}`,{
-        method:'GET',
-        headers:{
-          'Content-type':'application/json',
-          'Accept':'application/json',
-          'Authorization':`Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-      if(response.ok){
-        setComments(data.searchComments.data);
-      }
-      console.log(data);
-    }catch(error){
-      console.log(error);
-    }
-  }
+  const {
+    comments,
+    allComments,
+    commentsPagination,
+    currentComments,
+    setCurrentComments,
+    pendingComments,
+    approvedComments,
+    spamComments,
+    commentStatus,
+    Deletecomment,
+    activeFilter,
+    Searchcomment,
+  } = useComment();
 
   const pages = [];
   const start = Math.max(1, commentsPagination.currentPage - 2);
@@ -263,8 +198,8 @@ const ManageComments = () => {
             </button>
             {pages.map((page, index)=>{
               return page === '...' ?(
-                <span className={styles.pageDots}>...</span>
-              ):(<button onClick={()=> setCurrentComments(page)} className={`${styles.pageBtn} ${currentComments === page ? `${styles.pageBtnActive}`: ''}`}>{page}</button>)
+                <span key={index} className={styles.pageDots}>...</span>
+              ):(<button key={index} onClick={()=> setCurrentComments(page)} className={`${styles.pageBtn} ${currentComments === page ? `${styles.pageBtnActive}`: ''}`}>{page}</button>)
             })}
             <button onClick={()=> setCurrentComments(commentsPagination.currentPage + 1)} disabled={commentsPagination.currentPage === commentsPagination.lastPage} className={styles.pageBtn}>
               <BsChevronRight />

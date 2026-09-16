@@ -6,5 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Setting extends Model
 {
-    protected $guarded = [];
+    protected $fillable = [
+        'site_title', 'site_description', 'site_copyright',
+        'site_logo', 'f_url', 't_url', 'i_url', 'l_url', 'site_maintence'
+    ];
 }

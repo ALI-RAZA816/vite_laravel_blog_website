@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
   BsPlusLg,
   BsChevronLeft,
@@ -11,78 +11,23 @@ import {
 } from "react-icons/bs";
 import styles from "../assets/AdminCategories.module.css";
 import AdminAddCategoryModel from "./AdminAddCategoryModel";
-import { AppContext } from "../Context/AppContext";
+import { useCategory } from "../Context/CategoryContext";
 import { LuPalette } from "react-icons/lu";
 import { IoGlobeSharp } from "react-icons/io5";
 import EditAdminCategory from '../Pages/EditAdminCategory';
-import { apiUrl } from "../Http/Http";
-
-const category = [
-  {
-    icon: <BsFlower1 />,
-    iconBg: "#fbeecb",
-    iconColor: "#c98a1a",
-    name: "Wellness",
-    slug: "wellness-and-mindfulness",
-    posts: "24 Posts",
-  },
-  {
-    icon: <BsBook />,
-    iconBg: "#e6e0f8",
-    iconColor: "#5b3fd9",
-    name: "Literature",
-    slug: "classic-modern-literature",
-    posts: "18 Posts",
-  },
-  {
-    icon: <BsHouseDoor />,
-    iconBg: "#e6e0f8",
-    iconColor: "#5b3fd9",
-    name: "Home Decor",
-    slug: "minimalist-living-spaces",
-    posts: "42 Posts",
-  },
-  {
-    icon: <span style={{ fontSize: "14px" }}>&#127807;</span>,
-    iconBg: "#e6e0f8",
-    iconColor: "#5b3fd9",
-    name: "Sustainability",
-    slug: "eco-friendly-habits",
-    posts: "12 Posts",
-  },
-];
 
 const AdminCategories = () => {
 
-    const {categories} = useContext(AppContext);
-    const {catPagination} = useContext(AppContext);
-    const {setCatPagination} = useContext(AppContext);
-    const {currentCatPage} = useContext(AppContext);
-    const {setCurrentCatPage} = useContext(AppContext);
-    const {setRefresh} = useContext(AppContext);
-    const {viewCategory} = useContext(AppContext);
-    const {CategoryModelHandler} = useContext(AppContext);
-    const {EditCategoryModelHandler} = useContext(AppContext);
-
-    const deleteCategory = async (delete_id)=>{
-        const token = localStorage.getItem('token');
-        try{
-            const response = await fetch(`${apiUrl}/categories/${delete_id}`,{
-                method:'DELETE',
-                headers:{
-                    'Content-type':'application/json',
-                    'Accpet':'application/json',
-                    'Authorization':`Bearer ${token}`,
-                }
-            })
-            const data = await response.json();
-            if(response.ok){
-                setRefresh(prev => prev + 1);
-            }
-        }catch(error){
-            console.log(error);
-        }
-    }
+    const {
+        categories,
+        catPagination,
+        currentCatPage,
+        setCurrentCatPage,
+        viewCategory,
+        CategoryModelHandler,
+        EditCategoryModelHandler,
+        deleteCategory,
+    } = useCategory();
 
     const pages = [];
     const start = Math.max(1, catPagination.currentPage - 2);
@@ -152,7 +97,7 @@ const AdminCategories = () => {
                         </td>
                         <td>
                             <div className="d-flex align-items-center justify-content-end gap-3">
-                                <BsPencilFill onClick={()=>{EditCategoryModelHandler(), viewCategory(cat.id)}} className={styles.actionIcon} />
+                                <BsPencilFill onClick={()=>{EditCategoryModelHandler(); viewCategory(cat.id)}} className={styles.actionIcon} />
                                 <BsTrashFill onClick={()=> deleteCategory(cat.id)} className={`${styles.actionIcon} ${styles.deleteIcon}`} />
                             </div>
                         </td>
@@ -171,8 +116,8 @@ const AdminCategories = () => {
                     </button>
                     {pages.map((page, index)=>{
                     return page === '...' ?(
-                        <span className={styles.pageDots}>...</span>
-                    ):(<button onClick={()=> setCurrentCatPage(page)} className={`${styles.pageBtn} ${currentCatPage === page ? `${styles.pageBtnActive}`: ''}`}>{page}</button>)
+                        <span key={index} className={styles.pageDots}>...</span>
+                    ):(<button key={index} onClick={()=> setCurrentCatPage(page)} className={`${styles.pageBtn} ${currentCatPage === page ? `${styles.pageBtnActive}`: ''}`}>{page}</button>)
                     })}
                     <button onClick={()=> setCurrentCatPage(catPagination.currentPage + 1)} disabled={catPagination.currentPage === catPagination.lastPage} className={styles.pageBtn}>
                     <BsChevronRight />

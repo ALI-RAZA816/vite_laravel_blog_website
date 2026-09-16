@@ -1,7 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import styles from "../assets/AddNewUser.module.css";
 import { apiUrl } from "../Http/Http";
-import { AppContext } from "../Context/AppContext";
+import { useUser } from "../Context/UserContext";
 import { useNavigate } from "react-router-dom";
 
 /**
@@ -13,7 +13,7 @@ const AddNewUser = () => {
 
 
   const navigate = useNavigate();
-  const {setRefresh} = useContext(AppContext);
+  const {triggerUserRefresh} = useUser();
   const [image, setImage] = useState(null);
   const [imageErr, setImageErr] = useState(null);
   const [Status, setStatus] = useState(null);
@@ -169,7 +169,7 @@ const AddNewUser = () => {
         }
       }
     }else{
-      setRefresh(prev => prev + 1);
+      triggerUserRefresh();
       navigate('/admin-panel/users');
     }
 

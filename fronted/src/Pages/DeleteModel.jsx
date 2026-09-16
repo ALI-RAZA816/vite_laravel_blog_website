@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import styles from "../assets/DeleteModel.module.css";
 import { AppContext } from "../Context/AppContext";
 import { apiUrl } from "../Http/Http";
+import { useUser } from "../Context/UserContext";
 
 const DeleteModel = () => {
 
@@ -10,6 +11,7 @@ const DeleteModel = () => {
   const {deleteModel} = useContext(AppContext);
   const {setDeleteModel} = useContext(AppContext);
   const {setRefresh} = useContext(AppContext);
+  const {triggerUserRefresh} = useUser();
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   const deleteUser = async (delete_id)=>{
@@ -28,7 +30,7 @@ const DeleteModel = () => {
       if(response.ok){
         setDeleteModel(!deleteModel);
         setConfirmDelete(false);
-        setRefresh(prev => prev + 1);
+        triggerUserRefresh();
       }
     }catch(error){
       console.log(error);

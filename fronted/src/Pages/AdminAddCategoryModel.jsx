@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import { BsXLg } from "react-icons/bs";
 import styles from "../assets/AdminAddCategoryModel.module.css";
 import { BiLeaf } from "react-icons/bi";
@@ -7,9 +7,7 @@ import { MdOutlineMenuBook } from "react-icons/md";
 import { FaHouse } from "react-icons/fa6";
 import { LuPalette } from "react-icons/lu";
 import { IoGlobeSharp } from "react-icons/io5";
-import { AppContext } from "../Context/AppContext";
-import { apiUrl } from "../Http/Http";
-
+import { useCategory } from "../Context/CategoryContext";
 
 const icons = [
   { id: "leaf", symbol: <BiLeaf />},
@@ -20,106 +18,18 @@ const icons = [
   { id: "globe", symbol: <IoGlobeSharp />},
 ];
 
-const AdminAddCategoryModel = ({ onClose }) => {
+const AdminAddCategoryModel = () => {
 
-  
-  const {setRefresh} = useContext(AppContext);
-  const {showCategoryModel} = useContext(AppContext);
-  const {CategoryModelHandler} = useContext(AppContext);
-  const [selectedIcon, setSelectedIcon] = useState("sprout");
-
-  const [formData, setFormData] = useState({
-    cat_name:'',
-    slug:'',
-    description:'',
-    icon_name:''
-  });
-  const [formDataErr, setFormDataErr] = useState({
-    cat_nameErr:'',
-    slugErr:'',
-    descriptionErr:'',
-    icon_nameErr:''
-  });
-
-
-  const formHandler = (event)=>{
-    const {name, value} = event.target;
-    setFormData((prev)=>({
-      ...prev,
-      [name]:value
-    }));
-  }
-
-  const submitCategory = async (event)=>{
-    event.preventDefault();
-    if(!formData.cat_name){
-      setFormDataErr({
-        cat_nameErr:'The category name is required'
-      });
-      return;
-    }
-    if(!formData.slug){
-      setFormDataErr({
-        slugErr:'The slug-name is required'
-      });
-      return;
-    }
-    if(!selectedIcon){
-      setFormDataErr({
-        slugErr:'The icon-name is required'
-      });
-      return;
-    }
-
-    const payload = {
-      ...formData,
-      icon_name:selectedIcon
-    }
-
-    const token = localStorage.getItem('token');
-    try{
-      const response = await fetch(`${apiUrl}/categories`,{
-        method:'POST',
-        headers:{
-          'Content-type':'application/json',
-          'Accept':'application/json',
-          'Authorization':`Bearer ${token}`
-        },
-        body:JSON.stringify(payload)
-      });
-
-      const data = await response.json();
-      if(!response.ok){
-        if(data?.errors?.cat_name){
-          setFormDataErr({
-            cat_nameErr:data?.errors.cat_name[0]
-          });
-        }else if(data?.errors.slug){
-          setFormDataErr({
-            slugErr:data?.errors.slug[0]
-          });
-        }
-      }else{
-        setFormData({
-          cat_name:'',
-          slug:'',
-          description:'',
-          icon_name:''
-        });
-        setFormDataErr({
-          cat_nameErr:'',
-          slugErr:'',
-          descriptionErr:'',
-          icon_nameErr:''
-        })
-        setRefresh(prev => prev + 1);
-        CategoryModelHandler();
-      }
-
-    }catch(error){
-      console.log(error);
-    }
-  }
+  const {
+    showCategoryModel,
+    CategoryModelHandler,
+    newIcon,
+    setNewIcon,
+    newCatData,
+    newCatErr,
+    newCatFormHandler,
+    addCategory,
+  } = useCategory();
 
   return (
     <div  className={`${styles.panel} ${showCategoryModel && `${styles.hide}`}`}>
@@ -130,19 +40,19 @@ const AdminAddCategoryModel = ({ onClose }) => {
       </div>
 
       {/* Body */}
-      <form onSubmit={submitCategory} className={styles.body}>
+      <form onSubmit={addCategory} className={styles.body}>
         {/* Category Name */}
         <div className={styles.field}>
           <label className={styles.label}>Category Name</label>
           <input
             type="text"
-            onChange={formHandler}
-            value={formData.cat_name}
+            onChange={newCatFormHandler}
+            value={newCatData.cat_name}
             name="cat_name"
             className={styles.input}
             placeholder="e.g., Sustainable Living"
           />
-          <span className="text-danger">{formDataErr.cat_nameErr}</span>
+          <span className="text-danger">{newCatErr.cat_nameErr}</span>
         </div>
 
         {/* Slug */}
@@ -152,28 +62,28 @@ const AdminAddCategoryModel = ({ onClose }) => {
             <span className={styles.slugPrefix}>blog.com/</span>
             <input
               type="text"
-              onChange={formHandler}
-              value={formData.slug}
+              onChange={newCatFormHandler}
+              value={newCatData.slug}
               name="slug"
               className={styles.slugInput}
               placeholder="sustainable-living"
             />
           </div>
-             <span className="text-danger">{formDataErr.slugErr}</span>
+             <span className="text-danger">{newCatErr.slugErr}</span>
         </div>
 
         {/* Description */}
         <div className={styles.field}>
           <label className={styles.label}>Description</label>
           <textarea
-          onChange={formHandler}
-            value={formData.description}
+          onChange={newCatFormHandler}
+            value={newCatData.description}
             name="description"
             className={styles.textarea}
             rows={4}
             placeholder="Brief overview of this category..."
           />
-           <span className="text-danger">{formDataErr.descriptionErr}</span>
+           <span className="text-danger">{newCatErr.descriptionErr}</span>
         </div>
 
         {/* Select Icon */}
@@ -185,15 +95,14 @@ const AdminAddCategoryModel = ({ onClose }) => {
                 key={icon.id}
                 type="button"
                 className={`${styles.iconBtn} ${
-                  selectedIcon === icon.id ? styles.iconBtnActive : ""
+                  newIcon === icon.id ? styles.iconBtnActive : ""
                 }`}
-                onClick={() => setSelectedIcon(icon.id)}
+                onClick={() => setNewIcon(icon.id)}
               >
                 {icon.symbol}
               </button>
             ))}
           </div>
-           {/* <span className="text-danger">{formDataErr.icon_nameErr}</span> */}
         </div>
         <button type="submit" className={styles.createBtn}>Create Category</button>
       </form>

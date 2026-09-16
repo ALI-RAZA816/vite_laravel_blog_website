@@ -77,7 +77,7 @@ class SettingController extends Controller
             $imageName = time(). '.' . $ext;
             $image->move(public_path('posts-images'), $imageName);
         }else{
-            $imageName = $setting->site_logo;
+            $imageName = $setting?->site_logo;
         }
 
         Setting::updateOrCreate([
@@ -86,7 +86,7 @@ class SettingController extends Controller
             'site_title'=>$request->site_title,
             'site_description'=>$request->site_desc,
             'site_copyright'=>$request->site_copyright,
-            'site_logo'=>$imageName,
+            'site_logo'=>$imageName ?? null,
             'f_url'=>$request->f_url ?? null,
             't_url'=>$request->t_url ?? null,
             'i_url'=>$request->i_url ?? null,

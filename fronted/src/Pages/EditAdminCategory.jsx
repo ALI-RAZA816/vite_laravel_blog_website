@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import { BsXLg } from "react-icons/bs";
 import styles from "../assets/AdminAddCategoryModel.module.css";
 import { BiLeaf } from "react-icons/bi";
@@ -7,9 +7,7 @@ import { MdOutlineMenuBook } from "react-icons/md";
 import { FaHouse } from "react-icons/fa6";
 import { LuPalette } from "react-icons/lu";
 import { IoGlobeSharp } from "react-icons/io5";
-import { AppContext } from "../Context/AppContext";
-import { apiUrl } from "../Http/Http";
-
+import { useCategory } from "../Context/CategoryContext";
 
 const icons = [
   { id: "leaf", symbol: <BiLeaf />},
@@ -20,46 +18,17 @@ const icons = [
   { id: "globe", symbol: <IoGlobeSharp />},
 ];
 
-const AdminAddCategoryModel = () => {
+const EditAdminCategory = () => {
 
-  const {setRefresh} = useContext(AppContext);
-  const {selectedIcon} = useContext(AppContext);
-  const {setSelectedIcon} = useContext(AppContext);
-  const {editCategory} = useContext(AppContext);
-  const {formHandler} = useContext(AppContext);
-  const {showEditCategoryModel} = useContext(AppContext);
-  const {setShowEditCategoryModel} = useContext(AppContext);
-  const {EditCategoryModelHandler} = useContext(AppContext);
-
-
-  // update category
-  const updateCategory = async (event)=>{
-    event.preventDefault();
-    const token = localStorage.getItem('token');
-    const payload = {
-      ...editCategory,
-      icon:selectedIcon
-    }
-    try{
-      const response = await fetch(`${apiUrl}/categories/${editCategory.id}`,{
-        method:'PUT',
-        headers:{
-          'Content-type':'application/json',
-          'Accept':'application/json',
-          'Authorization':`Bearer ${token}`
-        },
-        body:JSON.stringify(payload)
-      })
-      const data = await response.json();
-      if(response.ok){
-        setRefresh(prev => prev + 1);
-        setShowEditCategoryModel(!showEditCategoryModel);
-      }
-    }catch(error){
-      console.log(error);
-    }
-  }
-  
+  const {
+    selectedIcon,
+    setSelectedIcon,
+    editCategory,
+    formHandler,
+    showEditCategoryModel,
+    EditCategoryModelHandler,
+    updateCategory,
+  } = useCategory();
 
   return (
     <div  className={`${styles.panel} ${showEditCategoryModel && `${styles.hide}`}`}>
@@ -137,4 +106,4 @@ const AdminAddCategoryModel = () => {
   );
 };
 
-export default AdminAddCategoryModel;
+export default EditAdminCategory;
