@@ -6,6 +6,15 @@
   font-family: "Segoe UI", Roboto, Arial, sans-serif;
 }
 
+/* Bootstrap's col-10 gives this a flex-basis of 83.33%, but a flex
+   item's default min-width is "auto" (its content's natural width),
+   not 0. So any wide content inside (a chart, a table, long text)
+   can silently force this column past its 83.33% share, which is
+   what pushes it below the sidebar as the window gets narrower. */
+.content {
+  min-width: 0;
+}
+
 .sticky {
   position: sticky;
   top: 0;
@@ -13,6 +22,21 @@
   height: 100vh;
   overflow-y: auto;
   align-self: flex-start;
+  flex-shrink: 0;
+}
+
+/* Row that holds the sidebar + page content side by side.
+   Bootstrap's .row wraps by default, and a flex item's content
+   (e.g. a wide chart/table) can otherwise force it to overflow
+   and drop to a new line above the 992px breakpoint. */
+.layoutRow {
+  flex-wrap: nowrap;
+}
+
+@media (max-width: 992px) {
+  .layoutRow {
+    flex-wrap: wrap;
+  }
 }
 
 /* Brand */
@@ -155,6 +179,7 @@
     width: 100%;
     max-width: 100%;
     flex: 0 0 100%;
+    min-width: 0;
   }
 }
 
