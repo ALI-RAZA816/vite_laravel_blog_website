@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->string('image');
-            $table->foreignId('category_id')->references('id')->on('categories');
-            $table->foreignId('author_id')->references('id')->on('users');
+            $table->foreignId('category_id')->references('id')->on('categories')->cascadeOnDelete();
+            $table->foreignId('author_id')->references('id')->on('users')->cascadeOnDelete();
             $table->unsignedBigInteger('views_counter')->default(0);
             $table->string('date');
             $table->json('tags')->nullable();
