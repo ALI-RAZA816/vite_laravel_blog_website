@@ -188,7 +188,7 @@ const DashboardContent = () => {
             <div className="flex-grow-1">
               {recentComments.map((comment, index) => (
                 <div className={styles.commentRow} key={index}>
-                   <div className={styles.avatar} style={{ backgroundColor: '#c5c2d6', }}>
+                   <div className={`${styles.avatar} overflow-hidden`} style={{ backgroundColor: '#c5c2d6', }}>
                       {comment.user.image ? (
                         <img src={`${baseUrl}/uploads/${comment.user.image}`} alt="" />
                       ) : (

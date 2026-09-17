@@ -5,124 +5,34 @@ import { apiUrl } from "../Http/Http";
 export const AppContext = createContext();
 
 const AppContextProvider = ({children})=>{
-    // all users data 
-    const [lastMonthViews, setLastMonthViews] = useState([]);
+
     const [deleteModel, setDeleteModel] = useState(false);
-    const [loggedUser, setLoggedUser] = useState([]);
     const [deletId, setDeleteId] = useState(null);
-    const [totalUsers, setTotalUsers] = useState(0);
-    const [avgViews, setAvgViews] = useState(0);
-    const [totalPosts, setTotalPosts] = useState([]);
-    const [totalViews, setTotalViews] = useState(0);
-    const [refresh, setRefresh] = useState(0);
-    const [allUsers, setAllUsers] = useState([]);
-    const [velocity, setVelocity] = useState(0);
-    const [commentAvg, setCommentAvg] = useState(0);
-    const [categories, setCategories] = useState([]);
-    const [allCat, setAllCat] = useState([]);
-    const [posts, setPosts] = useState([]);
-    const [Blocked, setBlocked] = useState([]);
-    const [thisWeek, setThisWeek] = useState([]);
-    const [allEditors, setAllEditors] = useState([]);
-    // hide and show loading spinner 
-    const[showLoadingSpinner, setShowLoadingSpinner] = useState(false); 
-    // admin sidebar open/close (mobile & tablet)
+
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const toggleSidebar = () => setSidebarOpen((prev) => !prev);
     const closeSidebar = () => setSidebarOpen(false);
-    // public header mobile menu open/close
+
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const toggleMobileMenu = () => setMobileMenuOpen((prev) => !prev);
     const closeMobileMenu = () => setMobileMenuOpen(false);
-    // disabled field on request 
-    const [disabledField, setDisabledField] = useState(false);
+
     const location = useLocation();
     const isAdmin = location.pathname === '/register' || location.pathname === '/login' || location.pathname === '/admin-login' || location.pathname === '/admin-panel' || location.pathname === '/admin-panel/dashboard' || location.pathname === '/admin-panel/posts' || location.pathname === '/admin-panel/posts/add-post' || location.pathname === '/admin-panel/categories' || location.pathname === '/admin-panel/comments' || location.pathname === '/admin-panel/users' || location.pathname === '/admin-panel/settings' || location.pathname.startsWith('/admin-panel');
 
-    const [showCategoryModel, setShowCategoryModel] = useState(false);
-    const [showEditCategoryModel, setShowEditCategoryModel] = useState(false);
-    const CategoryModelHandler = ()=>{
-        setShowCategoryModel(!showCategoryModel);
-    }
-    const EditCategoryModelHandler = ()=>{
-        setShowEditCategoryModel(!showEditCategoryModel);
-    }
-
-    // modelHandler 
     const DeleteModelHandler = (deleteId)=>{
         setDeleteModel(!deleteModel);
         setDeleteId(deleteId);
     }
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [pagination, setPagination] = useState({
-        currentPage:'',
-        from:'',
-        lastPage:'',
-        to:'',
-        total:'',
-        perPage:''
-    });
-    const [currentPostPage, setCurrentPostPage] = useState(1);
-    const [postPagination, setPostPagination] = useState({
-        currentPage:'',
-        from:'',
-        lastPage:'',
-        to:'',
-        total:'',
-        perPage:''
-    });
-    const [currentCatPage, setCurrentCatPage] = useState(1);
-    const [catPagination, setCatPagination] = useState({
-        currentPage:'',
-        from:'',
-        lastPage:'',
-        to:'',
-        total:'',
-        perPage:''
-    });
-    
-    // fetch all users
-    const fetchUsers = async ()=>{
-        try{
-            const token = localStorage.getItem('token');
-            const response = await fetch(`${apiUrl}/users?page=${currentPage}`,{
-                method:'GET',
-                headers:{
-                    'Content-type':'application/json',
-                    'Accept':'application/json',
-                    'Authorization':`Bearer ${token}`
-                }
-            });
-            const data = await response.json();
-            if(response.ok){
-                if(data.status === true){
-                    setLoggedUser(data.loggedUser);
-                    setTotalUsers(data.total);
-                    setAllUsers(data.users.data);
-                    setAllEditors(data.editor);
-                    setThisWeek(data.this_week);
-                    setBlocked(data.blocked);
-                    setPagination({
-                        currentPage:data.users.current_page,
-                        from:data.users.from,
-                        lastPage:data.users.last_page,
-                        to:data.users.to,
-                        total:data.users.total,
-                        perPage:data.users.per_page
-                    });
-                }
-            }
-        }catch(error){
-            console.log(error);
-        }
-    }
+    const [refresh, setRefresh] = useState(0);
 
-    // fetch category
+    const [allCat, setAllCat] = useState([]);
+
     const fetchCategory = async ()=>{
         try{
             const token = localStorage.getItem('token');
-            const response = await fetch(`${apiUrl}/categories?page=${currentCatPage}`,{
+            const response = await fetch(`${apiUrl}/categories?page=1`,{
                 method:'GET',
                 headers:{
                     'Content-type':'application/json',
@@ -133,364 +43,32 @@ const AppContextProvider = ({children})=>{
             const data = await response.json();
             if(response.ok){
                 setAllCat(data.allCat);
-                setCategories(data.category.data);
-                setCatPagination({
-                    currentPage:data.category.current_page,
-                    from:data.category.from,
-                    lastPage:data.category.last_page,
-                    to:data.category.to,
-                    total:data.category.total,
-                    perPage:data.category.per_page
-                });
-                
-            }
-        }catch(error){
-            console.log(error);
-        }
-    }
-    
-    // fetch posts
-    const fetchPosts = async ()=>{
-        try{
-            const token = localStorage.getItem('token');
-            const response = await fetch(`${apiUrl}/posts?page=${currentPostPage}`,{
-                method:'GET',
-                headers:{
-                    'Content-type':'application/json',
-                    'Accept':'application/json',
-                    'Authorization':`Bearer ${token}`
-                }
-            });
-            const data = await response.json();
-            console.log(data.total);
-            if(response.ok){
-                setAvgViews(data.averageViews);
-                setTotalPosts(data.total);
-                setTotalViews(data.views);
-                setVelocity(data.velocity);
-                setPosts(data.posts.data);
-                setPostPagination({
-                    currentPage:data.posts.current_page,
-                    from:data.posts.from,
-                    lastPage:data.posts.last_page,
-                    to:data.posts.to,
-                    total:data.posts.total,
-                    perPage:data.posts.per_page
-                });
-
-                const formattedData = data?.last_month?.map((item)=>{
-                    const date = new Date(item.year, item.month-1);
-
-                    return {
-                        month:date.toLocaleString('en-US',{
-                            month:'short'
-                        }) + " " + `${item.year}`,
-                        total:Number(item.monthly_views)
-                    }
-                }) || [];
-                setLastMonthViews(formattedData);
-                
             }
         }catch(error){
             console.log(error);
         }
     }
 
-
-    // view category 
-    const [selectedIcon, setSelectedIcon] = useState("sprout");
-    const [editCategory, setEditCategory] = useState({
-            id:'',
-            cat_name:'',
-            slug:'',
-            description:'',
-            icon_name:''
-    });
-
-    const formHandler = (event)=>{
-        const {name, value} = event.target;
-        setEditCategory((prev)=> ({
-            ...prev,
-            [name]:value
-        }));
-    }
-    const viewCategory = async (cat_id)=>{
-        const token = localStorage.getItem('token');
-        try{
-            const response = await fetch(`${apiUrl}/categories/${cat_id}`,{
-                method:'GET',
-                headers:{
-                    'Content-type':'application/json',
-                    'Accpet':'application/json',
-                    'Authorization':`Bearer ${token}`,
-                }
-            });
-
-            const data = await response.json();
-            if(response.ok){
-                setEditCategory({
-                    id:data.category.id,
-                    cat_name:data.category.name,
-                    slug:data.category.slug,
-                    description:data.category.description,
-                });
-                setSelectedIcon(data.category.icon);
-            }
-        }catch(error){
-            console.log(error);
-        }
-    }
-
-    const [comments, setComments] = useState([]);
-    const [allComments, setAllComments] = useState([]);
-    const [currentComments, setCurrentComments] = useState(1);
-    const [commentsPagination, setCommentsPagination] = useState({
-        currentPage:'',
-        from:'',
-        lastPage:'',
-        to:'',
-        total:'',
-        perPage:''
-    });
-    
-    const fetchcomments = async () => {
-
-        const token = localStorage.getItem("token");
-
-        try {
-            const response = await fetch(`${apiUrl}/comments?page=${currentComments}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                    "Authorization": `Bearer ${token}`,
-                },
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                setCommentAvg(data.average);
-                setAllComments(data.allComments);
-                setComments(data.comments.data);
-                setCommentsPagination({
-                    currentPage:data.comments.current_page,
-                    from:data.comments.from,
-                    lastPage:data.comments.last_page,
-                    to:data.comments.to,
-                    total:data.comments.total,
-                    perPage:data.comments.per_page
-                });
-            }
-
-        } catch (error) {
-            console.log("9. ERROR:", error);
-        }
-    };
-
-    const [maintenance, setMaintenance] = useState(false);
-    const [logoPreview, setLogoPreview] = useState(null);
-    const [logo, setLogo] = useState(null);
-    const [settingData, setSettingData] = useState({
-        site_title: '',
-        site_desc: '',
-        site_copyright: '',
-        f_url: '',
-        t_url: '',
-        i_url: '',
-        l_url: '',
-    });
-
-    // settings form handler
-    const settingFormHandler = (event) => {
-    const { name, value } = event.target;
-    setSettingData((prev) => ({
-        ...prev,
-        [name]: value,
-    }));
-    };
-
-    // site logo handler
-    const siteLogo = (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-    setLogo(file);
-    setLogoPreview(URL.createObjectURL(file));
-    };
-
-    // fetch settings
-    const fetchSetting = async () => {
-    const token = localStorage.getItem('token');
-    try {
-        const response = await fetch(`${apiUrl}/show-setting`, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-type': 'application/json',
-            'Accept': 'application/json',
-        },
-        });
-
-        const data = await response.json();
-        if (response.ok) {
-        setSettingData({
-            site_title: data?.setting?.site_title,
-            site_desc: data?.setting?.site_description,
-            site_copyright: data?.setting?.site_copyright,
-            f_url: data?.setting?.f_url,
-            t_url: data?.setting?.t_url,
-            i_url: data?.setting?.i_url,
-            l_url: data?.setting?.l_url,
-        });
-        setLogo(data?.setting?.site_logo);
-        setMaintenance(data?.setting?.site_maintence === "true");
-        }
-    } catch (error) {
-        console.log(error);
-    }
-    };
-
-    // save settings
-    const settingHandler = async () => {
-    const token = localStorage.getItem('token');
-    const form = new FormData();
-    form.append('site_title', settingData.site_title);
-    form.append('site_desc', settingData.site_desc);
-    form.append('site_copyright', settingData.site_copyright);
-    form.append('f_url', settingData.f_url);
-    form.append('t_url', settingData.t_url);
-    form.append('i_url', settingData.i_url);
-    form.append('l_url', settingData.l_url);
-    form.append('maintence', maintenance);
-    form.append('site_logo', logo);
-
-    try {
-        const response = await fetch(`${apiUrl}/settings`, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/json',
-        },
-        body: form,
-        });
-
-        const data = await response.json();
-        console.log(data);
-        if (response.ok) {
-        setRefresh((prev) => prev + 1);
-        }
-    } catch (error) {
-        console.log(error);
-    }
-    };
-
-    // remove logo
-    const logoHandler = async (event) => {
-    event.preventDefault();
-    const token = localStorage.getItem('token');
-    try {
-        const response = await fetch(`${apiUrl}/logo`, {
-        method: 'DELETE',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/json',
-        },
-        });
-        const data = await response.json();
-        if (response.ok) {
-        setRefresh((prev) => prev + 1);
-        }
-    } catch (error) {
-        console.log(error);
-    }
-    };
-    
     useEffect(()=>{
-        fetchUsers();
-        fetchPosts();
         fetchCategory();
-        fetchcomments();
-        fetchSetting();
-    },[refresh, currentComments, currentPage, currentPostPage, currentCatPage]);
+    },[refresh]);
 
     return (
         <AppContext.Provider value={{
             isAdmin,
-            maintenance,
-            setMaintenance,
-            logoPreview,
-            setLogoPreview,
-            logo,
-            setLogo,
-            settingData,
-            setSettingData,
-            settingFormHandler,
-            siteLogo,
-            settingHandler,
-            logoHandler,
-            fetchSetting,
-            showCategoryModel,
-            CategoryModelHandler,
-            showLoadingSpinner,
-            setShowLoadingSpinner,
             sidebarOpen,
-            setSidebarOpen,
             toggleSidebar,
             closeSidebar,
             mobileMenuOpen,
-            setMobileMenuOpen,
             toggleMobileMenu,
             closeMobileMenu,
-            disabledField,
-            setDisabledField,
-            allUsers,
-            allEditors,
-            thisWeek,
-            Blocked,
-            setRefresh,
             deleteModel,
             setDeleteModel,
             deletId,
-            setAllUsers,
-            totalUsers,
-            categories,
             DeleteModelHandler,
-            showEditCategoryModel,
-            EditCategoryModelHandler,
-            viewCategory,
-            editCategory,
-            formHandler,
-            selectedIcon,
-            setSelectedIcon,
-            lastMonthViews,
-            posts,
-            setPosts,
-            velocity,
-            pagination,
-            setCurrentPage,
-            avgViews,
-            currentPage,
-            currentPostPage,
-            setCurrentPostPage,
-            currentCatPage,
-            setCurrentCatPage,
-            postPagination,
-            setPostPagination,
-            catPagination,
-            setCatPagination,
-            totalPosts,
-            allCat,
-            comments,
-            loggedUser,
-            commentsPagination,
-            currentComments,
-            setCurrentComments,
-            allComments,
-            setComments,
-            totalViews,
             refresh,
-            commentAvg,
-            setShowEditCategoryModel
+            setRefresh,
+            allCat,
         }}>
             {children}
         </AppContext.Provider>

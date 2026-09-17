@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { apiUrl } from "../Http/Http";
+import { apiGet , apiSend, emptyPagination, toPagination } from "../services/apiClient.js";
 
 export const CommentContext = createContext();
 
@@ -15,41 +16,19 @@ const CommentContextProvider = ({ children }) => {
   const [allComments, setAllComments] = useState([]); // poori list (stats + tab counts ke liye)
   const [commentAvg, setCommentAvg] = useState(0);
   const [currentComments, setCurrentComments] = useState(1);
-  const [commentsPagination, setCommentsPagination] = useState({
-    currentPage: '',
-    from: '',
-    lastPage: '',
-    to: '',
-    total: '',
-    perPage: ''
-  });
+  const [commentsPagination, setCommentsPagination] = useState(emptyPagination);
 
   const fetchcomments = async () => {
-    const token = localStorage.getItem("token");
+
     try {
-      const response = await fetch(`${apiUrl}/comments?page=${currentComments}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
-      });
 
-      const data = await response.json();
+      const {ok, data} = await apiGet(`comments?page=${currentComments}`);
 
-      if (response.ok) {
+      if (ok) {
         setCommentAvg(data.average);
         setAllComments(data.allComments);
         setComments(data.comments.data);
-        setCommentsPagination({
-          currentPage: data.comments.current_page,
-          from: data.comments.from,
-          lastPage: data.comments.last_page,
-          to: data.comments.to,
-          total: data.comments.total,
-          perPage: data.comments.per_page
-        });
+        setCommentsPagination(toPagination(data.comments));
       }
     } catch (error) {
       console.log("fetchcomments:", error);
@@ -62,6 +41,7 @@ const CommentContextProvider = ({ children }) => {
 
   // status ke hisaab se derived lists - stat cards aur tab counts ke liye
   const pendingComments = allComments.filter((comment) => comment.status === "pending");
+  console.log(pendingComments);
   const approvedComments = allComments.filter((comment) => comment.status === "approved");
   const spamComments = allComments.filter((comment) => comment.status === "spam");
 
@@ -71,17 +51,8 @@ const CommentContextProvider = ({ children }) => {
   const commentStatus = async (name, id) => {
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`${apiUrl}/comments/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({ status: name })
-      });
-      const data = await response.json();
-      if (response.ok) {
+      const {ok, data} = await apiSend(`comments/${id}`, 'PUT', {status:name});
+      if (ok) {
         triggerCommentRefresh();
       }
     } catch (error) {
@@ -95,16 +66,9 @@ const CommentContextProvider = ({ children }) => {
   const Deletecomment = async (id) => {
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`${apiUrl}/comments/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-      if (response.ok) {
+      const {ok, data} = await apiSend(`comments/${id}`,'DELETE');
+
+      if (ok) {
         triggerCommentRefresh();
       }
     } catch (error) {
@@ -118,19 +82,11 @@ const CommentContextProvider = ({ children }) => {
   const [activeFilter, setActiveFilter] = useState('all');
 
   const Searchcomment = async (search_term) => {
-    const token = localStorage.getItem('token');
     setActiveFilter(search_term);
     try {
-      const response = await fetch(`${apiUrl}/filter-comments?page=${currentComments}&query=${search_term}`, {
-        method: 'GET',
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-      if (response.ok) {
+      const {ok, data} = await apiGet(`filter-comments?page=${currentComments}&query=${search_term}`);
+
+      if (ok) {
         setComments(data.searchComments.data);
       }
     } catch (error) {

@@ -1,6 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiUrl } from "../Http/Http";
+import { apiSend } from "../services/apiClient.js";
 
 export const AuthContext = createContext();
 
@@ -48,18 +49,9 @@ const AuthContextProvider = ({ children }) => {
     startRequest();
 
     try {
-      const response = await fetch(`${apiUrl}/login`, {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(loginData),
-      });
+      const {ok, data} = await apiSend('login', 'POST', loginData);
 
-      const data = await response.json();
-
-      if (!response.ok) {
+      if (!ok) {
         const error = data.errors;
 
         if (error?.email?.[0]) {
@@ -146,18 +138,10 @@ const AuthContextProvider = ({ children }) => {
     startRequest();
 
     try {
-      const response = await fetch(`${apiUrl}/account`, {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(registerData),
-      });
 
-      const data = await response.json();
+      const {ok, data} = await apiSend('account','POST', registerData);
 
-      if (!response.ok) {
+      if (!ok) {
         const error = data.errors ?? {};
 
         if (error.name?.[0]) {
@@ -190,17 +174,10 @@ const AuthContextProvider = ({ children }) => {
   // =======================
   const logout = async (event) => {
     if (event) event.preventDefault();
-    const token = localStorage.getItem("token");
 
     try {
-      await fetch(`${apiUrl}/logout`, {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const {ok, data} = await apiSend('logout','POST');
+
     } catch (error) {
       console.log("logout:", error);
     } finally {

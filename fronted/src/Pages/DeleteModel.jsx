@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import styles from "../assets/DeleteModel.module.css";
 import { AppContext } from "../Context/AppContext";
 import { apiUrl } from "../Http/Http";
+import { apiSend } from "../services/apiClient.js";
 import { useUser } from "../Context/UserContext";
 
 const DeleteModel = () => {
@@ -17,17 +18,8 @@ const DeleteModel = () => {
   const deleteUser = async (delete_id)=>{
     const token = localStorage.getItem('token');
     try{
-      const response = await fetch(`${apiUrl}/users/${delete_id}`,{
-        method:'DELETE',
-        headers:{
-          'Content-type':'application/json',
-          'Accept':'application/json',
-          'Authorization':`Bearer ${token}`
-        }
-      })
-
-      const data = await response.json();
-      if(response.ok){
+      const {ok, data} = await apiSend(`users/${delete_id}`,'DELETE');
+      if(ok){
         setDeleteModel(!deleteModel);
         setConfirmDelete(false);
         triggerUserRefresh();
@@ -40,9 +32,7 @@ const DeleteModel = () => {
 
   const confirmDeleteHandler = ()=>{
     setConfirmDelete(true);
-    if(confirmDelete === true){
-      deleteUser(deletId);
-    }
+    deleteUser(deletId);
   }
   
   return (

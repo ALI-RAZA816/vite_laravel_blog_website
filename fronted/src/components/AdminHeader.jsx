@@ -3,13 +3,16 @@ import { BsSearch, BsBell, BsList } from "react-icons/bs";
 import styles from "../assets/AdminHeader.module.css";
 import { Outlet } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";
+import { useLocation } from "react-router-dom";
 
 const AdminHeader = () => {
   const { toggleSidebar } = useContext(AppContext);
+  const location = useLocation();
+  const lastSegment = location.pathname.split('/').pop();
   return (
     <>
     <div className="container-fluid">
-        <div className="row">
+        <div className="row p-0">
             <div className="col-12">
                 <div
                 className={`d-flex align-items-center justify-content-between ${styles.header} ${styles.sticky}`}
@@ -24,14 +27,7 @@ const AdminHeader = () => {
                   <BsList />
                 </button>
                 {/* Search */}
-                <div className={styles.searchWrapper}>
-                    <BsSearch className={styles.searchIcon} />
-                    <input
-                    type="text"
-                    className={`form-control ${styles.searchInput}`}
-                    placeholder="Search data, posts, users..."
-                    />
-                </div>
+                <h3 className='text-capitalize fw-bold'>{lastSegment}</h3>
 
                 {/* Right side */}
                 <div className={`d-flex align-items-center ${styles.rightSection}`}>

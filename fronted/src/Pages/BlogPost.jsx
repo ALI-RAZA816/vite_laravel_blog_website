@@ -8,7 +8,7 @@ import { MdOutlineEdit } from "react-icons/md";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { useUser } from "../Context/UserContext";
 import { usePublicPost } from "../Context/PublicPostContext";
-
+import {apiGet, apiSend} from '../services/apiClient.js';
 export default function BlogPost() {
 
   const {id} = useParams();
@@ -26,17 +26,9 @@ export default function BlogPost() {
   const fetchComment = async (id)=>{
     const token = localStorage.getItem('token');
     try{
-      const response = await fetch(`${apiUrl}/comments/${id}`,{
-        method:'GET',
-        headers:{
-          'Content-type':'application/json',
-          'Accept':'application/json',
-          'Authorization':`Bearer ${token}`,
-        }
-      });
+      const {ok, data} = await apiGet(`comments/${id}`);
 
-      const data = await response.json();
-      if(response.ok){
+      if(ok){
         setEditComment(data.comment.comment);
       }
 
@@ -45,21 +37,13 @@ export default function BlogPost() {
     }
   }
 
-  // fetch single comment
+  // update comment
   const updateComment = async (id)=>{
     const token = localStorage.getItem('token');
     try{
-      const response = await fetch(`${apiUrl}/update-comments/${id}`,{
-        method:'PUT',
-        headers:{
-          'Content-type':'application/json',
-          'Accept':'application/json',
-          'Authorization':`Bearer ${token}`,
-        },
-        body:JSON.stringify({comment:EditComment})
-      });
-      const data = await response.json();
-      if(response.ok){
+
+      const {ok, data} = await apiSend(`update-comments/${id}`, 'PUT', {comment:EditComment});
+      if(ok){
         setRefresh(prev => prev + 1);
         setActiveEdit(null);
       }
@@ -125,16 +109,8 @@ export default function BlogPost() {
   const [postComment, setPostComments] = useState([]);
   const postComments = async ()=>{
     try{
-      const response = await fetch(`${apiUrl}/post-comments/${id}`,{
-        method:'GET',
-        headers:{
-          'Content-type':'application/json',
-          'Accept':'application/json',
-        }
-      });
-
-      const data = await response.json();
-      if(response.ok){
+      const {ok, data} = await apiGet (`post-comments/${id}`);
+      if(ok){
         setPostComments(data.postComment);
       }
     }catch(error){
@@ -157,17 +133,8 @@ export default function BlogPost() {
         post_id:id
     }
     try{
-      const response = await fetch(`${apiUrl}/comments`,{
-        method:'POST',
-        headers:{
-          'Content-type':'application/json',
-          'Accept':'application/json',
-          'Authorization':`Bearer ${token}`,
-        },
-        body:JSON.stringify(payload)
-      });
-      const data = await response.json();
-      if(response.ok){
+      const {ok, data} = await apiSend('comments','POST',payload);
+      if(ok){
         setRefresh(prev => prev + 1);
         setComment('');
         setCommentErr('');
@@ -181,17 +148,8 @@ export default function BlogPost() {
   const deleteComment = async (id)=>{
     const token = localStorage.getItem('token');
     try{
-      const response = await fetch(`${apiUrl}/comments/${id}`,{
-        method:'DELETE',
-        headers:{
-          'Content-type':'application/json',
-          'Accept':'application/json',
-          'Authorization':`Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-      console.log(data);
-      if(response.ok){
+      const {ok, data} = await apiSend(`comments/${id}`,'DELETE');
+      if(ok){
         setRefresh(prev => prev + 1);
         setActive(null);
       }

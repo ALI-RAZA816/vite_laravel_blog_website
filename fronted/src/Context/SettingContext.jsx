@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { apiUrl } from "../Http/Http";
-
+import {apiGet, apiUpload, apiSend} from '../services/apiClient.js';
 export const SettingContext = createContext();
 
 const SettingContextProvider = ({ children }) => {
@@ -42,17 +42,8 @@ const SettingContextProvider = ({ children }) => {
   const fetchSetting = async () => {
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`${apiUrl}/show-setting`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-        },
-      });
-
-      const data = await response.json();
-      if (response.ok) {
+      const {ok, data} = await apiGet('show-setting');
+      if (ok) {
         setSettingData({
           site_title: data?.setting?.site_title,
           site_desc: data?.setting?.site_description,
@@ -89,18 +80,8 @@ const SettingContextProvider = ({ children }) => {
     form.append('site_logo', logo);
 
     try {
-      const response = await fetch(`${apiUrl}/settings`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Accept': 'application/json',
-        },
-        body: form,
-      });
-
-      const data = await response.json();
-      console.log(data);
-      if (response.ok) {
+      const {ok, data} = await apiUpload('settings','POST',form);
+      if (ok) {
         triggerSettingRefresh();
       }
     } catch (error) {
@@ -113,15 +94,8 @@ const SettingContextProvider = ({ children }) => {
     event.preventDefault();
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`${apiUrl}/logo`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Accept': 'application/json',
-        },
-      });
-      const data = await response.json();
-      if (response.ok) {
+      const {ok, data} = apiSend('logo','DELETE');
+      if (ok) {
         triggerSettingRefresh();
       }
     } catch (error) {

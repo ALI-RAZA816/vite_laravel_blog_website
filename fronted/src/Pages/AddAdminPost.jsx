@@ -17,6 +17,7 @@ const initialTags = ["Slow Living", "Wellness", "Rituals"];
 import JoditEditor from 'jodit-react';
 import { AppContext } from "../Context/AppContext";
 import { apiUrl } from "../Http/Http";
+import { apiUpload } from "../services/apiClient.js";
 import { useNavigate } from "react-router-dom";
 
 const ImageIcon = ({ size = 100, color = "#808080" }) => (
@@ -188,16 +189,8 @@ const AddAdminPost = ({placeholder}) => {
     form.append('published',publish);
 
     try{
-      const response = await fetch(`${apiUrl}/posts`,{
-        method:'POST',
-        headers:{
-          'Accept':'application/json',
-          'Authorization':`Bearer ${token}`,
-        },
-        body:form
-      });
-      const data = await response.json();
-      if(!response.ok){
+      const {ok, data} = await apiUpload ('posts','POST',form);
+      if(!ok){
         setFormDataErr({
           titleErr: data?.errors?.title?.[0] || '',
           descriptionErr: data?.errors?.description?.[0] || '',

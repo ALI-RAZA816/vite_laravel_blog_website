@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { apiUrl } from "../Http/Http";
+import {apiGet, apiSend, emptyPagination, toPagination} from '../services/apiClient.js'
 
 export const UserContext = createContext();
 
@@ -19,29 +20,14 @@ const UserContextProvider = ({ children }) => {
   const [allEditors, setAllEditors] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [pagination, setPagination] = useState({
-    currentPage: '',
-    from: '',
-    lastPage: '',
-    to: '',
-    total: '',
-    perPage: ''
-  });
+  const [pagination, setPagination] = useState(emptyPagination);
 
   // fetch all users
   const fetchUsers = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${apiUrl}/users?page=${currentPage}`, {
-        method: 'GET',
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      const data = await response.json();
-      if (response.ok) {
+      const {ok, data} = await apiGet(`users?page=${currentPage}`);
+      
+      if (ok) {
         if (data.status === true) {
           setLoggedUser(data.loggedUser);
           setTotalUsers(data.total);
@@ -49,14 +35,7 @@ const UserContextProvider = ({ children }) => {
           setAllEditors(data.editor);
           setThisWeek(data.this_week);
           setBlocked(data.blocked);
-          setPagination({
-            currentPage: data.users.current_page,
-            from: data.users.from,
-            lastPage: data.users.last_page,
-            to: data.users.to,
-            total: data.users.total,
-            perPage: data.users.per_page
-          });
+          setPagination(toPagination(data.users));
         }
       }
     } catch (error) {
@@ -74,16 +53,9 @@ const UserContextProvider = ({ children }) => {
   const searchUsers = async (searchTerm) => {
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`${apiUrl}/search?query=${searchTerm}&page=${currentPage}`, {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        }
-      });
-      const data = await response.json();
-      if (response.ok) {
+      const {ok, data} = await apiSend(`search?query=${searchTerm}&page=${currentPage}`,'POST');
+      
+      if (ok) {
         setAllUsers(data.users.data);
       }
     } catch (error) {

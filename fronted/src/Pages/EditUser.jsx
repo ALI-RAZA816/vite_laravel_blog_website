@@ -14,7 +14,7 @@ import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { useUser } from "../Context/UserContext";
 import { LuUserRound } from "react-icons/lu";
 import { apiUrl, baseUrl } from "../Http/Http";
-
+import { apiGet, apiUpload } from '../services/apiClient.js';
 
 
 const EditUser = () => {
@@ -61,17 +61,9 @@ const EditUser = () => {
     const viewSingleUser = async (id)=>{
         try{
 
-            const token = localStorage.getItem('token');
-            const response = await fetch(`${apiUrl}/users/${id}`,{
-            method:'GET',
-            headers:{
-                'Content-type':'application/json',
-                'Accept':'application/json',
-                'Authorization':`Bearer ${token}`
-            }
-            });
-            const data = await response.json();
-            if(response.ok){
+            const {ok, data} = await apiGet(`users/${id}`);
+            
+            if(ok){
                 if(data.user){
                     const user = data.user;
                     setFormData({
@@ -112,15 +104,8 @@ const EditUser = () => {
             form.append('image', formData.image);
         }
         try{
-            const response = await fetch(`${apiUrl}/users/${formData.id}`,{
-                method:'PUT',
-                headers:{
-                    'Authorization':`Bearer ${token}`
-                },
-                body:form
-            });
-            const data = await response.json();
-            if(response.ok){
+            const {ok, data} = await apiUpload(`users/${formData.id}`, 'PUT', form);
+            if(ok){
                 if(data.status === 200){
                     triggerUserRefresh();
                     navigate('/admin-panel/users');

@@ -9,7 +9,7 @@ import JoditEditor from 'jodit-react';
 import { AppContext } from "../Context/AppContext";
 import { apiUrl, baseUrl } from "../Http/Http";
 import { useNavigate, useParams } from "react-router-dom";
-
+import {apiGet, apiUpload} from '../services/apiClient';
 const ImageIcon = ({ size = 100, color = "#808080" }) => (
   <svg
     width={size}
@@ -136,26 +136,15 @@ const AdminEditPost = ({placeholder}) => {
 
   // fetch single post
   const editHandler = async ()=>{
-    const token = localStorage.getItem('token');
     try{
-      const response = await fetch(`${apiUrl}/posts/${id}`,{
-        method:'GET',
-        headers:{
-          'Content-type':'application/json',
-          'Accept':'application/json',
-          'Authorization':`Bearer ${token}`,
-        }
-      });
-
-      const data = await response.json();
-      if(response.ok){
+      const {ok, data} = await apiGet(`posts/${id}`);
+      if(ok){
         setFormData({
           id:data.post.id,
           title:data.post.title,
           category:data.post.category_id,
           image:data.post.image
         });
-        // setImage(data.post.image);
         data.post.published === 'published' ? setIsPublished(true) : setIsPublished(false);
         setTags(JSON.parse(data.post.tags));
         setContent(data.post.description);
@@ -183,16 +172,9 @@ const AdminEditPost = ({placeholder}) => {
       form.append('_method', 'PATCH');
   
       try{
-        const response = await fetch(`${apiUrl}/posts/${formData.id}`,{
-          method:'POST',
-          headers:{
-            'Accept':'application/json',
-            'Authorization':`Bearer ${token}`,
-          },
-          body:form
-        });
-        const data = await response.json();
-        if(!response.ok){
+
+        const {ok, data} = await apiUpload (`posts/${formData.id}`,'POST',form);
+        if(!ok){
           setFormDataErr({
             titleErr: data?.errors?.title?.[0] || '',
             descriptionErr: data?.errors?.description?.[0] || '',
@@ -203,8 +185,11 @@ const AdminEditPost = ({placeholder}) => {
           setRefresh(prev => prev + 1);
           navigate('/admin-panel/posts');
         }
+
       }catch(error){
+
         console.log(error);
+
       }
   
     }

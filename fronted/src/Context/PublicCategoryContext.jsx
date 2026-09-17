@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { apiUrl } from "../Http/Http";
+import { apiGet } from "../services/apiClient.js";
 
 export const PublicCategoryContext = createContext();
 
@@ -10,17 +11,10 @@ const PublicCategoryContextProvider = ({ children }) => {
 
   const fetchPublicCategories = async () => {
     try {
-      const response = await fetch(`${apiUrl}/public-category`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-        },
-      });
 
-      const data = await response.json();
+      const {ok, data} = await apiGet('public-category');
 
-      if (response.ok) {
+      if (ok) {
         setPublicCategories(data.allCategories);
       }
     } catch (error) {

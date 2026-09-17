@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { apiUrl } from "../Http/Http";
+import { apiGet } from "../services/apiClient.js";
+import { apiSend, emptyPagination, toPagination } from "../services/apiClient.js";
 
 export const CategoryContext = createContext();
 
@@ -14,38 +16,17 @@ const CategoryContextProvider = ({ children }) => {
   const [categories, setCategories] = useState([]); // current page wali list
   const [allCat, setAllCat] = useState([]); // dropdowns ke liye poori list
   const [currentCatPage, setCurrentCatPage] = useState(1);
-  const [catPagination, setCatPagination] = useState({
-    currentPage: '',
-    from: '',
-    lastPage: '',
-    to: '',
-    total: '',
-    perPage: ''
-  });
+  const [catPagination, setCatPagination] = useState(emptyPagination);
 
   const fetchCategory = async () => {
-    const token = localStorage.getItem('token');
+
     try {
-      const response = await fetch(`${apiUrl}/categories?page=${currentCatPage}`, {
-        method: 'GET',
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      const data = await response.json();
-      if (response.ok) {
+      const {ok, data} = await apiGet(`categories?page=${currentCatPage}`);
+
+      if (ok) {
         setAllCat(data.allCat);
         setCategories(data.category.data);
-        setCatPagination({
-          currentPage: data.category.current_page,
-          from: data.category.from,
-          lastPage: data.category.last_page,
-          to: data.category.to,
-          total: data.category.total,
-          perPage: data.category.per_page
-        });
+        setCatPagination(toPagination(data.category));
       }
     } catch (error) {
       console.log(error);
@@ -96,19 +77,9 @@ const CategoryContextProvider = ({ children }) => {
     const token = localStorage.getItem('token');
 
     try {
-      const response = await fetch(`${apiUrl}/categories`, {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(payload)
-      });
 
-      const data = await response.json();
-
-      if (!response.ok) {
+      const {ok, data} = await apiSend('categories','POST', payload);
+      if (!ok) {
         if (data?.errors?.cat_name) {
           setNewCatErr({ ...emptyNewCatErr, cat_nameErr: data.errors.cat_name[0] });
         } else if (data?.errors?.slug) {
@@ -125,6 +96,7 @@ const CategoryContextProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
     }
+
   };
 
   // =======================
@@ -151,17 +123,9 @@ const CategoryContextProvider = ({ children }) => {
   const viewCategory = async (cat_id) => {
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`${apiUrl}/categories/${cat_id}`, {
-        method: 'GET',
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        }
-      });
+      const {ok, data} = await apiGet(`categories/${cat_id}`);
 
-      const data = await response.json();
-      if (response.ok) {
+      if (ok) {
         setEditCategory({
           id: data.category.id,
           cat_name: data.category.name,
@@ -181,18 +145,9 @@ const CategoryContextProvider = ({ children }) => {
     const payload = { ...editCategory, icon: selectedIcon };
 
     try {
-      const response = await fetch(`${apiUrl}/categories/${editCategory.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(payload)
-      });
-
-      const data = await response.json();
-      if (response.ok) {
+      const {ok, data} = await apiSend(`categories/${editCategory.id}`, 'PUT', payload);
+      
+      if (ok) {
         triggerCatRefresh();
         setShowEditCategoryModel(false);
       }
@@ -205,18 +160,10 @@ const CategoryContextProvider = ({ children }) => {
   //     DELETE CATEGORY
   // =======================
   const deleteCategory = async (delete_id) => {
-    const token = localStorage.getItem('token');
+    
     try {
-      const response = await fetch(`${apiUrl}/categories/${delete_id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        }
-      });
-      const data = await response.json();
-      if (response.ok) {
+      const {ok, data} = await apiSend(`categories/${delete_id}`,'DELETE');
+      if (ok) {
         triggerCatRefresh();
       }
     } catch (error) {

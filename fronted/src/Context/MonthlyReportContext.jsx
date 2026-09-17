@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { apiUrl } from "../Http/Http";
+import { apiGet } from "../services/apiClient.js";
 
 export const MonthlyReportContext = createContext();
 
@@ -10,19 +11,9 @@ const MonthlyReportContextProvider = ({ children }) => {
   const [monthlyReport, setMonthlyReport] = useState([]);
 
   const fetchMonthlyReport = async () => {
-    const token = localStorage.getItem('token');
 
     try {
-      const response = await fetch(`${apiUrl}/month-report`, {
-        method: 'GET',
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        }
-      });
-
-      const data = await response.json();
+      const {ok, data} = await apiGet('month-report');
 
       const formattedData = data?.total?.map((item) => {
         const date = new Date(item.year, item.month - 1);

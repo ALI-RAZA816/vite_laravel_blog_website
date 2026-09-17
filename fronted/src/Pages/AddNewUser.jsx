@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "../assets/AddNewUser.module.css";
 import { apiUrl } from "../Http/Http";
+import { apiUpload } from "../services/apiClient.js";
 import { useUser } from "../Context/UserContext";
 import { useNavigate } from "react-router-dom";
 
@@ -152,25 +153,22 @@ const AddNewUser = () => {
     if(image instanceof File){
       form.append("image",image);
     }
-    const token = localStorage.getItem('token');
-    const response = await fetch(`${apiUrl}/account`,{
-      method:'POST',
-      headers:{
-        'Authorization':`Bearer ${token}`
-      },
-      body:form
-    });
 
-    const data = await response.json();
-    if(!response.ok){
-      if(response.status === 422){
-        if(data?.errors?.image[0]){
-          setImageErr(data?.errors?.image[0]);
+    try{
+      const token = localStorage.getItem('token');
+      const {ok, data} = await apiUpload('account','POST',form);
+      if(!ok){
+        if(response.status === 422){
+          if(data?.errors?.image[0]){
+            setImageErr(data?.errors?.image[0]);
+          }
         }
+      }else{
+        triggerUserRefresh();
+        navigate('/admin-panel/users');
       }
-    }else{
-      triggerUserRefresh();
-      navigate('/admin-panel/users');
+    }catch(error){
+      console.log(error);
     }
 
   }

@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { apiUrl } from "../Http/Http";
+import { apiGet, apiSend, emptyPagination, toPagination } from "../services/apiClient.js";
 
 export const PostContext = createContext();
 
@@ -19,43 +20,19 @@ const PostContextProvider = ({ children }) => {
   const [lastMonthViews, setLastMonthViews] = useState([]);
 
   const [currentPostPage, setCurrentPostPage] = useState(1);
-  const [postPagination, setPostPagination] = useState({
-    currentPage: '',
-    from: '',
-    lastPage: '',
-    to: '',
-    total: '',
-    perPage: ''
-  });
+  const [postPagination, setPostPagination] = useState(emptyPagination);
 
   const fetchPosts = async () => {
-    const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`${apiUrl}/posts?page=${currentPostPage}`, {
-        method: 'GET',
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        }
-      });
+      const {ok, data} = await apiGet(`posts?page=${currentPostPage}`);
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (ok) {
         setAvgViews(data.averageViews);
         setTotalPosts(data.total);
         setTotalViews(data.views);
         setVelocity(data.velocity);
         setPosts(data.posts.data);
-        setPostPagination({
-          currentPage: data.posts.current_page,
-          from: data.posts.from,
-          lastPage: data.posts.last_page,
-          to: data.posts.to,
-          total: data.posts.total,
-          perPage: data.posts.per_page
-        });
+        setPostPagination(toPagination(data.posts));
 
         // { year, month, monthly_views } ko chart-friendly { month, total } me badalna
         const formatted = (data?.last_month ?? []).map((item) => {
@@ -81,20 +58,14 @@ const PostContextProvider = ({ children }) => {
   // =======================
   const deletePost = async (event, id) => {
     event.preventDefault();
-    const token = localStorage.getItem('token');
+
     try {
-      const response = await fetch(`${apiUrl}/posts/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      const data = await response.json();
-      if (response.ok) {
+
+      const {ok, data} = await apiSend(`posts/${id}`,'DELETE');
+      if (ok) {
         triggerPostRefresh();
       }
+
     } catch (error) {
       console.log(error);
     }
@@ -107,20 +78,11 @@ const PostContextProvider = ({ children }) => {
     event.preventDefault();
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`${apiUrl}/multi-delete-post`, {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ ids })
-      });
-      const data = await response.json();
-      if (response.ok) {
+      const {ok, data} = await apiSend(`multi-delete-post`,'POST', {ids});
+      if (ok) {
         triggerPostRefresh();
       }
-      return response.ok;
+      return ok;
     } catch (error) {
       console.log(error);
       return false;
@@ -131,18 +93,10 @@ const PostContextProvider = ({ children }) => {
   //     SEARCH / FILTER
   // =======================
   const searchPosts = async (searchTerm) => {
-    const token = localStorage.getItem('token');
+    
     try {
-      const response = await fetch(`${apiUrl}/search-post?query=${searchTerm}&page=${currentPostPage}`, {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        }
-      });
-      const data = await response.json();
-      if (response.ok) {
+      const {ok, data} = await apiSend(`search-post?query=${searchTerm}&page=${currentPostPage}`,'POST');
+      if (ok) {
         setPosts(data.posts.data);
       }
     } catch (error) {

@@ -2,10 +2,6 @@ import { Link } from "react-router-dom";
 import styles from "../assets/AdminLogin.module.css";
 import { IoLockClosedOutline } from "react-icons/io5";
 
-
-
-
-
 export default function AdminLogin() {
   return (
     <div className={styles.page}>

@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { apiUrl } from "../Http/Http";
+import { apiGet, emptyPagination, toPagination } from "../services/apiClient.js";
 
 export const PublicPostContext = createContext();
 
@@ -10,22 +11,16 @@ const PublicPostContextProvider = ({ children }) => {
   // =======================
   const [publicPosts, setPublicPosts] = useState([]);
   const [popularPosts, setPopularPosts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [publicPostPage, setPublicPostPage] = useState(emptyPagination);
 
   const fetchPublicPosts = async () => {
     try {
-      const response = await fetch(`${apiUrl}/public-posts`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-        },
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
+      const {ok, data} = await apiGet(`public-posts?page=${currentPage}`);
+      if (ok) {
         setPopularPosts(data.popularPost);
-        setPublicPosts(data.allPost);
+        setPublicPosts(data.allPost.data);
+        setPublicPostPage(toPagination(data.allPost));
       }
     } catch (error) {
       console.log("fetchPublicPosts:", error);
@@ -34,7 +29,7 @@ const PublicPostContextProvider = ({ children }) => {
 
   useEffect(() => {
     fetchPublicPosts();
-  }, []);
+  }, [currentPage]);
 
   // =======================
   //   SINGLE POST VIEW (BlogPost.jsx)
@@ -54,17 +49,8 @@ const PublicPostContextProvider = ({ children }) => {
   const fetchPostView = async (id) => {
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`${apiUrl}/post-view/${id}`, {
-        method: 'GET',
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-        }
-      });
-
-      const data = await response.json();
-      if (response.ok) {
+      const {ok, data} = await apiGet(`post-view/${id}`);
+      if (ok) {
         setPostView({
           category: data.post.category.name,
           title: data.post.title,
@@ -87,7 +73,10 @@ const PublicPostContextProvider = ({ children }) => {
       publicPosts,
       popularPosts,
       fetchPublicPosts,
-
+      publicPostPage,
+      setPublicPostPage,
+      currentPage,   
+      setCurrentPage,
       postView,
       fetchPostView,
     }}>

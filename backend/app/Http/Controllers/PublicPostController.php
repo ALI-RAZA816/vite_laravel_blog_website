@@ -11,7 +11,7 @@ use Laravel\Sanctum\PersonalAccessToken;
 class PublicPostController extends Controller
 {
     public function publicPosts(){
-        $publicPost = Post::with(['category','author'])->get();
+        $publicPost = Post::with(['category','author'])->paginate(40);
         $popularPost = Post::with(['category','author'])->orderBy('views_counter','desc')->limit(5)->get();
         return response()->json([
             'allPost'=>$publicPost,

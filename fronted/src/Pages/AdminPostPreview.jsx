@@ -2,10 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "../assets/AdminPostPreview.module.css";
 import { useParams } from "react-router-dom";
 import { apiUrl, baseUrl } from "../Http/Http";
-
-// NOTE: This component intentionally excludes the dark left navigation
-// sidebar from the original design. It renders only the top header,
-// the preview card, the right-hand insights/tags sidebar, and the footer.
+import {apiGet} from '../services/apiClient';
 
 const AdminPostPreview = () => {
 
@@ -24,20 +21,9 @@ const AdminPostPreview = () => {
 
   // fetch single post
   const editHandler = async ()=>{
-    const token = localStorage.getItem('token');
     try{
-      const response = await fetch(`${apiUrl}/posts/${id}`,{
-        method:'GET',
-        headers:{
-          'Content-type':'application/json',
-          'Accept':'application/json',
-          'Authorization':`Bearer ${token}`,
-        }
-      });
-
-      const data = await response.json();
-      console.log(data);
-      if(response.ok){
+      const {ok, data} = await apiGet(`posts/${id}`);
+      if(ok){
         setFormData({
           category:data.post.category.name,
           title:data.post.title,

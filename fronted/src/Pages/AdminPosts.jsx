@@ -8,6 +8,7 @@ import {
   BsStars,
 } from "react-icons/bs";
 import { FaEye } from "react-icons/fa";
+import {apiGet} from '../services/apiClient';
 import { Bar } from "react-chartjs-2";
 import { usePost } from "../Context/PostContext";
 import styles from "../assets/AdminPosts.module.css";
@@ -46,23 +47,14 @@ const AdminPosts = () => {
     multiDeletePost,
     searchPosts,
   } = usePost();
-const {allCat} = useContext(AppContext);
+  const {allCat} = useContext(AppContext);
 
   const [chartData2, setChartData2] =useState([]);
   const monthReportHandler = async () => {
     const token = localStorage.getItem('token');
 
     try {
-      const response = await fetch(`${apiUrl}/month-report`, {
-        method: 'GET',
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        }
-      });
-
-      const data = await response.json();
+      const {ok, data} = await apiGet('month-report');
 
       const formattedData = data?.total?.map((item) => {
         const date = new Date(item.year, item.month - 1);
@@ -252,7 +244,7 @@ const {allCat} = useContext(AppContext);
               {posts?.map((post, index) => (
                 <tr key={index}>
                   <td>
-                    <input onChange={(event)=>DeletedChecked(event, post.id)} type="checkbox" checked={checkedall && true} className={styles.checkbox} />
+                    <input onChange={(event)=>DeletedChecked(event, post.id)} type="checkbox" checked={checkDeleted.includes(post.id)}  className={styles.checkbox} />
                   </td>
                   <td>
                     <p className={styles.postTitle}>{post.title.length > 40 ? `${post.title.substr(0, 40)}...`: post.title}</p>

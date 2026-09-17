@@ -14,11 +14,24 @@ export default function Home() {
 
 
   const { publicCategories: categories } = usePublicCategory();
-  const { publicPosts: totalPosts, popularPosts } = usePublicPost();
+  const { publicPosts: totalPosts, popularPosts ,publicPostPage:pagination, setCurrentPage: setCurrentPostPage, currentPage :currentPostPage} = usePublicPost();
+  
+  const pages = [];
+  const start = Math.max(1, pagination.currentPage - 2);
+  const end = Math.min(pagination.lastPage, pagination.currentPage + 2);
+  if(start > 1){
+    pages.push(1);
+    if(start > 2) pages.push('...');
+  }
 
-  // useEffect(()=>{
-  //   fetchPosts();
-  // },[]);
+  for (let i = start; i<=end; i++  ){
+    pages.push(i);
+  }
+ 
+  if(end < pagination.lastPage){
+    if(end < pagination.lastPage - 1) pages.push("...");
+    pages.push(pagination.lastPage);
+  }
 
   return (
     <div className={styles.page}>
@@ -59,10 +72,10 @@ export default function Home() {
             </div>
 
            {/* Pagination */}
-            {/* <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
-              <span className={styles.showingText}>Showing {postPagination.from} to {postPagination.to} of {postPagination.total} users</span>
+            <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
+              <span className={styles.showingText}>Showing {pagination.from} to {pagination.to} of {pagination.total} users</span>
               <div className="d-flex align-items-center gap-2">
-                <button disabled={postPagination.currentPage === 1} onClick={()=> setCurrentPostPage(postPagination.currentPage - 1)} className={styles.pageBtn}>
+                <button disabled={pagination.currentPage === 1} onClick={()=> setCurrentPostPage(pagination.currentPage - 1)} className={styles.pageBtn}>
                   <BsChevronLeft />
                 </button>
                 {pages.map((page, index)=>{
@@ -70,11 +83,11 @@ export default function Home() {
                     <span className={styles.pageDots}>...</span>
                   ):(<button onClick={()=> setCurrentPostPage(page)} className={`${styles.pageBtn} ${currentPostPage === page ? `${styles.pageBtnActive}`: ''}`}>{page}</button>)
                 })}
-                <button onClick={()=> setCurrentPostPage(postPagination.currentPage + 1)} disabled={postPagination.currentPage === postPagination.lastPage} className={styles.pageBtn}>
+                <button onClick={()=> setCurrentPostPage(pagination.currentPage + 1)} disabled={pagination.currentPage === pagination.lastPage} className={styles.pageBtn}>
                   <BsChevronRight />
                 </button>
               </div>
-            </div> */}
+            </div>
           </div>
 
           {/* Sidebar */}
