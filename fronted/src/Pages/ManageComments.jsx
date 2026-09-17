@@ -7,6 +7,8 @@ import { IoMdCheckmark } from "react-icons/io";
 import { FaXmark } from "react-icons/fa6";
 import { IoWarningOutline } from "react-icons/io5";
 import { RiDeleteBinLine } from "react-icons/ri";
+import RecentComments from "../components/RecentComments";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const ManageComments = () => {
 
@@ -23,6 +25,7 @@ const ManageComments = () => {
     Deletecomment,
     activeFilter,
     Searchcomment,
+    spinnerLoader
   } = useComment();
 
   const pages = [];
@@ -126,8 +129,10 @@ const ManageComments = () => {
 
       {/* Table */}
       <div className={styles.tableCard}>
-        <div className="table-responsive">
-          <table className={`table mb-0 ${styles.commentsTable}`}>
+        <div className="table-responsive" style={{height:'500px'}}>
+          {spinnerLoader ? (
+              <div style={{height:'480px'}} className="d-flex justify-content-center align-items-center"><LoadingSpinner /></div>
+          ) :comments.length === 0 ? <div className="p-3"><RecentComments/></div>:<table className={`table mb-0 ${styles.commentsTable}`}>
             <thead>
               <tr>
                 <th>Author</th>
@@ -186,7 +191,7 @@ const ManageComments = () => {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table>}
         </div>
 
         {/* Pagination */}
@@ -206,17 +211,6 @@ const ManageComments = () => {
             </button>
           </div>
         </div>}
-      </div>
-
-      {/* Footer */}
-      <div className={styles.footer}>
-        <h4 className={styles.footerBrand}>SlowLiving Blog</h4>
-        <p className={styles.footerMeta}>Management Portal • Version 2.4.0</p>
-        <div className={styles.footerLinks}>
-          <a href="#">Terms of Service</a>
-          <a href="#">Privacy Policy</a>
-        </div>
-        <p className={styles.footerCopy}>© 2024 SlowLiving Blog. All rights reserved.</p>
       </div>
     </div>
   );

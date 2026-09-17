@@ -9,6 +9,7 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { useUser } from "../Context/UserContext";
 import { usePublicPost } from "../Context/PublicPostContext";
 import {apiGet, apiSend} from '../services/apiClient.js';
+import LoadingSpinner from "../components/LoadingSpinner.jsx";
 export default function BlogPost() {
 
   const {id} = useParams();
@@ -20,7 +21,7 @@ export default function BlogPost() {
   const [EditComment, setEditComment] = useState('');
   const userInfo = JSON.parse(localStorage.getItem('UserInfo'));
 
-  const { postView: formData, fetchPostView } = usePublicPost();
+  const { postView: formData, spinnerLoader, fetchPostView } = usePublicPost();
 
   // fetch single comment
   const fetchComment = async (id)=>{
@@ -177,127 +178,131 @@ export default function BlogPost() {
   
 
   return (
-    <div className={styles.page}>
+    <>
+      {spinnerLoader ? (
+                <div className="d-flex min-vh-100 justify-content-center align-items-center"><LoadingSpinner /></div>
+            ):<div className={styles.page}>
 
-      <div className={styles.hero}>
-        {formData.post_image && <img
-          src={`${baseUrl}/posts-images/${formData.post_image}`}
-          alt="hero"
-        />}
-        <div className={styles.heroContent}>
-          <span className={styles.badge}>{formData.category}</span>
-          <h1 className={styles.heroTitle}>{formData.title}
-          </h1>
-        </div>
-      </div>
-
-      <div className="container">
-        <div className={styles.authorRow}>
-          <div className={styles.authorInfo}>
-           {formData.author_image ? <img
-              src={`${baseUrl}/uploads/${formData.author_image}`}
-              alt="Elena Vance"
-              className={styles.authorAvatar}
-            />: <div className="rounded-5 text-center text-white" style={{lineHeight:'40px',height:'40px', width:'40px', backgroundColor: '#5b3fd9', overflow:'hidden'}}>
-                    {formData.author_name.split(' ')[0]?.substr(0, 1)}
-                    {formData.author_name.split(' ')[1]?.substr(0, 1)}
-                </div>
-            }
-            <div>
-              <p className={styles.authorName}>{formData.author_name}</p>
-              <span className={styles.authorMeta}>{formData.date}</span>
-            </div>
+        <div className={styles.hero}>
+          {formData.post_image && <img
+            src={`${baseUrl}/posts-images/${formData.post_image}`}
+            alt="hero"
+          />}
+          <div className={styles.heroContent}>
+            <span className={styles.badge}>{formData.category}</span>
+            <h1 className={styles.heroTitle}>{formData.title}
+            </h1>
           </div>
         </div>
-        <hr className={styles.divider} />
 
-        <div className={styles.articleBody}>
-          <div
-            dangerouslySetInnerHTML={{ __html: formData.description }}
-          />
-        </div>
-        <div className={styles.commentsSection}>
-          <h5 className={styles.heading}>Comments ({postComment.length < 1000 ? postComment.length : `${(postComment.length/1000).toFixed(1)}k` })</h5>
-  
-          {/* Add a comment */}
-          <div className={`d-flex align-items-start ${styles.addCommentRow}`}>
-            <div className="rounded-5 text-center overflow-hidden text-white" style={{lineHeight:'40px',height:'40px', width:'40px'}}>
-              {loggedUser.image ? <img
-                  src={`${baseUrl}/uploads/${loggedUser.image}`}
-                  alt=""
-                  className={styles.authorAvatar}
-                />: <div className="rounded-5 text-center text-white" style={{lineHeight:'40px',height:'40px', width:'40px', backgroundColor: '#5b3fd9', overflow:'hidden'}}>
-                        {loggedUser?.name?.split(' ')[0].substr(0, 1)}
-                        {loggedUser?.name?.split(' ')[1].substr(0, 1)}
-                    </div>
-                }
-            </div>
-              <div className={`${styles.addCommentBox} d-flex flex-column`}>
-                <textarea
-                  className={styles.commentInput}
-                  placeholder="Add a comment..."
-                  rows={3}
-                  value={comment}
-                  onChange={(event)=>setComment(event.target.value)}
-                />
-                <span className="text-danger">{commentErr}</span>
-                <button onClick={addComment} className={`${styles.postBtn} ms-auto`} >
-                  Post Comment
-                </button>
+        <div className="container">
+          <div className={styles.authorRow}>
+            <div className={styles.authorInfo}>
+            {formData.author_image ? <img
+                src={`${baseUrl}/uploads/${formData.author_image}`}
+                alt="Elena Vance"
+                className={styles.authorAvatar}
+              />: <div className="rounded-5 text-center text-white" style={{lineHeight:'40px',height:'40px', width:'40px', backgroundColor: '#5b3fd9', overflow:'hidden'}}>
+                      {formData.author_name.split(' ')[0]?.substr(0, 1)}
+                      {formData.author_name.split(' ')[1]?.substr(0, 1)}
+                  </div>
+              }
+              <div>
+                <p className={styles.authorName}>{formData.author_name}</p>
+                <span className={styles.authorMeta}>{formData.date}</span>
               </div>
+            </div>
           </div>
+          <hr className={styles.divider} />
+
+          <div className={styles.articleBody}>
+            <div
+              dangerouslySetInnerHTML={{ __html: formData.description }}
+            />
+          </div>
+          <div className={styles.commentsSection}>
+            <h5 className={styles.heading}>Comments ({postComment.length < 1000 ? postComment.length : `${(postComment.length/1000).toFixed(1)}k` })</h5>
     
-          {/* Comment list */}
-          <div className={styles.commentList}>
-            {postComment.map((comment, index)=>{
-              return <div key={index} className={`${styles.commentItem} d-flex justify-content-between mb-3`}>
-                        <div className="d-flex w-100">
-                          <div className={`${styles.avatarInitials} ${styles.avatarPurple} me-2 overflow-hidden`}>
-                            {comment.user.image ? <img
-                              src={`${baseUrl}/uploads/${comment.user.image}`}
-                              alt="Elena Vance"
-                              className={styles.authorAvatar}
-                            />: <div className="rounded-5 text-center text-white" style={{lineHeight:'40px',height:'40px', width:'40px', backgroundColor: '#5b3fd9', overflow:'hidden'}}>
-                                    {comment?.user.name?.split(' ')[0].substr(0, 1)}
-                                    {comment?.user.name?.split(' ')[1].substr(0, 1)}
-                                </div>
-                            }
-                          </div>
-                          <div className={`${styles.commentBody} w-100`}>
-                            <div className={styles.commentMeta}>
-                              <span className={styles.commentAuthor}>{comment.user.name}</span>
-                              <span className={styles.commentTime}>{timeAgo(comment.created_at)}</span>
-                            </div>
-                            <p className={styles.commentText}>{comment.comment}</p>
-                            {activeEdit === index && (<div onClick={(e) => e.stopPropagation()} className={`${styles.addCommentBox} d-flex flex-column`}>
-                              <textarea
-                                className={styles.commentInput}
-                                placeholder="Add a comment..."
-                                rows={3}
-                                value={EditComment}
-                                onChange={(event)=>setEditComment(event.target.value)}
-                              />
-                              <button onClick={()=> updateComment(comment.id)} className={`${styles.postBtn} ms-auto`} >
-                                Edit
-                              </button>
-                            </div>)}
-                          </div>
-                        </div>
-                        {comment.user_id === userInfo.id && (<div className="position-relative">
-                          <IoEllipsisVerticalSharp style={{cursor:'pointer'}} onClick={(e)=> {e.stopPropagation(), setActive(index)}} />
-                          {active === index && (<div className={`${styles.commentAction} d-flex flex-column bg-white shadow-sm px-3 py-2 rounded-2`}>
-                            <span onClick={(e)=> {e.stopPropagation(), fetchComment(comment.id), setActive(null), setActiveEdit(index)}}  style={{cursor:'pointer',fontSize:'13px'}} className="d-flex mb-1"><MdOutlineEdit className="fs-5 me-2" />Edit</span>
-                            <span onClick={()=>deleteComment(comment.id)}  style={{cursor:'pointer',fontSize:'13px'}} className="d-flex">
-                              <RiDeleteBinLine className="fs-5 me-2" />
-                              Delete
-                            </span>
-                          </div>)}
-                        </div>)}
+            {/* Add a comment */}
+            {localStorage.getItem('token') && <div className={`d-flex align-items-start ${styles.addCommentRow}`}>
+              <div className="rounded-5 text-center overflow-hidden text-white" style={{lineHeight:'40px',height:'40px', width:'40px'}}>
+                {loggedUser.image ? <img
+                    src={`${baseUrl}/uploads/${loggedUser.image}`}
+                    alt=""
+                    className={styles.authorAvatar}
+                  />: <div className="rounded-5 text-center text-white" style={{lineHeight:'40px',height:'40px', width:'40px', backgroundColor: '#5b3fd9', overflow:'hidden'}}>
+                          {loggedUser?.name?.split(' ')[0].substr(0, 1)}
+                          {loggedUser?.name?.split(' ')[1].substr(0, 1)}
                       </div>
-            })}
+                  }
+              </div>
+                <div className={`${styles.addCommentBox} d-flex flex-column`}>
+                  <textarea
+                    className={styles.commentInput}
+                    placeholder="Add a comment..."
+                    rows={3}
+                    value={comment}
+                    onChange={(event)=>setComment(event.target.value)}
+                  />
+                  <span className="text-danger">{commentErr}</span>
+                  <button onClick={addComment} className={`${styles.postBtn} ms-auto`} >
+                    Post Comment
+                  </button>
+                </div>
+            </div>}
+      
+            {/* Comment list */}
+            <div className={styles.commentList}>
+              {postComment.map((comment, index)=>{
+                return <div key={index} className={`${styles.commentItem} d-flex justify-content-between mb-3`}>
+                          <div className="d-flex w-100">
+                            <div className={`${styles.avatarInitials} ${styles.avatarPurple} me-2 overflow-hidden`}>
+                              {comment.user.image ? <img
+                                src={`${baseUrl}/uploads/${comment.user.image}`}
+                                alt="Elena Vance"
+                                className={styles.authorAvatar}
+                              />: <div className="rounded-5 text-center text-white" style={{lineHeight:'40px',height:'40px', width:'40px', backgroundColor: '#5b3fd9', overflow:'hidden'}}>
+                                      {comment?.user.name?.split(' ')[0].substr(0, 1)}
+                                      {comment?.user.name?.split(' ')[1].substr(0, 1)}
+                                  </div>
+                              }
+                            </div>
+                            <div className={`${styles.commentBody} w-100`}>
+                              <div className={styles.commentMeta}>
+                                <span className={styles.commentAuthor}>{comment.user.name}</span>
+                                <span className={styles.commentTime}>{timeAgo(comment.created_at)}</span>
+                              </div>
+                              <p className={styles.commentText}>{comment.comment}</p>
+                              {activeEdit === index && (<div onClick={(e) => e.stopPropagation()} className={`${styles.addCommentBox} d-flex flex-column`}>
+                                <textarea
+                                  className={styles.commentInput}
+                                  placeholder="Add a comment..."
+                                  rows={3}
+                                  value={EditComment}
+                                  onChange={(event)=>setEditComment(event.target.value)}
+                                />
+                                <button onClick={()=> updateComment(comment.id)} className={`${styles.postBtn} ms-auto`} >
+                                  Edit
+                                </button>
+                              </div>)}
+                            </div>
+                          </div>
+                          {comment.user_id === userInfo.id && (<div className="position-relative">
+                            <IoEllipsisVerticalSharp style={{cursor:'pointer'}} onClick={(e)=> {e.stopPropagation(), setActive(index)}} />
+                            {active === index && (<div className={`${styles.commentAction} d-flex flex-column bg-white shadow-sm px-3 py-2 rounded-2`}>
+                              <span onClick={(e)=> {e.stopPropagation(), fetchComment(comment.id), setActive(null), setActiveEdit(index)}}  style={{cursor:'pointer',fontSize:'13px'}} className="d-flex mb-1"><MdOutlineEdit className="fs-5 me-2" />Edit</span>
+                              <span onClick={()=>deleteComment(comment.id)}  style={{cursor:'pointer',fontSize:'13px'}} className="d-flex">
+                                <RiDeleteBinLine className="fs-5 me-2" />
+                                Delete
+                              </span>
+                            </div>)}
+                          </div>)}
+                        </div>
+              })}
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </div>}
+    </>
   );
 }

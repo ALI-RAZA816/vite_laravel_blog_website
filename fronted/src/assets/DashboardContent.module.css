@@ -91,6 +91,7 @@
 
 /* Panels */
 .panel {
+  min-height: 450px;
   background-color: #ffffff;
   border-radius: 14px;
   padding: 24px;

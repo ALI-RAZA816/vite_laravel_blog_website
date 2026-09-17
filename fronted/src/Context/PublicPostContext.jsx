@@ -9,18 +9,21 @@ const PublicPostContextProvider = ({ children }) => {
   // =======================
   //   PUBLIC POSTS LIST (Home.jsx)
   // =======================
+  const [spinnerLoader, setSpinnerLoader] = useState(false);
   const [publicPosts, setPublicPosts] = useState([]);
   const [popularPosts, setPopularPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [publicPostPage, setPublicPostPage] = useState(emptyPagination);
 
   const fetchPublicPosts = async () => {
+    setSpinnerLoader(true);
     try {
       const {ok, data} = await apiGet(`public-posts?page=${currentPage}`);
       if (ok) {
         setPopularPosts(data.popularPost);
         setPublicPosts(data.allPost.data);
         setPublicPostPage(toPagination(data.allPost));
+        setSpinnerLoader(false);
       }
     } catch (error) {
       console.log("fetchPublicPosts:", error);
@@ -47,7 +50,7 @@ const PublicPostContextProvider = ({ children }) => {
   });
 
   const fetchPostView = async (id) => {
-    const token = localStorage.getItem('token');
+    setSpinnerLoader(true);
     try {
       const {ok, data} = await apiGet(`post-view/${id}`);
       if (ok) {
@@ -62,6 +65,7 @@ const PublicPostContextProvider = ({ children }) => {
           tags: JSON.parse(data.post.tags),
           description: data.post.description
         });
+        setSpinnerLoader(false);
       }
     } catch (error) {
       console.log(error);
@@ -78,6 +82,7 @@ const PublicPostContextProvider = ({ children }) => {
       currentPage,   
       setCurrentPage,
       postView,
+      spinnerLoader,
       fetchPostView,
     }}>
       {children}

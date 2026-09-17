@@ -24,6 +24,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import RecentPost from "../components/RecentPost";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 ChartJS.register(
   CategoryScale,
@@ -46,13 +48,14 @@ const AdminPosts = () => {
     deletePost,
     multiDeletePost,
     searchPosts,
+    spinnerLoader,
+    setSpinnerLoader
   } = usePost();
   const {allCat} = useContext(AppContext);
 
   const [chartData2, setChartData2] =useState([]);
   const monthReportHandler = async () => {
-    const token = localStorage.getItem('token');
-
+    setSpinnerLoader(true);
     try {
       const {ok, data} = await apiGet('month-report');
 
@@ -69,7 +72,7 @@ const AdminPosts = () => {
 
       const latest = formattedData.slice(-12)
       setChartData2(latest);
-
+      setSpinnerLoader(false);
     } catch (error) {
       console.log(error);
     }
@@ -226,7 +229,9 @@ const AdminPosts = () => {
       {/* Table */}
       <div className={styles.tableCard}>
         <div className="table-responsive">
-          <table className={`table mb-0 ${styles.postsTable}`}>
+          {spinnerLoader ? (
+                        <div style={{height:'480px'}} className="d-flex justify-content-center align-items-center"><LoadingSpinner /></div>
+                    ) :posts.length === 0 ? (<div className="p-3"><RecentPost/></div>) :<table className={`table mb-0 ${styles.postsTable}`}>
             <thead>
               <tr>
                 <th style={{ width: "40px" }}>
@@ -298,12 +303,12 @@ const AdminPosts = () => {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table>}
         </div>
 
      
         {/* Pagination */}
-        <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
+        {posts.length !== 0 && <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
           <span className={styles.showingText}>Showing {postPagination.from} to {postPagination.to} of {postPagination.total} posts</span>
           <div className="d-flex align-items-center gap-2">
             <button disabled={postPagination.currentPage === 1} onClick={()=> setCurrentPostPage(postPagination.currentPage - 1)} className={styles.pageBtn}>
@@ -318,7 +323,7 @@ const AdminPosts = () => {
               <BsChevronRight />
             </button>
           </div>
-        </div>
+        </div>}
       </div>
 
       {/* Bottom panels */}
@@ -330,7 +335,7 @@ const AdminPosts = () => {
               Your publishing frequency is up {velocity}% this month.
             </p>
           <div className={styles.velocityChart}>
-           <Bar data={chartData} options={chartOptions} />
+            {spinnerLoader ? <div  className="d-flex justify-content-center align-items-center"><LoadingSpinner /></div>:<Bar data={chartData} options={chartOptions} />}
           </div>
           </div>
         </div>

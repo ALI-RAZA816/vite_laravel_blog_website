@@ -8,6 +8,7 @@ export const CategoryContext = createContext();
 const CategoryContextProvider = ({ children }) => {
   // apna khud ka refresh signal - sirf category data hi dobara fetch hota hai
   const [catRefresh, setCatRefresh] = useState(0);
+  const [spinnerLoader, setSpinnerLoader] = useState(false);
   const triggerCatRefresh = () => setCatRefresh((prev) => prev + 1);
 
   // =======================
@@ -19,14 +20,15 @@ const CategoryContextProvider = ({ children }) => {
   const [catPagination, setCatPagination] = useState(emptyPagination);
 
   const fetchCategory = async () => {
-
+    setSpinnerLoader(true);
     try {
       const {ok, data} = await apiGet(`categories?page=${currentCatPage}`);
-
+      
       if (ok) {
         setAllCat(data.allCat);
         setCategories(data.category.data);
         setCatPagination(toPagination(data.category));
+        setSpinnerLoader(false);
       }
     } catch (error) {
       console.log(error);
@@ -180,6 +182,7 @@ const CategoryContextProvider = ({ children }) => {
       setCurrentCatPage,
       catPagination,
       fetchCategory,
+      spinnerLoader,
 
       // add modal
       showCategoryModel,

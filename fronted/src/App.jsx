@@ -35,7 +35,7 @@ function App() {
       <>
         {!isAdmin && <Header />}
             <ScrollToTop/>
-            {loader && <Loader/>}
+            {/* {loader && <Loader/>} */}
             <Routes>
               <Route path='/' element={<Home />} />
               <Route path='/blog-post/:id' element={<BlogPost/>}/>

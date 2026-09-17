@@ -54,11 +54,11 @@ const AppContextProvider = ({children})=>{
 
     useEffect(()=>{
         const loaderHandler = ()=>{
-            setTimeout(()=>setLoader(false), 1000);
+            setTimeout(()=>setLoader(false), 2000);
         }
 
         if(document.readyState === 'complete'){
-            loadHandler();
+            loaderHandler();
         }else{
             window.addEventListener('load',loaderHandler);
         }

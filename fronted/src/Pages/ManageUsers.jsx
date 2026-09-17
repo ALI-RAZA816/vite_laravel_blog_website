@@ -11,6 +11,8 @@ import { AppContext } from "../Context/AppContext";
 import { useUser } from "../Context/UserContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { baseUrl } from "../Http/Http";
+import NoUsers from "../components/NoUsers";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 
 const ManageUsers = () => {
@@ -26,6 +28,7 @@ const ManageUsers = () => {
     Blocked,
     allEditors,
     searchUsers,
+    spinnerLoader
   } = useUser();
   const {DeleteModelHandler} = useContext(AppContext);
   
@@ -175,8 +178,10 @@ const ManageUsers = () => {
           </div>
         </div>
 
-        <div className="table-responsive">
-          <table className={`table mb-0 ${styles.usersTable}`}>
+        <div className="table-responsive bg-white">
+          {spinnerLoader ? (
+              <div style={{height:'480px'}} className="d-flex justify-content-center align-items-center"><LoadingSpinner /></div>
+          ):allUsers.length === 0 ?<div className="p-3"> <NoUsers/></div> : <table className={`table mb-0 ${styles.usersTable}`}>
             <thead>
               <tr>
                 <th>NAME</th>
@@ -240,7 +245,7 @@ const ManageUsers = () => {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table>}
         </div>
 
         {/* Pagination */}

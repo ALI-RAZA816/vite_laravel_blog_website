@@ -7,6 +7,7 @@ export const UserContext = createContext();
 const UserContextProvider = ({ children }) => {
   // apna khud ka refresh signal - sirf users data hi dobara fetch hota hai
   const [userRefresh, setUserRefresh] = useState(0);
+  const [spinnerLoader, setSpinnerLoader] = useState(false);
   const triggerUserRefresh = () => setUserRefresh((prev) => prev + 1);
 
   // =======================
@@ -24,6 +25,7 @@ const UserContextProvider = ({ children }) => {
 
   // fetch all users
   const fetchUsers = async () => {
+    setSpinnerLoader(true);
     try {
       const {ok, data} = await apiGet(`users?page=${currentPage}`);
       
@@ -36,6 +38,7 @@ const UserContextProvider = ({ children }) => {
           setThisWeek(data.this_week);
           setBlocked(data.blocked);
           setPagination(toPagination(data.users));
+          setSpinnerLoader(false);
         }
       }
     } catch (error) {
@@ -77,6 +80,7 @@ const UserContextProvider = ({ children }) => {
       pagination,
       fetchUsers,
       triggerUserRefresh,
+      spinnerLoader,
 
       searchUsers,
     }}>

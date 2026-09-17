@@ -7,6 +7,7 @@ export const CommentContext = createContext();
 const CommentContextProvider = ({ children }) => {
   // apna khud ka refresh signal - sirf comment data hi dobara fetch hota hai
   const [commentRefresh, setCommentRefresh] = useState(0);
+  const [spinnerLoader, setSpinnerLoader] = useState(false);
   const triggerCommentRefresh = () => setCommentRefresh((prev) => prev + 1);
 
   // =======================
@@ -19,16 +20,17 @@ const CommentContextProvider = ({ children }) => {
   const [commentsPagination, setCommentsPagination] = useState(emptyPagination);
 
   const fetchcomments = async () => {
-
+    setSpinnerLoader(true);
     try {
-
+      
       const {ok, data} = await apiGet(`comments?page=${currentComments}`);
-
+      
       if (ok) {
         setCommentAvg(data.average);
         setAllComments(data.allComments);
         setComments(data.comments.data);
         setCommentsPagination(toPagination(data.comments));
+        setSpinnerLoader(false);
       }
     } catch (error) {
       console.log("fetchcomments:", error);
@@ -114,6 +116,7 @@ const CommentContextProvider = ({ children }) => {
 
       activeFilter,
       Searchcomment,
+      spinnerLoader
     }}>
       {children}
     </CommentContext.Provider>

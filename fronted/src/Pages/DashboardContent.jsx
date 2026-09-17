@@ -29,6 +29,10 @@ import { useComment } from "../Context/CommentContext";
 import { usePost } from "../Context/PostContext";
 import { useUser } from "../Context/UserContext";
 import { baseUrl } from "../Http/Http";
+import Analytics from "../components/Analytics";
+import RecentComments from "../components/RecentComments";
+import RecentPost from "../components/RecentPost";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 
 const chartData = [
@@ -46,7 +50,7 @@ const DashboardContent = () => {
   const [monthlyRecord, setMonthlyRecord] = useState('');
   // const {totalUsers} = useContext(AppContext);
 
-  const { lastMonthViews, posts, totalViews, totalPosts, velocity, avgViews } = usePost();
+  const { lastMonthViews, spinnerLoader, posts, totalViews, totalPosts, velocity, avgViews } = usePost();
   const { comments, allComments, commentAvg } = useComment();
   const { totalUsers } = useUser();
 
@@ -168,44 +172,60 @@ const DashboardContent = () => {
       {/* Chart + Recent Comments */}
       <div className="row g-4 mt-1">
         <div className="col-12 col-xl-8">
-          <div className={styles.panel}>
-            <div className="d-flex justify-content-between align-items-center mb-4">
-              <h6 className={styles.panelTitle}>VIEWS PER MONTH</h6>
-              <select onChange={(event)=> setMonthlyRecord(event.target.value)} className={styles.rangeSelect} defaultValue="Last 6 Months">
-                <option value='last 6 months'>Last 6 Months</option>
-                <option value='last 12 months'>Last 12 Months</option>
-              </select>
-            </div>
-            <div className={`${styles.chart}`} style={{ width: '100%', height: '400px' }}>
-              <Line data={data} options={options} />
-            </div>
+          <div className={`${styles.panel} overflow-hidden`}>
+           {spinnerLoader ? (
+              <div className="h-100 d-flex justify-content-center align-items-center"><LoadingSpinner /></div>
+          ) : lastMonthViews.length === 0 ? (
+              <Analytics />
+          ) : (
+              <>
+                  <div className="d-flex justify-content-between align-items-center mb-4">
+                      <h6 className={styles.panelTitle}>VIEWS PER MONTH</h6>
+                      <select
+                          onChange={(event) => setMonthlyRecord(event.target.value)}
+                          className={styles.rangeSelect}
+                          defaultValue="Last 6 Months"
+                      >
+                          <option value='last 6 months'>Last 6 Months</option>
+                          <option value='last 12 months'>Last 12 Months</option>
+                      </select>
+                  </div>
+                  <div className={`${styles.chart}`} style={{ width: '100%', height: '400px' }}>
+                      <Line data={data} options={options} />
+                  </div>
+              </>
+          )}
           </div>
         </div>
 
         <div className="col-12 col-xl-4">
           <div className={`${styles.panel} d-flex flex-column`}>
             <h6 className={`${styles.panelTitle} mb-4`}>RECENT COMMENTS</h6>
-            <div className="flex-grow-1">
-              {recentComments.map((comment, index) => (
-                <div className={styles.commentRow} key={index}>
-                   <div className={`${styles.avatar} overflow-hidden`} style={{ backgroundColor: '#c5c2d6', }}>
-                      {comment.user.image ? (
-                        <img src={`${baseUrl}/uploads/${comment.user.image}`} alt="" />
-                      ) : (
-                        <>
-                        {comment.user.name.split(' ')[0].substr(0,1)}
-                        {comment.user.name.split(' ')[1].substr(0,1)}
-                        </>
-                      )}
+            {spinnerLoader ? (
+              <div className="h-100 d-flex justify-content-center align-items-center"><LoadingSpinner /></div>
+          ) : recentComments.length === 0 ? (<RecentComments/>):<div>
+              <div className="flex-grow-1">
+                {recentComments.map((comment, index) => (
+                  <div className={styles.commentRow} key={index}>
+                    <div className={`${styles.avatar} overflow-hidden`} style={{ backgroundColor: '#c5c2d6', }}>
+                        {comment.user.image ? (
+                          <img src={`${baseUrl}/uploads/${comment.user.image}`} alt="" />
+                        ) : (
+                          <>
+                          {comment.user.name.split(' ')[0].substr(0,1)}
+                          {comment.user.name.split(' ')[1].substr(0,1)}
+                          </>
+                        )}
+                      </div>
+                    <div className={styles.commentBody}>
+                      <p className={styles.commentName}>{comment.user.name}</p>
+                      <p className={styles.commentText}>{comment.comment.length > 20 ? `${comment.comment.substr(0, 20)}...` : comment.comment}</p>
                     </div>
-                  <div className={styles.commentBody}>
-                    <p className={styles.commentName}>{comment.user.name}</p>
-                    <p className={styles.commentText}>{comment.comment.length > 20 ? `${comment.comment.substr(0, 20)}...` : comment.comment}</p>
                   </div>
-                </div>
-              ))}
-            </div>
-            <Link to="/admin-panel/comments"><button className={styles.viewAllBtn}>View All Comments</button></Link>
+                ))}
+              </div>
+              <Link to="/admin-panel/comments"><button className={styles.viewAllBtn}>View All Comments</button></Link>
+            </div>}
           </div>
         </div>
       </div>
@@ -221,7 +241,9 @@ const DashboardContent = () => {
           {/* Table */}
               <div className={styles.tableCard}>
                 <div className="table-responsive">
-                  <table className={`table mb-0 ${styles.postsTable}`}>
+                  {spinnerLoader ? (
+              <div style={{height:'480px'}} className="d-flex justify-content-center align-items-center"><LoadingSpinner /></div>
+          ) :recentPost.length === 0 ? (<RecentPost/>) : <table className={`table mb-0 ${styles.postsTable}`}>
                     <thead>
                       <tr>
                         <th>POST TITLE</th>
@@ -281,7 +303,7 @@ const DashboardContent = () => {
                         </tr>
                       ))}
                     </tbody>
-                  </table>
+                  </table>}
                 </div>
               </div>
         

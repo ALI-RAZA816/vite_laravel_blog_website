@@ -15,6 +15,8 @@ import { useCategory } from "../Context/CategoryContext";
 import { LuPalette } from "react-icons/lu";
 import { IoGlobeSharp } from "react-icons/io5";
 import EditAdminCategory from '../Pages/EditAdminCategory';
+import NoCategories from "../components/NoCategories";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const AdminCategories = () => {
 
@@ -27,6 +29,7 @@ const AdminCategories = () => {
         CategoryModelHandler,
         EditCategoryModelHandler,
         deleteCategory,
+        spinnerLoader
     } = useCategory();
 
     const pages = [];
@@ -68,47 +71,49 @@ const AdminCategories = () => {
         {/* Table */}
         <div className={styles.tableCard}>
             <div className="table-responsive">
-            <table className={`table mb-0 ${styles.categoriesTable}`}>
-                <thead>
-                <tr>
-                    <th>NAME</th>
-                    <th>SLUG</th>
-                    <th>POST COUNT</th>
-                    <th className="text-end">ACTIONS</th>
-                </tr>
-                </thead>
-                <tbody>
-                {categories.map((cat, index) => (
-                    <tr key={index}>
-                        <td>
-                            <div className="d-flex align-items-center gap-3">
-                            <div
-                                className={styles.catIcon}
-                                style={{ backgroundColor: cat.iconBg, color: cat.iconColor }}
-                            >
-                                {cat.icon === 'leaf' ? <BsFlower1 /> : '' || cat.icon === 'sprout' ? <span style={{ fontSize: "14px" }}>&#127807;</span> : '' || cat.icon === 'book' ?  <BsBook />  : '' || cat.icon === 'home' ?  <BsHouseDoor /> : '' || cat.icon === 'palette' ?  <LuPalette /> : '' || cat.icon === 'globe' ?  <IoGlobeSharp /> : ''}
-                            </div>
-                            <span className={styles.catName}>{cat.name}</span>
-                            </div>
-                        </td>
-                        <td className={styles.slugCell}>{cat.slug}</td>
-                        <td>
-                            <span className={styles.postCountBadge}>{cat.post_count}</span>
-                        </td>
-                        <td>
-                            <div className="d-flex align-items-center justify-content-end gap-3">
-                                <BsPencilFill onClick={()=>{EditCategoryModelHandler(); viewCategory(cat.id)}} className={styles.actionIcon} />
-                                <BsTrashFill onClick={()=> deleteCategory(cat.id)} className={`${styles.actionIcon} ${styles.deleteIcon}`} />
-                            </div>
-                        </td>
+                {spinnerLoader ? (
+                              <div style={{height:'480px'}} className="d-flex justify-content-center align-items-center"><LoadingSpinner /></div>
+                          ) : categories.length === 0 ? <div className="p-3"><NoCategories/></div>:<table className={`table mb-0 ${styles.categoriesTable}`}>
+                    <thead>
+                    <tr>
+                        <th>NAME</th>
+                        <th>SLUG</th>
+                        <th>POST COUNT</th>
+                        <th className="text-end">ACTIONS</th>
                     </tr>
-                ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {categories.map((cat, index) => (
+                        <tr key={index}>
+                            <td>
+                                <div className="d-flex align-items-center gap-3">
+                                <div
+                                    className={styles.catIcon}
+                                    style={{ backgroundColor: cat.iconBg, color: cat.iconColor }}
+                                >
+                                    {cat.icon === 'leaf' ? <BsFlower1 /> : '' || cat.icon === 'sprout' ? <span style={{ fontSize: "14px" }}>&#127807;</span> : '' || cat.icon === 'book' ?  <BsBook />  : '' || cat.icon === 'home' ?  <BsHouseDoor /> : '' || cat.icon === 'palette' ?  <LuPalette /> : '' || cat.icon === 'globe' ?  <IoGlobeSharp /> : ''}
+                                </div>
+                                <span className={styles.catName}>{cat.name}</span>
+                                </div>
+                            </td>
+                            <td className={styles.slugCell}>{cat.slug}</td>
+                            <td>
+                                <span className={styles.postCountBadge}>{cat.post_count}</span>
+                            </td>
+                            <td>
+                                <div className="d-flex align-items-center justify-content-end gap-3">
+                                    <BsPencilFill onClick={()=>{EditCategoryModelHandler(); viewCategory(cat.id)}} className={styles.actionIcon} />
+                                    <BsTrashFill onClick={()=> deleteCategory(cat.id)} className={`${styles.actionIcon} ${styles.deleteIcon}`} />
+                                </div>
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>}
             </div>
 
             {/* Pagination */}
-            <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
+            {categories.length !== 0 && <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
                 <span className={styles.showingText}>Showing {catPagination.from} to {catPagination.to} of {catPagination.total} categories</span>
                 <div className="d-flex align-items-center gap-2">
                     <button disabled={catPagination.currentPage === 1} onClick={()=> setCurrentCatPage(catPagination.currentPage - 1)} className={styles.pageBtn}>
@@ -123,7 +128,7 @@ const AdminCategories = () => {
                     <BsChevronRight />
                     </button>
                 </div>
-            </div>
+            </div>}
         </div>
 
         {/* Footer */}

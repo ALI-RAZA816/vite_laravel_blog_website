@@ -13,6 +13,7 @@ const PostContextProvider = ({ children }) => {
   //     LIST + STATS
   // =======================
   const [posts, setPosts] = useState([]); // current page wali list
+  const [spinnerLoader, setSpinnerLoader] = useState(false);
   const [totalPosts, setTotalPosts] = useState([]); // poori list (dashboard count ke liye)
   const [totalViews, setTotalViews] = useState(0);
   const [avgViews, setAvgViews] = useState(0);
@@ -23,9 +24,9 @@ const PostContextProvider = ({ children }) => {
   const [postPagination, setPostPagination] = useState(emptyPagination);
 
   const fetchPosts = async () => {
+    setSpinnerLoader(true);
     try {
       const {ok, data} = await apiGet(`posts?page=${currentPostPage}`);
-
       if (ok) {
         setAvgViews(data.averageViews);
         setTotalPosts(data.total);
@@ -43,6 +44,7 @@ const PostContextProvider = ({ children }) => {
           };
         });
         setLastMonthViews(formatted);
+        setSpinnerLoader(false);
       }
     } catch (error) {
       console.log("fetchPosts:", error);
@@ -117,7 +119,8 @@ const PostContextProvider = ({ children }) => {
       setCurrentPostPage,
       postPagination,
       fetchPosts,
-
+      setSpinnerLoader,
+      spinnerLoader,
       deletePost,
       multiDeletePost,
       searchPosts,

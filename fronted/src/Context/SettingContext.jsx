@@ -6,6 +6,7 @@ export const SettingContext = createContext();
 const SettingContextProvider = ({ children }) => {
   // apna khud ka refresh signal - sirf setting data hi dobara fetch hota hai
   const [settingRefresh, setSettingRefresh] = useState(0);
+  const [spinnerLoader, setSpinnerLoader] = useState(false);
   const triggerSettingRefresh = () => setSettingRefresh((prev) => prev + 1);
 
   const [maintenance, setMaintenance] = useState(false);
@@ -40,7 +41,7 @@ const SettingContextProvider = ({ children }) => {
 
   // fetch settings
   const fetchSetting = async () => {
-    const token = localStorage.getItem('token');
+    setSpinnerLoader(true);
     try {
       const {ok, data} = await apiGet('show-setting');
       if (ok) {
@@ -55,6 +56,7 @@ const SettingContextProvider = ({ children }) => {
         });
         setLogo(data?.setting?.site_logo);
         setMaintenance(data?.setting?.site_maintence === "true");
+        setSpinnerLoader(false);
       }
     } catch (error) {
       console.log(error);
@@ -118,6 +120,7 @@ const SettingContextProvider = ({ children }) => {
       settingHandler,
       logoHandler,
       fetchSetting,
+      spinnerLoader
     }}>
       {children}
     </SettingContext.Provider>

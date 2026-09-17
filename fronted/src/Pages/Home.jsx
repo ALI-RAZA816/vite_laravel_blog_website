@@ -9,12 +9,13 @@ import {
   BsChevronLeft,
   BsChevronRight
 } from "react-icons/bs";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function Home() {
 
 
   const { publicCategories: categories } = usePublicCategory();
-  const { publicPosts: totalPosts, popularPosts ,publicPostPage:pagination, setCurrentPage: setCurrentPostPage, currentPage :currentPostPage} = usePublicPost();
+  const { publicPosts: totalPosts, spinnerLoader, popularPosts ,publicPostPage:pagination, setCurrentPage: setCurrentPostPage, currentPage :currentPostPage} = usePublicPost();
   
   const pages = [];
   const start = Math.max(1, pagination.currentPage - 2);
@@ -56,7 +57,9 @@ export default function Home() {
               <h2 className={styles.sectionTitle}>Recent Stories</h2>
             </div>
             <div className="row">
-              {totalPosts.map((post, i) => (
+              {spinnerLoader ? (
+                  <div className="d-flex min-vh-100 justify-content-center align-items-center"><LoadingSpinner /></div>
+              ):totalPosts.map((post, i) => (
                 <div className="col-md-6" key={i}>
                   <Link to={`blog-post/${post.id}`}><div className={styles.card}>
                     <img src={`${baseUrl}/posts-images/${post.image}`} alt={post.title} className={styles.cardImg} />
@@ -72,7 +75,7 @@ export default function Home() {
             </div>
 
            {/* Pagination */}
-            <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
+            {totalPosts.length !== 0 && <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
               <span className={styles.showingText}>Showing {pagination.from} to {pagination.to} of {pagination.total} users</span>
               <div className="d-flex align-items-center gap-2">
                 <button disabled={pagination.currentPage === 1} onClick={()=> setCurrentPostPage(pagination.currentPage - 1)} className={styles.pageBtn}>
@@ -87,7 +90,7 @@ export default function Home() {
                   <BsChevronRight />
                 </button>
               </div>
-            </div>
+            </div>}
           </div>
 
           {/* Sidebar */}
@@ -103,7 +106,9 @@ export default function Home() {
             <div className={styles.sidebarBlock}>
               <h4 className={styles.sidebarTitle}>CATEGORIES</h4>
               <div className={styles.categoryPills}>
-                {categories.map((cat, index)=>{
+                {spinnerLoader ? (
+                  <div className="d-flex justify-content-center align-items-center"><LoadingSpinner /></div>
+              ):categories.map((cat, index)=>{
                   return <span key={index} className={styles.pill}>{cat.name} ({cat.post_count})</span>
                 })}
               </div>
@@ -111,7 +116,9 @@ export default function Home() {
 
             <div className={styles.sidebarBlock}>
               <h4 className={styles.sidebarTitle}>POPULAR THIS WEEK</h4>
-              {popularPosts.map((p, i) => (
+              {spinnerLoader ? (
+                  <div className="d-flex justify-content-center align-items-center"><LoadingSpinner /></div>
+              ):popularPosts.map((p, i) => (
                 <div className={styles.popularItem} key={i}>
                   <img src={`${baseUrl}/posts-images/${p.image}`} />
                   <div>
