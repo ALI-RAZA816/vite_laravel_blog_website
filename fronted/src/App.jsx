@@ -25,15 +25,17 @@ import AddNewUser from "./Pages/AddNewUser";
 import AdminEditPost from "./Pages/AdminEditPost";
 import ScrollToTop from "./components/ScrollToTop";
 import AdminPostPreview from "./Pages/AdminPostPreview";
+import Loader from "./components/Loader";
 
 function App() {
 
-  const {isAdmin} = useContext(AppContext)
+  const {isAdmin, loader} = useContext(AppContext);
 
   return (
       <>
         {!isAdmin && <Header />}
             <ScrollToTop/>
+            {loader && <Loader/>}
             <Routes>
               <Route path='/' element={<Home />} />
               <Route path='/blog-post/:id' element={<BlogPost/>}/>

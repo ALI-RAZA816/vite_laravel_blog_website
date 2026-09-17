@@ -6,8 +6,9 @@ export const AppContext = createContext();
 
 const AppContextProvider = ({children})=>{
 
-    const [deleteModel, setDeleteModel] = useState(false);
     const [deletId, setDeleteId] = useState(null);
+    const [loader, setLoader] = useState(true);
+    const [deleteModel, setDeleteModel] = useState(false);
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const toggleSidebar = () => setSidebarOpen((prev) => !prev);
@@ -49,8 +50,24 @@ const AppContextProvider = ({children})=>{
         }
     }
 
+    // const loaderHandler = () => setLoader(true);
+
     useEffect(()=>{
+        const loaderHandler = ()=>{
+            setTimeout(()=>setLoader(false), 1000);
+        }
+
+        if(document.readyState === 'complete'){
+            loadHandler();
+        }else{
+            window.addEventListener('load',loaderHandler);
+        }
         fetchCategory();
+        
+        return () => {
+            window.removeEventListener('load', loaderHandler);
+        };
+
     },[refresh]);
 
     return (
@@ -69,6 +86,7 @@ const AppContextProvider = ({children})=>{
             refresh,
             setRefresh,
             allCat,
+            loader
         }}>
             {children}
         </AppContext.Provider>
