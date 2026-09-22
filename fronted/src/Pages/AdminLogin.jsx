@@ -45,13 +45,17 @@ const AdminLogin = () => {
         if(!ok){
           setStatusCode(status);
           navigate('/aunauthorized');
-        }else if(data.user.role === 'user'){
-          setStatusCode(401)
-          navigate('/aunauthorized');
-        }else{
-          setAuthorized('authorized');
-          navigate('/admin-panel/dashboard');
+          return;
         }
+        if(data?.user?.role === 'user'){
+          setStatusCode(403)
+          navigate('/aunauthorized');
+          return;
+        }
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('UserInfo', JSON.stringify(data.user));
+        setAuthorized('authorized');
+        navigate('/admin-panel/dashboard');
 
       } catch (error) {
         console.log("loginAccount:", error);

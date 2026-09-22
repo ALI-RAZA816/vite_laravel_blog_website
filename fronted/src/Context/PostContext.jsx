@@ -14,7 +14,6 @@ const PostContextProvider = ({ children }) => {
   // =======================
   const [posts, setPosts] = useState([]); // current page wali list
   const [spinnerLoader, setSpinnerLoader] = useState(false);
-  const [totalPosts, setTotalPosts] = useState([]); // poori list (dashboard count ke liye)
   const [totalViews, setTotalViews] = useState(0);
   const [avgViews, setAvgViews] = useState(0);
   const [velocity, setVelocity] = useState(0);
@@ -29,7 +28,6 @@ const PostContextProvider = ({ children }) => {
       const {ok, data} = await apiGet(`posts?page=${currentPostPage}`);
       if (ok) {
         setAvgViews(data.averageViews);
-        setTotalPosts(data.total);
         setTotalViews(data.views);
         setVelocity(data.velocity);
         setPosts(data.posts.data);
@@ -114,7 +112,6 @@ const PostContextProvider = ({ children }) => {
     <PostContext.Provider value={{
       posts,
       setPosts,
-      totalPosts,
       totalViews,
       avgViews,
       velocity,

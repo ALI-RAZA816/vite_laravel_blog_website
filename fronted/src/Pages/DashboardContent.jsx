@@ -33,6 +33,7 @@ import Analytics from "../components/Analytics";
 import RecentComments from "../components/RecentComments";
 import RecentPost from "../components/RecentPost";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { useDashboard } from "../Context/DashboardContext";
 
 
 const chartData = [
@@ -50,9 +51,9 @@ const DashboardContent = () => {
   const [monthlyRecord, setMonthlyRecord] = useState('');
   // const {totalUsers} = useContext(AppContext);
 
-  const { lastMonthViews, spinnerLoader, posts, totalViews, totalPosts, velocity, avgViews } = usePost();
-  const { comments, allComments, commentAvg } = useComment();
-  const { totalUsers } = useUser();
+  const { lastMonthViews, spinnerLoader, posts, totalViews,velocity, avgViews } = usePost();
+  const { totalPosts, totalUsers, allComments} = useDashboard();
+  const { comments, commentAvg } = useComment();
 
   const recentPost = posts.slice(0,5);
   const recentComments = comments.slice(0,5);
@@ -145,7 +146,7 @@ const DashboardContent = () => {
       {/* Stat cards */}
       <div className="row ">
         {statCards.map((card, index) => (
-          <div className="col-12 col-sm-6 col-xl-3" key={index}>
+          <div className="col-12 mb-md-3 mb-3 col-sm-6 col-xl-3" key={index}>
             <div className={styles.statCard}>
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <div

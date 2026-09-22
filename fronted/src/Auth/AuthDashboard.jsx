@@ -16,11 +16,8 @@ export default function AuthDashboard() {
         }).then(res=>{
             return res.json();
         }).then(user =>{
-            console.log(user);
             if(['admin','editor','author'].includes(user.role)){
                 setAuthorized('authorized');
-            }else{
-                setAuthorized('unauthorized');
             }
         }).catch(()=>{
             localStorage.removeItem('token');
@@ -28,6 +25,10 @@ export default function AuthDashboard() {
             setAuthorized('unauthorized');
         })
     },[]);
+    
+    if (authorized === 'unauthorized' || !token) {
+        return <Navigate to="/admin-login" replace />;
+    }
 
     return token && authorized === 'authorized' ? <Outlet/> : <Navigate to ='/admin-login' replace/>
 }

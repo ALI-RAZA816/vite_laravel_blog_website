@@ -19,7 +19,6 @@ const ManageUsers = () => {
 
     const {
     allUsers,
-    setAllUsers,
     totalUsers,
     pagination,
     currentPage,
@@ -28,6 +27,7 @@ const ManageUsers = () => {
     Blocked,
     allEditors,
     searchUsers,
+    loggedUser,
     spinnerLoader
   } = useUser();
   const {DeleteModelHandler} = useContext(AppContext);
@@ -125,10 +125,10 @@ const ManageUsers = () => {
             <BsDownload className="me-2" />
             Export List
           </button>
-          <Link to="/admin-panel/users/add-new-user"><button className={`d-flex align-items-center ${styles.addBtn}`}>
+          {loggedUser.role !== 'editor' && <Link to="/admin-panel/users/add-new-user"><button className={`d-flex align-items-center ${styles.addBtn}`}>
             <BsPersonPlusFill className="me-2" />
             Add New User
-          </button></Link>
+          </button></Link>}
         </div>
       </div>
 

@@ -1,9 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { apiUrl } from "../Http/Http";
 import {apiGet, apiUpload, apiSend} from '../services/apiClient.js';
-export const SettingContext = createContext();
+export const PublicSetting = createContext();
 
-const SettingContextProvider = ({ children }) => {
+const PublicSettingContext = ({ children }) => {
   // apna khud ka refresh signal - sirf setting data hi dobara fetch hota hai
   const [settingRefresh, setSettingRefresh] = useState(0);
   const [spinnerLoader, setSpinnerLoader] = useState(false);
@@ -43,7 +43,7 @@ const SettingContextProvider = ({ children }) => {
   const fetchSetting = async () => {
     setSpinnerLoader(true);
     try {
-      const {ok, data} = await apiGet('settings');
+      const {ok, data} = await apiGet('show-setting');
       if (ok) {
         setSettingData({
           site_title: data?.setting?.site_title,
@@ -110,7 +110,7 @@ const SettingContextProvider = ({ children }) => {
   };
 
   return (
-    <SettingContext.Provider value={{
+    <PublicSetting.Provider value={{
       maintenance,
       setMaintenance,
       logoPreview,
@@ -127,15 +127,15 @@ const SettingContextProvider = ({ children }) => {
       spinnerLoader
     }}>
       {children}
-    </SettingContext.Provider>
+    </PublicSetting.Provider>
   );
 };
 
 // chhota hook taake har page me useContext likhna na pade
-export const useSetting = () => {
-  const ctx = useContext(SettingContext);
+export const usePublicSetting = () => {
+  const ctx = useContext(PublicSetting);
   if (!ctx) throw new Error("useSetting ko <SettingContextProvider> ke andar use karein.");
   return ctx;
 };
 
-export default SettingContextProvider;
+export default PublicSettingContext;

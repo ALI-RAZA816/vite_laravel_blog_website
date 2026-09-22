@@ -14,6 +14,8 @@ import SettingContextProvider from "./Context/SettingContext.jsx";
 import UserContextProvider from "./Context/UserContext.jsx";
 import PublicCategoryContextProvider from "./Context/PublicCategoryContext.jsx";
 import PublicPostContextProvider from "./Context/PublicPostContext.jsx";
+import DashboardContextProvider from "./Context/DashboardContext.jsx";
+import PublicSettingContext from "./Context/PublicSettingContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -28,7 +30,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                     <UserContextProvider>
                       <PublicCategoryContextProvider>
                         <PublicPostContextProvider>
-                          <App />
+                          <DashboardContextProvider>
+                            <PublicSettingContext>
+                              <App />
+                            </PublicSettingContext>
+                          </DashboardContextProvider>
                         </PublicPostContextProvider>
                       </PublicCategoryContextProvider>
                     </UserContextProvider>

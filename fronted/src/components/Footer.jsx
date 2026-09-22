@@ -3,7 +3,7 @@ import styles from '../assets/Footer.module.css'
 import { FaEarthAfrica } from "react-icons/fa6";
 import { FiCamera } from "react-icons/fi";
 import { MdOutlineMail } from "react-icons/md";
-import { useSetting } from '../Context/SettingContext';
+import { usePublicSetting } from '../Context/PublicSettingContext';
 import { FaFacebookF } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { IoLogoInstagram } from "react-icons/io";
@@ -12,7 +12,7 @@ import { GrLinkedinOption } from "react-icons/gr";
 
 export default function Footer() {
 
-  const {settingData} = useSetting();
+  const {settingData} = usePublicSetting();
 
   return (
     <div>

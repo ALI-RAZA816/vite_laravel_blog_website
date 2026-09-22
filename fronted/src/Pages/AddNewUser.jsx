@@ -156,9 +156,9 @@ const AddNewUser = () => {
 
     try{
       const token = localStorage.getItem('token');
-      const {ok, data} = await apiUpload('account','POST',form);
+      const {ok, status, data} = await apiUpload('users','POST',form);
       if(!ok){
-        if(response.status === 422){
+        if(status.status === 422){
           if(data?.errors?.image[0]){
             setImageErr(data?.errors?.image[0]);
           }

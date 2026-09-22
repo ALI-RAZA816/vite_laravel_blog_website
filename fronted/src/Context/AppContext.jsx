@@ -5,7 +5,7 @@ import { apiUrl } from "../Http/Http";
 export const AppContext = createContext();
 
 const AppContextProvider = ({children})=>{
-    const [authorized, setAuthorized] = useState('');
+    const [authorized, setAuthorized] = useState('checking');
     const [statuCode, setStatusCode] = useState(0);
     const [deletId, setDeleteId] = useState(null);
     const [loader, setLoader] = useState(true);

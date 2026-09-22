@@ -42,7 +42,7 @@ export const apiUpload = async (path, method = 'POST', body = null)=>{
         body: body
     });
     const data = await response.json();
-    return {ok:response.ok, data}
+    return {ok:response.ok, status:response.status, data}
 }
 
 export const toPagination = (paginator) => ({

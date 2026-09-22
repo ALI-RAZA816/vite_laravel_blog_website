@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+use App\Events\UserRegistered;
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use App\Http\Controllers\Controller;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -37,7 +38,51 @@ class UserController extends Controller
      */
     public function create(Request $request)
     {
-      
+       try{
+            $request->validate([
+                'name'=>'required|string|max:50',
+                'emailaddress'=>'required|email',
+                'password'=>'required|min:5|confirmed',
+                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:3072',
+            ],[
+                'image'=>'File type must be png,jpeg,jpg or 3MB'
+            ]);
+
+            $imageName = null;
+            if($request->hasFile('image')){
+                $image = $request->image;
+                $ext = $image->getClientOriginalExtension();
+                $imageName = time(). "." . $ext;
+                $image->move(public_path('uploads'),$imageName);
+            };
+            $date = date('M d, y');
+            $user = User::create([
+                'name'=>$request->name,
+                'username'=>$request->username ?? null,
+                'role'=>$request->role ?? 'user',
+                'status'=>$request->status ?? null,
+                'bio'=>$request->bio ?? null,
+                'email'=>$request->emailaddress,
+                'password'=>Hash::make($request->password),
+                'image'=>$imageName ?? null,
+                'join_date'=>$date,
+                'created_at'=>now(),
+                'updated_at'=>now(),
+            ]);
+
+            UserRegistered::dispatch($user, $request->password, $request->boolean('instruction'));
+
+            return response()->json([
+                'status'=>200,
+                'message'=>'Account created'
+            ]);
+
+        }catch(ValidationException $e){
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $e->errors(),
+            ], 422);
+        }
     }
 
     /**

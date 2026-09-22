@@ -18,13 +18,12 @@ import { useUser } from "../Context/UserContext";
 import { apiSend } from "../services/apiClient";
 
 const navItems = [
-  { icon: <BsGrid1X2Fill />, label: "dashboard", active: true },
-  { icon: <BsFileEarmarkTextFill />, label: "posts" },
-  { icon: <BsDiagram3Fill />, label: "categories" },
-  { icon: <BsChatSquareTextFill />, label: "comments" },
-  { icon: <BsPeopleFill />, label: "users" },
-//   { icon: <BsImages />, label: "media" },
-  { icon: <BsGearFill />, label: "settings" },
+  { icon: <BsGrid1X2Fill />, label: "dashboard", roles:['admin', 'editor', 'author'], active: true },
+  { icon: <BsFileEarmarkTextFill />, label: "posts", roles:['admin', 'editor', 'author'] },
+  { icon: <BsDiagram3Fill />, label: "categories", roles:['admin', 'editor'] },
+  { icon: <BsChatSquareTextFill />, label: "comments" , roles:['admin', 'editor'] },
+  { icon: <BsPeopleFill />, label: "users", roles:['admin', 'editor'] },
+  { icon: <BsGearFill />, label: "settings", roles:['admin'] },
 ];
 
 const Sidebar = () => {
@@ -70,14 +69,14 @@ const Sidebar = () => {
                     {navItems.map((item, index) => (
                     <li className="nav-item" key={index}>
                         <Link
-                        to={`/admin-panel/${item.label}`}
-                        onClick={closeSidebar}
-                        className={`nav-link text-capitalize d-flex align-items-center ${styles.navLink} ${
-                            location.pathname === `/admin-panel/${item.label}` ? styles.active : ""
-                        }`}
-                        >
-                        <span className={styles.icon}>{item.icon}</span>
-                        <span>{item.label}</span>
+                            to={`/admin-panel/${item.label}`}
+                            onClick={closeSidebar}
+                            className={`nav-link text-capitalize d-flex align-items-center ${styles.navLink} ${
+                                location.pathname === `/admin-panel/${item.label}` ? styles.active : ""
+                            }`}
+                            >
+                            <span className={styles.icon}>{item.icon}</span>
+                            <span>{item.label}</span>
                         </Link>
                     </li>
                     ))}
