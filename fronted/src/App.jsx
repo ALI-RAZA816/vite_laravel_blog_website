@@ -29,6 +29,7 @@ import Loader from "./components/Loader";
 import AuthDashboard from "./Auth/AuthDashboard";
 import NotFound from "./components/NotFound";
 import Unauthorized from "./components/Unauthorized";
+import RouteProtected from "./Auth/RouteProtected";
 
 function App() {
 
@@ -50,26 +51,40 @@ function App() {
                 
               <Route element={<AuthDashboard/>}>
                 <Route path="/admin-panel" element={<Sidebar/>}>
-                  <Route path="dashboard" element={<AdminHeader/>}>
-                    <Route index element={<DashboardContent/>}/>
+                  <Route element={<RouteProtected allowRoles={["admin", "editor"]}/>}>
+                    <Route path="dashboard" element={<AdminHeader/>}>
+                      <Route index element={<DashboardContent/>}/>
+                    </Route>
                   </Route>
-                  <Route path="posts" element={<AdminHeader/>}>
-                    <Route index element={<AdminPosts/>}/>
-                    <Route path="post-preview/:id" element={<AdminPostPreview/>} />
-                    <Route path="add-post" element={<AddAdminPost/>}/>
-                    <Route path="edit-post/:id" element={<AdminEditPost/>}/>
-                    <Route path="add-categories" element={<AdminCategories/>}/>
+                  <Route element={<RouteProtected allowRoles={["admin", "editor"]}/>}>
+                    <Route path="posts" element={<AdminHeader/>}>
+                      <Route index element={<AdminPosts/>}/>
+                      <Route path="post-preview/:id" element={<AdminPostPreview/>} />
+                      <Route path="add-post" element={<AddAdminPost/>}/>
+                      <Route path="edit-post/:id" element={<AdminEditPost/>}/>
+                      <Route path="add-categories" element={<AdminCategories/>}/>
+                    </Route>
                   </Route>
-                  <Route path="categories" element={<AdminHeader/>}>
-                    <Route index element={<AdminCategories/>}/>
+                  <Route element={<RouteProtected allowRoles={["admin", "editor"]}/>}>
+                    <Route path="categories" element={<AdminHeader/>}>
+                      <Route index element={<AdminCategories/>}/>
+                    </Route>
                   </Route>
-                  <Route path="comments" element={<AdminHeader/>}>
-                    <Route index element={<ManageComments/>}/>
+                  <Route element={<RouteProtected allowRoles={["admin", "editor"]}/>}>
+                    <Route path="comments" element={<AdminHeader/>}>
+                      <Route index element={<ManageComments/>}/>
+                    </Route>
                   </Route>
                   <Route path="users" element={<AdminHeader/>}>
-                    <Route index element={<ManageUsers/>}/>
-                    <Route path="edituser/:id" element={<EditUser/>}/>
-                    <Route path="add-new-user" element={<AddNewUser/>}/>
+                    <Route element={<RouteProtected allowRoles={["admin", "editor"]}/>}>
+                        <Route index element={<ManageUsers/>}/>
+                    </Route>
+                    <Route element={<RouteProtected allowRoles={["admin"]}/>}>
+                        <Route path="edituser/:id" element={<EditUser/>}/>
+                    </Route>
+                    <Route element={<RouteProtected allowRoles={["admin"]}/>}>
+                      <Route path="add-new-user" element={<AddNewUser/>}/>
+                    </Route>
                   </Route>
                   <Route path="settings" element={<AdminHeader/>}>
                     <Route index element={<AdminSetting/>}/>

@@ -17,7 +17,7 @@ import { AppContext } from "../Context/AppContext";
 import { useUser } from "../Context/UserContext";
 import { apiSend } from "../services/apiClient";
 
-const navItems = [
+const menuItems = [
   { icon: <BsGrid1X2Fill />, label: "dashboard", roles:['admin', 'editor', 'author'], active: true },
   { icon: <BsFileEarmarkTextFill />, label: "posts", roles:['admin', 'editor', 'author'] },
   { icon: <BsDiagram3Fill />, label: "categories", roles:['admin', 'editor'] },
@@ -31,6 +31,8 @@ const Sidebar = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const {deleteModel, sidebarOpen, closeSidebar} = useContext(AppContext);
+    const {loggedUser} = useUser();
+
     const logoutPanel = async (event)=>{
         event.preventDefault();
         try{
@@ -44,6 +46,8 @@ const Sidebar = () => {
             console.log(error);
         }
     }
+
+    const navItems = menuItems.filter(item => item.roles.includes(loggedUser.role));
   return (
     <>
         {deleteModel && <DeleteModel/>}

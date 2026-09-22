@@ -189,7 +189,7 @@ const ManageUsers = () => {
                 <th>ROLE</th>
                 <th>JOIN DATE</th>
                 <th>STATUS</th>
-                <th>ACTIONS</th>
+                {loggedUser.role !== 'editor' && <th>ACTIONS</th>}
               </tr>
             </thead>
             <tbody>
@@ -233,7 +233,7 @@ const ManageUsers = () => {
                       <span style={{color:user.status === 'active' ? '#165823' : '' || user.status === 'blocked' ? '#DF301C':'' || user.status === 'inactive' ? '#A8A492':'' }}>{user.status}</span>
                     </span>
                   </td>
-                  <td>
+                  {loggedUser.role !== 'editor' && <td>
                     <Link to={`/admin-panel/users/edituser/${user.id}`}>
                       <MdOutlineModeEdit className={styles.editpencil}/>
                     </Link>
@@ -241,7 +241,7 @@ const ManageUsers = () => {
                       <RiDeleteBin5Fill  onClick={()=>DeleteModelHandler(user.id)} className={styles.deleteIcon}  />
                     </button>
                     {/* <BsThreeDotsVertical className={styles.actionsIcon} /> */}
-                  </td>
+                  </td>}
                 </tr>
               ))}
             </tbody>

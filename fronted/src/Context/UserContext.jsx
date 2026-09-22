@@ -13,7 +13,10 @@ const UserContextProvider = ({ children }) => {
   // =======================
   //     LIST + STATS
   // =======================
-  const [loggedUser, setLoggedUser] = useState([]);
+  const [loggedUser, setLoggedUser] = useState(() => {
+        const stored = localStorage.getItem('UserInfo');
+        return stored ? JSON.parse(stored) : null; 
+    });
   const [totalUsers, setTotalUsers] = useState(0);
   const [allUsers, setAllUsers] = useState([]);
   const [Blocked, setBlocked] = useState([]);
