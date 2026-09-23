@@ -3,23 +3,28 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Comment;
 use App\Models\Post;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $user = $request->user();
         $allComments = Comment::all();
         $total_comment = Comment::count();
         $this_month = Comment::whereMonth('created_at',now()->month)->count();
         $average = $total_comment > 0 ? round(($this_month / $total_comment) * 100, 2) : 0;
-        $comments = Comment::with(['user','post'])->paginate(10);
+        if($user->role === 'admin'){
+            $comments = Comment::with(['user','post'])->paginate(10);
+        }else{
+            $comments = Comment::with(['user','post'])->where('user_id', $user->id)->paginate(10);
+        }
 
         return response()->json([
             'comments' => $comments,
@@ -65,9 +70,15 @@ class CommentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, string $id)
     {
-        $comment = Comment::with(['user','post'])->where('id', $id)->first();
+        $user = $request->user();
+        if($user->role === 'admin') {
+            $comment = Comment::with(['user','post'])->where('id', $id)->first();
+        } else {
+            $comment = Comment::with(['user','post'])->where('id', $id)->where('user_id', $user->id)->first();
+        }
+
         if(!$comment){
             return response()->json([
                 'message'=>'Not found'
@@ -92,14 +103,20 @@ class CommentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $status = Comment::where('id', $id)->first();
+        $user = $request->user();
+        if($user->role === 'admin') {
+            $status = Comment::where('id', $id)->first();
+        } else {
+            $status = Comment::where('id', $id)->where('user_id', $user->id)->first();
+        }
+        // $status = Comment::where('id', $id)->first();
         if(!$status){
             return response()->json([
                 'message'=>'Not found'
             ],404);
         }
 
-        Comment::where('id',$id)->update([
+        $status->update([
             'status'=>$request->status
         ]);
 
@@ -111,9 +128,14 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
-        $status = Comment::where('id', $id)->first();
+        $user = $request->user();
+        if($user->role === 'admin') {
+            $status = Comment::where('id', $id)->first();
+        } else {
+            $status = Comment::where('id', $id)->where('user_id', $user->id)->first();
+        }
         if(!$status){
             return response()->json([
                 'message'=>'Not found'
@@ -160,7 +182,7 @@ class CommentController extends Controller
             ],404);
         }
 
-        Comment::where('id',$id)->update([
+        $status->update([
             'comment'=>$request->comment
         ]);
 

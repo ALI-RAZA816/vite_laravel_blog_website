@@ -38,7 +38,15 @@ class UserController extends Controller
      */
     public function create(Request $request)
     {
-       try{
+      
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        try{
             $request->validate([
                 'name'=>'required|string|max:50',
                 'emailaddress'=>'required|email',
@@ -83,14 +91,6 @@ class UserController extends Controller
                 'errors' => $e->errors(),
             ], 422);
         }
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-       
     }
 
     /**

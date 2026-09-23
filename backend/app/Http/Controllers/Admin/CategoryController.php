@@ -14,7 +14,7 @@ class CategoryController extends Controller
     public function index()
     {
         $allCat = Category::all();
-        $categories = Category::with(['user'])->latest()->paginate(12);
+        $categories = Category::latest()->paginate(12);
         return response()->json([
             'category'=>$categories,
             'allCat'=>$allCat

@@ -9,6 +9,7 @@ import { IoWarningOutline } from "react-icons/io5";
 import { RiDeleteBinLine } from "react-icons/ri";
 import RecentComments from "../components/RecentComments";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { useUser } from "../Context/UserContext";
 
 const ManageComments = () => {
 
@@ -27,6 +28,8 @@ const ManageComments = () => {
     Searchcomment,
     spinnerLoader
   } = useComment();
+
+  const {loggedUser} = useUser();
 
   const pages = [];
   const start = Math.max(1, commentsPagination.currentPage - 2);
@@ -182,9 +185,9 @@ const ManageComments = () => {
                   <td className={styles.dateCell}>{comment.date}</td>
                   <td>
                     <div className="d-flex">
-                      <div className={`${styles.actions} me-2`}><IoMdCheckmark onClick={()=> commentStatus('approved', comment.id)} /></div>
-                      <div className={`${styles.actions} me-2`}><FaXmark onClick={()=> commentStatus('rejected', comment.id)} /></div>
-                      <div className={`${styles.actions} me-2`}><IoWarningOutline onClick={()=> commentStatus('spam', comment.id)} /></div>
+                      {loggedUser.role !== 'author' && <div className={`${styles.actions} me-2`}><IoMdCheckmark onClick={()=> commentStatus('approved', comment.id)} /></div>}
+                      {loggedUser.role !== 'author' && <div className={`${styles.actions} me-2`}><FaXmark onClick={()=> commentStatus('rejected', comment.id)} /></div>}
+                      {loggedUser.role !== 'author' && <div className={`${styles.actions} me-2`}><IoWarningOutline onClick={()=> commentStatus('spam', comment.id)} /></div>}
                       <div className={`${styles.actions}`}><RiDeleteBinLine onClick={()=> Deletecomment(comment.id)}/></div>
                     </div>
                   </td>

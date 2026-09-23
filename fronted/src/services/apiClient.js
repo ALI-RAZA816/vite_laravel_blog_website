@@ -41,7 +41,14 @@ export const apiUpload = async (path, method = 'POST', body = null)=>{
         },
         body: body
     });
-    const data = await response.json();
+
+    let data = null;
+    const text = await response.json();
+    if(text){
+        data = text;
+    }else{
+        data = null;
+    }
     return {ok:response.ok, status:response.status, data}
 }
 
