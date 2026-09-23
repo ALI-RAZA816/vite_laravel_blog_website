@@ -83,7 +83,7 @@ export default function Home() {
                 </button>
                 {pages.map((page, index)=>{
                   return page === '...' ?(
-                    <span className={styles.pageDots}>...</span>
+                    <span key={index} className={styles.pageDots}>...</span>
                   ):(<button onClick={()=> setCurrentPostPage(page)} className={`${styles.pageBtn} ${currentPostPage === page ? `${styles.pageBtnActive}`: ''}`}>{page}</button>)
                 })}
                 <button onClick={()=> setCurrentPostPage(pagination.currentPage + 1)} disabled={pagination.currentPage === pagination.lastPage} className={styles.pageBtn}>
@@ -123,7 +123,7 @@ export default function Home() {
                   <img src={`${baseUrl}/posts-images/${p.image}`} />
                   <div>
                     <p className={styles.popularTitle}>{p.title.length > 40 ? `${p.title.substr(0, 40)}...` : p.title}</p>
-                    <span className={styles.popularDate}>{p.date} <span class="badge ms-3 text-bg-secondary">{p.category.name}</span></span>
+                    <span className={styles.popularDate}>{p.date} <span className="badge ms-3 text-bg-secondary">{p.category.name}</span></span>
                   </div>
                 </div>
               ))}

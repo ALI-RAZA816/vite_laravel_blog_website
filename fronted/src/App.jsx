@@ -51,18 +51,20 @@ function App() {
                 
               <Route element={<AuthDashboard/>}>
                 <Route path="/admin-panel" element={<Sidebar/>}>
-                  <Route element={<RouteProtected allowRoles={["admin", "editor"]}/>}>
+                  <Route element={<RouteProtected allowRoles={["admin", "editor", "author"]}/>}>
                     <Route path="dashboard" element={<AdminHeader/>}>
                       <Route index element={<DashboardContent/>}/>
                     </Route>
                   </Route>
-                  <Route element={<RouteProtected allowRoles={["admin", "editor"]}/>}>
+                  <Route element={<RouteProtected allowRoles={["admin", "editor","author"]}/>}>
                     <Route path="posts" element={<AdminHeader/>}>
                       <Route index element={<AdminPosts/>}/>
                       <Route path="post-preview/:id" element={<AdminPostPreview/>} />
                       <Route path="add-post" element={<AddAdminPost/>}/>
                       <Route path="edit-post/:id" element={<AdminEditPost/>}/>
-                      <Route path="add-categories" element={<AdminCategories/>}/>
+                      <Route element={<RouteProtected allowRoles={["admin", "editor"]}/>}>
+                        <Route path="add-categories" element={<AdminCategories/>}/>
+                      </Route>
                     </Route>
                   </Route>
                   <Route element={<RouteProtected allowRoles={["admin", "editor"]}/>}>
@@ -70,13 +72,13 @@ function App() {
                       <Route index element={<AdminCategories/>}/>
                     </Route>
                   </Route>
-                  <Route element={<RouteProtected allowRoles={["admin", "editor"]}/>}>
+                  <Route element={<RouteProtected allowRoles={["admin", "editor","author"]}/>}>
                     <Route path="comments" element={<AdminHeader/>}>
                       <Route index element={<ManageComments/>}/>
                     </Route>
                   </Route>
                   <Route path="users" element={<AdminHeader/>}>
-                    <Route element={<RouteProtected allowRoles={["admin", "editor"]}/>}>
+                    <Route element={<RouteProtected allowRoles={["admin", "editor","author"]}/>}>
                         <Route index element={<ManageUsers/>}/>
                     </Route>
                     <Route element={<RouteProtected allowRoles={["admin"]}/>}>
@@ -86,8 +88,10 @@ function App() {
                       <Route path="add-new-user" element={<AddNewUser/>}/>
                     </Route>
                   </Route>
-                  <Route path="settings" element={<AdminHeader/>}>
-                    <Route index element={<AdminSetting/>}/>
+                    <Route element={<RouteProtected allowRoles={["admin"]}/>}>
+                      <Route path="settings" element={<AdminHeader/>}>
+                        <Route index element={<AdminSetting/>}/>
+                      </Route>
                   </Route>
                 </Route>
               </Route>

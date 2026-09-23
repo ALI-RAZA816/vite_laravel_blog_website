@@ -47,7 +47,6 @@ const CommentContextProvider = ({ children }) => {
 
   // status ke hisaab se derived lists - stat cards aur tab counts ke liye
   const pendingComments = allComments.filter((comment) => comment.status === "pending");
-  console.log(pendingComments);
   const approvedComments = allComments.filter((comment) => comment.status === "approved");
   const spamComments = allComments.filter((comment) => comment.status === "spam");
 

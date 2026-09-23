@@ -110,7 +110,7 @@ const EditUser = () => {
                     triggerUserRefresh();
                     navigate('/admin-panel/users');
                 }
-            }else if(response.status === 422){
+            }else if(data.status === 422){
                 setImageErr(data?.errors?.image[0]);
             }
 

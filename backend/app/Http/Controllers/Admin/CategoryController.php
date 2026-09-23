@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Category;
+use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -14,7 +14,7 @@ class CategoryController extends Controller
     public function index()
     {
         $allCat = Category::all();
-        $categories = Category::latest()->paginate(12);
+        $categories = Category::with(['user'])->latest()->paginate(12);
         return response()->json([
             'category'=>$categories,
             'allCat'=>$allCat

@@ -16,11 +16,16 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $total = Post::with('category')->with('author')->get();
+        $user = $request->user();
+        $total = Post::with(['category','author'])->get();
         $views = Post::sum('views_counter');
-        $posts = Post::with('category')->with('author')->latest()->paginate(10);
+        if($user->role === 'admin'){
+            $posts = Post::with(['category','author'])->latest()->paginate(10);
+        }else{
+            $posts = Post::with(['category','author'])->where('author_id', $user->id)->latest()->paginate(10);
+        }
         $total_posts = Post::count();
         $this_month = Post::whereMonth('created_at',now()->month)->count();
         $velocity = $total_posts > 0 ? round(($this_month / $total_posts) * 100, 2) : 0;
@@ -102,14 +107,20 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, string $id)
     {
-       $post = Post::with('category')->with('author')->where('id',$id)->first();
-        if(!$post){
-            return response()->json([
-                'messate'=>'Not found'
-            ],404);
+        $user = $request->user();
+        if($user->role === 'admin'){
+            $post = Post::with('category')->with('author')->where('id',$id)->first();
+        }else{
+            $post = Post::with('category')->with('author')->where('id',$id)->where('author_id', $user->id)->first();
         }
+
+       if(!$post){
+            return response()->json([
+                'message'=>'Not found'
+            ],404);
+        } 
 
         return response()->json([
             'post'=>$post
@@ -129,6 +140,7 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $user = $request->user();
         $request->validate([
             'title'=>'required',
             'description'=>'required',
@@ -140,14 +152,17 @@ class PostController extends Controller
             'image.max' => 'Image size must not be greater than 3MB.',
         ]);
 
-        $post = Post::where('id',$id)->first();
-        
+        if($user->role === 'admin'){
+            $post = Post::with('category')->with('author')->where('id',$id)->first();
+        }else{
+            $post = Post::with('category')->with('author')->where('id',$id)->where('author_id', $user->id)->first();
+        }
 
         if(!$post){
             return response()->json([
                 'message'=>'Not found'
             ],404);
-        }
+        } 
 
         $oldCategory = $post->category_id;
         $NewCategory = $request->category;
@@ -177,7 +192,7 @@ class PostController extends Controller
             Category::where('id', $NewCategory)->increment('post_count');
         }
 
-        Post::where('id',$id)->update([
+        $post->update([
             'title'=>$request->title,
             'description'=>$request->description,
             'published'=>$request->published,
@@ -194,15 +209,21 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
-        $post = Post::where('id',$id)->first();
-        $categoryId = $post->category_id;
-        if(!$post){
-            return response()->json([
-                'message'=>'Not found'
-            ],404);
+        $user = $request->user();
+        if($user->role === 'admin'){
+            $post = Post::with('category')->with('author')->where('id',$id)->first();
+        }else{
+            $post = Post::with('category')->with('author')->where('id',$id)->where('author_id', $user->id)->first();
         }
+        $categoryId = $post->category_id;
+         if(!$post){
+                return response()->json([
+                    'message'=>'Not found'
+                ],404);
+            }
+
 
         $path = public_path('posts-images');
         $previousImage = $path . '/' . $post->image;
@@ -236,18 +257,25 @@ class PostController extends Controller
 
 
     public function multiDeletePost(Request $request){
-
+        $user = $request->user();
         $request->validate([
             'ids' => 'required|array',
             'ids.*' => 'integer|exists:posts,id',
         ]);
 
-        $posts = Post::whereIn('id',$request->ids)->get();
+        if($user->role === 'admin'){
+            $posts = Post::whereIn('id',$request->ids)->get();
+            
+        }else{
+            $posts = Post::whereIn('id',$request->ids)->where('author_id', $user->id)->get();
+        }
+
         if(!$posts){
             return response()->json([
                 'message'=>'Not found'
             ],404);
         }
+
         foreach($posts as $post){
             $path = public_path('posts-images');
             $previousImage = $path . '/' . $post->image;
@@ -257,7 +285,7 @@ class PostController extends Controller
                 }
             }
         }
-        Post::whereIn('id',$request->ids)->delete();
+        Post::whereIn('id',$posts->pluck('id'))->delete();
         return response()->json([
             'message' => 'Posts deleted successfully'
         ], 200);

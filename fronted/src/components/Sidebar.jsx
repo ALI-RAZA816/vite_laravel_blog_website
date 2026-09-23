@@ -21,7 +21,7 @@ const menuItems = [
   { icon: <BsGrid1X2Fill />, label: "dashboard", roles:['admin', 'editor', 'author'], active: true },
   { icon: <BsFileEarmarkTextFill />, label: "posts", roles:['admin', 'editor', 'author'] },
   { icon: <BsDiagram3Fill />, label: "categories", roles:['admin', 'editor'] },
-  { icon: <BsChatSquareTextFill />, label: "comments" , roles:['admin', 'editor'] },
+  { icon: <BsChatSquareTextFill />, label: "comments" , roles:['admin', 'editor', 'author'] },
   { icon: <BsPeopleFill />, label: "users", roles:['admin', 'editor'] },
   { icon: <BsGearFill />, label: "settings", roles:['admin'] },
 ];

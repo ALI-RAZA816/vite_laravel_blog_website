@@ -5,6 +5,7 @@ import { Outlet } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";
 import { useLocation } from "react-router-dom";
 import { useUser } from "../Context/UserContext";
+import { baseUrl } from "../Http/Http";
 
 const AdminHeader = () => {
   const { toggleSidebar } = useContext(AppContext);

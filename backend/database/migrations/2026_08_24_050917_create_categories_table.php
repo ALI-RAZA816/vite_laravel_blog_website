@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('slug');
             $table->string('description')->nullable();
             $table->string('icon');
-            $table->string('post_count')->default(0);
+            $table->unsignedBigInteger('post_count')->default(0);
             $table->timestamps();
         });
     }

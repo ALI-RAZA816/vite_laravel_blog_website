@@ -41,13 +41,17 @@ Route::middleware('auth:sanctum')->group(function(){
         
     Route::middleware('role:admin,editor')->group(function(){
         Route::apiResource('users', UserController::class)->only(['index','show']);
+        Route::apiResource('categories', CategoryController::class);
+    });
+        
+        
+    Route::middleware('role:admin,editor,author')->group(function(){
         Route::get('dashboard',[DashboardController::class,'DashboardAnalysis']);
         Route::get('filter-comments',[CommentController::class,'searchComments']);
         Route::put('update-comments/{id}',[CommentController::class,'updateComment']);
         Route::post('search-post',[PostController::class,'searchPost']);
         Route::get('month-report',[MonthlyReportController::class,'report']);
         Route::post('multi-delete-post',[PostController::class,'multiDeletePost']);
-        Route::apiResource('categories', CategoryController::class);
         Route::apiResource('comments', CommentController::class);
         Route::apiResource('posts', PostController::class);
     });
