@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\PublicCategryController;
+use App\Http\Controllers\PublicCommentController;
 use App\Http\Controllers\PublicPostController;
 use App\Http\Controllers\PublicSettingController;
 use Illuminate\Http\Request;
@@ -29,6 +30,10 @@ Route::get('show-setting', [PublicSettingController::class, 'publicSetting']);
 
 Route::middleware('auth:sanctum')->group(function(){
     Route::post('logout',[AuthController::class,'logoutAccount']);
+    Route::post('public-comments',[PublicCommentController::class,'addComment']);
+    Route::put('public-comments/{id}',[PublicCommentController::class,'updateComment']);
+    Route::get('public-comments/{id}',[PublicCommentController::class,'showComment']);
+    Route::delete('public-comments/{id}',[PublicCommentController::class,'deleteComment']);
 
     
     Route::middleware('role:admin')->group(function(){

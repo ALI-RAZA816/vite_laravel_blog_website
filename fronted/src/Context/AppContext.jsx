@@ -20,7 +20,7 @@ const AppContextProvider = ({children})=>{
     const closeMobileMenu = () => setMobileMenuOpen(false);
 
     const location = useLocation();
-    const isAdmin = location.pathname === '/register' || location.pathname === '/login' || location.pathname.startsWith('/admin-panel') || location.pathname.startsWith('/admin-login');
+    const isAdmin = location.pathname === '/register' || location.pathname === '/aunauthorized' || location.pathname === '/login' || location.pathname.startsWith('/admin-panel') || location.pathname.startsWith('/admin-login');
 
     const DeleteModelHandler = (deleteId)=>{
         setDeleteModel(!deleteModel);

@@ -258,7 +258,7 @@ const ManageUsers = () => {
             {pages.map((page, index)=>{
               return page === '...' ?(
                 <span key={index} className={styles.pageDots}>...</span>
-              ):(<button onClick={()=> setCurrentPage(page)} className={`${styles.pageBtn} ${currentPage === page ? `${styles.pageBtnActive}`: ''}`}>{page}</button>)
+              ):(<button key={index} onClick={()=> setCurrentPage(page)} className={`${styles.pageBtn} ${currentPage === page ? `${styles.pageBtnActive}`: ''}`}>{page}</button>)
             })}
             <button onClick={()=> setCurrentPage(pagination.currentPage + 1)} disabled={pagination.currentPage === pagination.lastPage} className={styles.pageBtn}>
               <BsChevronRight />

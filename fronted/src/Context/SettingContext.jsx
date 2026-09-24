@@ -66,7 +66,7 @@ const SettingContextProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('UserInfo'));
-    if(token && user.role !== 'user'){
+    if(token && user.role === 'admin'){
       fetchSetting();
     }
   }, [settingRefresh]);

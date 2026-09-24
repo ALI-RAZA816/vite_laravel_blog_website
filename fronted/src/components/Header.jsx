@@ -72,7 +72,7 @@ export default function Header() {
                 <Link to="/register" onClick={closeMobileMenu} className={styles.registerBtn}>Register</Link>
               </div>
               :<div onClick={profileHandler} className={styles.profile}>
-                {loggedUser.image ? <div className="rounded-5 text-center text-white" style={{lineHeight:'40px',height:'40px', width:'40px', backgroundColor: '#5b3fd9', overflow:'hidden'}}>
+                {loggedUser?.image ? <div className="rounded-5 text-center text-white" style={{lineHeight:'40px',height:'40px', width:'40px', backgroundColor: '#5b3fd9', overflow:'hidden'}}>
                   <img
                     src={`${baseUrl}/uploads/${loggedUser.image}`}
                     alt=""

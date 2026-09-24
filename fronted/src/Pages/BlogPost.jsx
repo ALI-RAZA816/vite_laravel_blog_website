@@ -25,9 +25,9 @@ export default function BlogPost() {
 
   // fetch single comment
   const fetchComment = async (id)=>{
-    const token = localStorage.getItem('token');
+
     try{
-      const {ok, data} = await apiGet(`comments/${id}`);
+      const {ok, data} = await apiGet(`public-comments/${id}`);
 
       if(ok){
         setEditComment(data.comment.comment);
@@ -43,7 +43,7 @@ export default function BlogPost() {
     const token = localStorage.getItem('token');
     try{
 
-      const {ok, data} = await apiSend(`update-comments/${id}`, 'PUT', {comment:EditComment});
+      const {ok, data} = await apiSend(`public-comments/${id}`, 'PUT', {comment:EditComment});
       if(ok){
         setRefresh(prev => prev + 1);
         setActiveEdit(null);
@@ -128,13 +128,12 @@ export default function BlogPost() {
       setCommentErr('Express your vision');
       return;
     }
-    const token = localStorage.getItem('token');
     const payload ={
         comment:comment,
         post_id:id
     }
     try{
-      const {ok, data} = await apiSend('comments','POST',payload);
+      const {ok, data} = await apiSend('public-comments','POST',payload);
       if(ok){
         setRefresh(prev => prev + 1);
         setComment('');
@@ -147,9 +146,9 @@ export default function BlogPost() {
   }
 
   const deleteComment = async (id)=>{
-    const token = localStorage.getItem('token');
+
     try{
-      const {ok, data} = await apiSend(`comments/${id}`,'DELETE');
+      const {ok, data} = await apiSend(`public-comments/${id}`,'DELETE');
       if(ok){
         setRefresh(prev => prev + 1);
         setActive(null);

@@ -21,6 +21,9 @@ export default function AuthDashboard() {
             setLoggedUser(user);
             if(['admin','editor','author'].includes(user.role)){
                 setAuthorized('authorized');
+            }else{
+                // setAuthorized('aunauthorized');
+                 setStatusCode(403); 
             }
         }).catch(()=>{
             localStorage.removeItem('token');

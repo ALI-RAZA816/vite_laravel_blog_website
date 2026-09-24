@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
-use App\Models\Post;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -50,21 +48,7 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        $date = date('M d, y');
-        $post_title = Post::where('id',$request->post_id)->select('title')->first();
-
-        Comment::create([
-            'user_id'=>Auth::id(),
-            'post_id'=>$request->post_id,
-            'comment'=>$request->comment,
-            'on_post'=>$post_title->title,
-            'date'=>$date,
-        ]);
-
-        return response()->json([
-            'message'=>'Comment added'
-        ],200);
-
+       //
     }
 
     /**
@@ -171,23 +155,6 @@ class CommentController extends Controller
         }
         return response()->json([
             'postComment'=>$postComment
-        ],200);
-    }
-
-    public function updateComment (Request $request, int $id){
-        $status = Comment::where('id', $id)->first();
-        if(!$status){
-            return response()->json([
-                'message'=>'Not found'
-            ],404);
-        }
-
-        $status->update([
-            'comment'=>$request->comment
-        ]);
-
-        return response()->json([
-            'message'=>'Comment updated'
         ],200);
     }
 }

@@ -1,11 +1,14 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { apiUrl } from "../Http/Http";
 import { apiGet, apiSend, emptyPagination, toPagination } from "../services/apiClient.js";
+import { UserContext } from "./UserContext.jsx";
 
 export const DashboardContext = createContext();
 
 const DashboardContextProvider = ({ children }) => {
 
+    const token = localStorage.getItem('token');
+    const {loggedUser} = useContext(UserContext);
     const [totalPosts, setTotalPosts] = useState([]); // poori list (dashboard count ke liye)
     const [allComments, setAllComments] = useState([]); // poori list (stats + tab counts ke liye)
     const [totalUsers, setTotalUsers] = useState(0);
@@ -29,7 +32,9 @@ const DashboardContextProvider = ({ children }) => {
     }
 
     useEffect(()=>{
-        fetchDashboardData();
+        if(token && loggedUser.role !== 'user'){
+            fetchDashboardData();
+        }
     },[]);
 
 

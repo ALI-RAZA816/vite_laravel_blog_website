@@ -4,6 +4,7 @@
   display: flex;
   flex-direction: column;
 }
+
 .bgText {
   position: absolute;
   left: 40px;
@@ -19,14 +20,6 @@
   font-weight: 700;
 }
 
-.center {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 60px 20px;
-}
 .iconBox {
   width: 64px;
   height: 64px;
@@ -57,7 +50,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   padding: 40px 20px;
+
 }
 
 .tabSwitch {
