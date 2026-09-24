@@ -21,7 +21,7 @@ class PostController extends Controller
         $user = $request->user();
         $total = Post::with(['category','author'])->get();
         $views = Post::sum('views_counter');
-        if($user->role === 'admin'){
+        if($user->role === 'admin' || $user->role === 'editor'){
             $posts = Post::with(['category','author'])->latest()->paginate(10);
         }else{
             $posts = Post::with(['category','author'])->where('author_id', $user->id)->latest()->paginate(10);
@@ -110,7 +110,7 @@ class PostController extends Controller
     public function show(Request $request, string $id)
     {
         $user = $request->user();
-        if($user->role === 'admin'){
+        if($user->role === 'admin' || $user->role === 'editor'){
             $post = Post::with('category')->with('author')->where('id',$id)->first();
         }else{
             $post = Post::with('category')->with('author')->where('id',$id)->where('author_id', $user->id)->first();
@@ -152,7 +152,7 @@ class PostController extends Controller
             'image.max' => 'Image size must not be greater than 3MB.',
         ]);
 
-        if($user->role === 'admin'){
+        if($user->role === 'admin' || $user->role === 'editor'){
             $post = Post::with('category')->with('author')->where('id',$id)->first();
         }else{
             $post = Post::with('category')->with('author')->where('id',$id)->where('author_id', $user->id)->first();
@@ -212,7 +212,7 @@ class PostController extends Controller
     public function destroy(Request $request, string $id)
     {
         $user = $request->user();
-        if($user->role === 'admin'){
+        if($user->role === 'admin' || $user->role === 'editor'){
             $post = Post::with('category')->with('author')->where('id',$id)->first();
         }else{
             $post = Post::with('category')->with('author')->where('id',$id)->where('author_id', $user->id)->first();
@@ -263,7 +263,7 @@ class PostController extends Controller
             'ids.*' => 'integer|exists:posts,id',
         ]);
 
-        if($user->role === 'admin'){
+        if($user->role === 'admin' || $user->role === 'editor'){
             $posts = Post::whereIn('id',$request->ids)->get();
             
         }else{

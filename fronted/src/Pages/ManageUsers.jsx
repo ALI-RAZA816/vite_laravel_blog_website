@@ -121,10 +121,6 @@ const ManageUsers = () => {
           </p>
         </div>
         <div className="d-flex align-items-center gap-3">
-          <button className={`d-flex align-items-center ${styles.exportBtn}`}>
-            <BsDownload className="me-2" />
-            Export List
-          </button>
           {loggedUser.role !== 'editor' && <Link to="/admin-panel/users/add-new-user"><button className={`d-flex align-items-center ${styles.addBtn}`}>
             <BsPersonPlusFill className="me-2" />
             Add New User

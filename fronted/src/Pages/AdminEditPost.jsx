@@ -51,7 +51,7 @@ const AdminEditPost = ({placeholder}) => {
 
   const navigate = useNavigate();
   const {id} = useParams();
-  const {allCat} = useContext(AppContext);
+  const {allCat, setStatusCode} = useContext(AppContext);
   const config = useMemo(
     () => ({
       readonly: false,
@@ -137,7 +137,7 @@ const AdminEditPost = ({placeholder}) => {
   // fetch single post
   const editHandler = async ()=>{
     try{
-      const {ok, data} = await apiGet(`posts/${id}`);
+      const {ok, status, data} = await apiGet(`posts/${id}`);
       if(ok){
         setFormData({
           id:data.post.id,
@@ -148,6 +148,9 @@ const AdminEditPost = ({placeholder}) => {
         data.post.published === 'published' ? setIsPublished(true) : setIsPublished(false);
         setTags(JSON.parse(data.post.tags));
         setContent(data.post.description);
+      }else{
+        setStatusCode(status);
+        navigate('/aunauthorized');
       }
     }catch(error){
       console.log(error);

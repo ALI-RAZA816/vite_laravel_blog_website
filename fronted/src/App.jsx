@@ -79,13 +79,13 @@ function App() {
                   </Route>
                     <Route element={<RouteProtected allowRoles={["admin", "editor"]}/>}>
                       <Route path="users" element={<AdminHeader/>}>
-                      <Route index element={<ManageUsers/>}/>
-                      <Route element={<RouteProtected allowRoles={["admin"]}/>}>
-                        <Route path="edituser/:id" element={<EditUser/>}/>
-                      </Route>
-                    </Route>
-                    <Route element={<RouteProtected allowRoles={["admin"]}/>}>
-                      <Route path="add-new-user" element={<AddNewUser/>}/>
+                        <Route index element={<ManageUsers/>}/>
+                        <Route element={<RouteProtected allowRoles={["admin"]}/>}>
+                          <Route path="edituser/:id" element={<EditUser/>}/>
+                        </Route>
+                        <Route element={<RouteProtected allowRoles={["admin"]}/>}>
+                          <Route path="add-new-user" element={<AddNewUser/>}/>
+                        </Route>
                     </Route>
                   </Route>
                     <Route element={<RouteProtected allowRoles={["admin"]}/>}>

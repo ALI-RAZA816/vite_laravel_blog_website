@@ -13,7 +13,7 @@ export const apiGet = async (path)=>{
         }
     });
     const data = await response.json();
-    return {ok:response.ok, data}
+    return {ok:response.ok, status:response.status, data}
 }
 
 export const apiSend = async (path, method = 'POST', body = null)=>{
