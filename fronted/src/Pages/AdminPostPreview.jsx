@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styles from "../assets/AdminPostPreview.module.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { apiUrl, baseUrl } from "../Http/Http";
 import {apiGet} from '../services/apiClient';
+import { AppContext } from "../Context/AppContext";
 
 const AdminPostPreview = () => {
 
   const {id} = useParams();
+  const {setStatusCode} = useContext(AppContext);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     category:'',
     title:'',
@@ -22,7 +25,7 @@ const AdminPostPreview = () => {
   // fetch single post
   const editHandler = async ()=>{
     try{
-      const {ok, data} = await apiGet(`posts/${id}`);
+      const {ok, status, data} = await apiGet(`posts/${id}`);
       if(ok){
         setFormData({
           category:data.post.category.name,
@@ -35,6 +38,9 @@ const AdminPostPreview = () => {
           tags:JSON.parse(data.post.tags),
           description:data.post.description
         });
+      }else{
+        setStatusCode(status);
+        navigate('/unauthorized');
       }
     }catch(error){
       console.log(error);

@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiUrl } from "../Http/Http";
 import { apiSend } from "../services/apiClient.js";
+import { AppContext } from "./AppContext.jsx";
 
 export const AuthContext = createContext();
 
@@ -11,12 +12,14 @@ const AuthContextProvider = ({ children }) => {
   // spinner + fields disable (login aur register dono ke liye)
   const [showLoadingSpinner, setShowLoadingSpinner] = useState(false);
   const [disabledField, setDisabledField] = useState(false);
+  const {setStatusCode} = useContext(AppContext);
 
   // request shuru / khatam hone par ek hi jagah se control
   const startRequest = () => {
     setShowLoadingSpinner(true);
     setDisabledField(true);
   };
+
   const stopRequest = () => {
     setShowLoadingSpinner(false);
     setDisabledField(false);
@@ -49,7 +52,7 @@ const AuthContextProvider = ({ children }) => {
     startRequest();
 
     try {
-      const {ok, data} = await apiSend('login', 'POST', loginData);
+      const {ok, status, data} = await apiSend('login', 'POST', loginData);
 
       if (!ok) {
         const error = data.errors;
@@ -64,6 +67,11 @@ const AuthContextProvider = ({ children }) => {
           setLoginErr({ emailErr: data.message, passwordErr: "" });
         }
         return;
+      }
+
+      if(status){
+        setStatusCode(status);
+        navigate('/aunauthorized');
       }
 
       if (data.status === 401) {

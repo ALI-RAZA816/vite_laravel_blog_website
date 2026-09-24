@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import styles from "../assets/BlogPost.module.css";
 import { useContext, useEffect, useState } from "react";
 import { apiUrl, baseUrl } from "../Http/Http";
@@ -13,8 +13,9 @@ import LoadingSpinner from "../components/LoadingSpinner.jsx";
 export default function BlogPost() {
 
   const {id} = useParams();
+  const navigate = useNavigate();
   const {loggedUser} = useUser();
-  const {setRefresh} = useContext(AppContext);
+  const {setRefresh, setStatusCode} = useContext(AppContext);
   const {refresh} = useContext(AppContext);
   const [active, setActive] = useState(null);
   const [activeEdit, setActiveEdit] = useState(null);
@@ -27,10 +28,13 @@ export default function BlogPost() {
   const fetchComment = async (id)=>{
 
     try{
-      const {ok, data} = await apiGet(`public-comments/${id}`);
+      const {ok, status, data} = await apiGet(`public-comments/${id}`);
 
       if(ok){
         setEditComment(data.comment.comment);
+      }else{
+        setStatusCode(status);
+        navigate('/aunauthorized');
       }
 
     }catch(error){
@@ -43,10 +47,13 @@ export default function BlogPost() {
     const token = localStorage.getItem('token');
     try{
 
-      const {ok, data} = await apiSend(`public-comments/${id}`, 'PUT', {comment:EditComment});
+      const {ok, status, data} = await apiSend(`public-comments/${id}`, 'PUT', {comment:EditComment});
       if(ok){
         setRefresh(prev => prev + 1);
         setActiveEdit(null);
+      }else{
+        setStatusCode(status);
+        navigate('/aunauthorized');
       }
     }catch(error){
       console.log(error);
@@ -133,11 +140,14 @@ export default function BlogPost() {
         post_id:id
     }
     try{
-      const {ok, data} = await apiSend('public-comments','POST',payload);
+      const {ok, status, data} = await apiSend('public-comments','POST',payload);
       if(ok){
         setRefresh(prev => prev + 1);
         setComment('');
         setCommentErr('');
+      }else{
+        setStatusCode(status);
+        navigate('/aunauthorized');
       }
 
     }catch(error){
@@ -148,10 +158,13 @@ export default function BlogPost() {
   const deleteComment = async (id)=>{
 
     try{
-      const {ok, data} = await apiSend(`public-comments/${id}`,'DELETE');
+      const {ok, status, data} = await apiSend(`public-comments/${id}`,'DELETE');
       if(ok){
         setRefresh(prev => prev + 1);
         setActive(null);
+      }else{
+        setStatusCode(status);
+        navigate('/aunauthorized');
       }
 
     }catch(error){

@@ -4,11 +4,13 @@ import { AppContext } from "../Context/AppContext";
 import { apiUrl } from "../Http/Http";
 import { apiSend } from "../services/apiClient.js";
 import { useUser } from "../Context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const DeleteModel = () => {
 
+  const navigate = useNavigate();
   const {DeleteModelHandler} = useContext(AppContext);
-  const {deletId} = useContext(AppContext);
+  const {deletId, setStatusCode} = useContext(AppContext);
   const {deleteModel} = useContext(AppContext);
   const {setDeleteModel} = useContext(AppContext);
   const {setRefresh} = useContext(AppContext);
@@ -18,11 +20,14 @@ const DeleteModel = () => {
   const deleteUser = async (delete_id)=>{
     const token = localStorage.getItem('token');
     try{
-      const {ok, data} = await apiSend(`users/${delete_id}`,'DELETE');
+      const {ok, status, data} = await apiSend(`users/${delete_id}`,'DELETE');
       if(ok){
         setDeleteModel(!deleteModel);
         setConfirmDelete(false);
         triggerUserRefresh();
+      }else{
+        setStatusCode(status);
+        navigate('/aunauthorized');
       }
     }catch(error){
       console.log(error);

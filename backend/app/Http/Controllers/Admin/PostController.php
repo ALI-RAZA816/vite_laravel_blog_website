@@ -89,7 +89,7 @@ class PostController extends Controller
 
         Category::where('id', $request->category)->increment('post_count');
 
-        $total = Post::with('category')->with('author')->whereMonth('created_at',now()->month)->whereYear('created_at', now()->year)->count();
+        $total = Post::with(['category','author'])->whereMonth('created_at',now()->month)->whereYear('created_at', now()->year)->count();
 
         MonthlyReport::updateOrCreate([
             'user_id'=>Auth::id(),
@@ -111,9 +111,9 @@ class PostController extends Controller
     {
         $user = $request->user();
         if($user->role === 'admin' || $user->role === 'editor'){
-            $post = Post::with('category')->with('author')->where('id',$id)->first();
+            $post = Post::with(['category','author'])->where('id',$id)->first();
         }else{
-            $post = Post::with('category')->with('author')->where('id',$id)->where('author_id', $user->id)->first();
+            $post = Post::with(['category','author'])->where('id',$id)->where('author_id', $user->id)->first();
         }
 
        if(!$post){
@@ -153,9 +153,9 @@ class PostController extends Controller
         ]);
 
         if($user->role === 'admin' || $user->role === 'editor'){
-            $post = Post::with('category')->with('author')->where('id',$id)->first();
+            $post = Post::with(['category','author'])->where('id',$id)->first();
         }else{
-            $post = Post::with('category')->with('author')->where('id',$id)->where('author_id', $user->id)->first();
+            $post = Post::with(['category','author'])->where('id',$id)->where('author_id', $user->id)->first();
         }
 
         if(!$post){
@@ -213,9 +213,9 @@ class PostController extends Controller
     {
         $user = $request->user();
         if($user->role === 'admin' || $user->role === 'editor'){
-            $post = Post::with('category')->with('author')->where('id',$id)->first();
+            $post = Post::with(['category','author'])->where('id',$id)->first();
         }else{
-            $post = Post::with('category')->with('author')->where('id',$id)->where('author_id', $user->id)->first();
+            $post = Post::with(['category','author'])->where('id',$id)->where('author_id', $user->id)->first();
         }
         $categoryId = $post->category_id;
          if(!$post){
@@ -244,12 +244,17 @@ class PostController extends Controller
     public function searchPost(Request $request){
         $search_term = $request->query('query');
         if($search_term === 'all'){
-            $search_post = Post::with('category')->with('author')->latest()->paginate(10);
+            $search_post = Post::with(['category','author'])->latest()->paginate(10);
             return response()->json([
                 'posts'=>$search_post
             ]);
         }
-        $search_post = Post::with('category')->with('author')->where('title','LIKE','%'. $search_term . '%')->orWhere("category_id", '=', $search_term)->orWhere('published','=',$search_term)->latest()->paginate(10);
+        // $search_post = Post::with(['category','author'])->where('title','LIKE','%'. $search_term . '%')->orWhere("category_id", '=', $search_term)->orWhere('published','=',$search_term)->latest()->paginate(10);
+        $search_post = Post::with(['category','author'])->where(function($query) use ($search_term){
+            $query->where('title', 'LIKE', '%' . $search_term . '%')
+              ->orWhere('category_id', $search_term)
+              ->orWhere('published', $search_term);
+        })->latest()->paginate(10);
         return response()->json([
             'posts'=>$search_post
         ]);

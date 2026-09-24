@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   FiSearch,
   FiBell,
@@ -15,11 +15,13 @@ import { useUser } from "../Context/UserContext";
 import { LuUserRound } from "react-icons/lu";
 import { apiUrl, baseUrl } from "../Http/Http";
 import { apiGet, apiUpload } from '../services/apiClient.js';
+import { AppContext } from "../Context/AppContext.jsx";
 
 
 const EditUser = () => {
 
     const {id} = useParams();
+    const {setStatusCode} = useContext(AppContext);
     const navigate = useNavigate();
     const {triggerUserRefresh} = useUser();
     const [imageErr, setImageErr]= useState(null);
@@ -61,7 +63,7 @@ const EditUser = () => {
     const viewSingleUser = async (id)=>{
         try{
 
-            const {ok, data} = await apiGet(`users/${id}`);
+            const {ok, status, data} = await apiGet(`users/${id}`);
             
             if(ok){
                 if(data.user){
@@ -77,6 +79,9 @@ const EditUser = () => {
                         image:user.image
                     })
                 }
+            }else{
+                setStatusCode(status);
+                navigate('/aunauthorized');
             }
         }catch(error){
             console.log(error);
@@ -104,7 +109,7 @@ const EditUser = () => {
             form.append('image', formData.image);
         }
         try{
-            const {ok, data} = await apiUpload(`users/${formData.id}`, 'PUT', form);
+            const {ok, status, data} = await apiUpload(`users/${formData.id}`, 'PUT', form);
             if(ok){
                 if(data.status === 200){
                     triggerUserRefresh();
@@ -112,6 +117,9 @@ const EditUser = () => {
                 }
             }else if(data.status === 422){
                 setImageErr(data?.errors?.image[0]);
+            }else{
+                setStatusCode(status);
+                navigate('/aunauthorized');
             }
 
         }catch(error){
