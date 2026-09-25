@@ -1,13 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { apiUrl } from "../Http/Http";
 import { apiGet } from "../services/apiClient.js";
 
 export const MonthlyReportContext = createContext();
 
 const MonthlyReportContextProvider = ({ children }) => {
 
-  // AdminPosts.jsx ke "Content Velocity" bar chart ke liye data.
-  // { month: "Jan 2026", total: 12 } jaisi shape me, sirf last 12 mahine.
   const [monthlyReport, setMonthlyReport] = useState([]);
 
   const fetchMonthlyReport = async () => {
@@ -49,10 +46,9 @@ const MonthlyReportContextProvider = ({ children }) => {
   );
 };
 
-// chhota hook taake har page me useContext likhna na pade
 export const useMonthlyReport = () => {
   const ctx = useContext(MonthlyReportContext);
-  if (!ctx) throw new Error("useMonthlyReport ko <MonthlyReportContextProvider> ke andar use karein.");
+  if (!ctx) throw new Error(" Use the useMonthlyReport in <MonthlyReportContextProvider>");
   return ctx;
 };
 

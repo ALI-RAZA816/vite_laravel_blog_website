@@ -1,10 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { apiUrl } from "../Http/Http";
 import {apiGet, apiUpload, apiSend} from '../services/apiClient.js';
 export const PublicSetting = createContext();
 
 const PublicSettingContext = ({ children }) => {
-  // apna khud ka refresh signal - sirf setting data hi dobara fetch hota hai
   const [settingRefresh, setSettingRefresh] = useState(0);
   const [spinnerLoader, setSpinnerLoader] = useState(false);
   const triggerSettingRefresh = () => setSettingRefresh((prev) => prev + 1);
@@ -131,10 +129,9 @@ const PublicSettingContext = ({ children }) => {
   );
 };
 
-// chhota hook taake har page me useContext likhna na pade
 export const usePublicSetting = () => {
   const ctx = useContext(PublicSetting);
-  if (!ctx) throw new Error("useSetting ko <SettingContextProvider> ke andar use karein.");
+  if (!ctx) throw new Error(" Use the usePublicSetting in <PublicSettingContextProvider>");
   return ctx;
 };
 

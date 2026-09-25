@@ -1,8 +1,5 @@
 import React from 'react'
 import styles from '../assets/Footer.module.css'
-import { FaEarthAfrica } from "react-icons/fa6";
-import { FiCamera } from "react-icons/fi";
-import { MdOutlineMail } from "react-icons/md";
 import { usePublicSetting } from '../Context/PublicSettingContext';
 import { FaFacebookF } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";

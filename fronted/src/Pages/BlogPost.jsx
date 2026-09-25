@@ -1,7 +1,7 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styles from "../assets/BlogPost.module.css";
 import { useContext, useEffect, useState } from "react";
-import { apiUrl, baseUrl } from "../Http/Http";
+import { baseUrl } from "../Http/Http";
 import { AppContext } from "../Context/AppContext";
 import { IoEllipsisVerticalSharp } from "react-icons/io5";
 import { MdOutlineEdit } from "react-icons/md";

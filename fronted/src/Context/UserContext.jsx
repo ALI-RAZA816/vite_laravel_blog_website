@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { apiUrl } from "../Http/Http";
 import {apiGet, apiSend, emptyPagination, toPagination} from '../services/apiClient.js'
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "./AppContext.jsx";
@@ -7,7 +6,6 @@ import { AppContext } from "./AppContext.jsx";
 export const UserContext = createContext();
 
 const UserContextProvider = ({ children }) => {
-  // apna khud ka refresh signal - sirf users data hi dobara fetch hota hai
   const [userRefresh, setUserRefresh] = useState(0);
   const [spinnerLoader, setSpinnerLoader] = useState(false);
   const triggerUserRefresh = () => setUserRefresh((prev) => prev + 1);
@@ -69,7 +67,6 @@ const UserContextProvider = ({ children }) => {
   //     SEARCH / FILTER
   // =======================
   const searchUsers = async (searchTerm) => {
-    const token = localStorage.getItem('token');
     try {
       const {ok, status, data} = await apiSend(`search?query=${searchTerm}&page=${currentPage}`,'POST');
       
@@ -108,10 +105,9 @@ const UserContextProvider = ({ children }) => {
   );
 };
 
-// chhota hook taake har page me useContext likhna na pade
 export const useUser = () => {
   const ctx = useContext(UserContext);
-  if (!ctx) throw new Error("useUser ko <UserContextProvider> ke andar use karein.");
+  if (!ctx) throw new Error(" Use the useUser in <UserContextProvider>");
   return ctx;
 };
 

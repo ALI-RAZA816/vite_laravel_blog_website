@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
 import styles from "../assets/DeleteModel.module.css";
 import { AppContext } from "../Context/AppContext";
-import { apiUrl } from "../Http/Http";
 import { apiSend } from "../services/apiClient.js";
 import { useUser } from "../Context/UserContext";
 import { useNavigate } from "react-router-dom";
@@ -13,12 +12,10 @@ const DeleteModel = () => {
   const {deletId, setStatusCode} = useContext(AppContext);
   const {deleteModel} = useContext(AppContext);
   const {setDeleteModel} = useContext(AppContext);
-  const {setRefresh} = useContext(AppContext);
   const {triggerUserRefresh} = useUser();
-  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [setConfirmDelete] = useState(false);
 
   const deleteUser = async (delete_id)=>{
-    const token = localStorage.getItem('token');
     try{
       const {ok, status, data} = await apiSend(`users/${delete_id}`,'DELETE');
       if(ok){

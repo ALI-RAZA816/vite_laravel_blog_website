@@ -14,7 +14,7 @@ import { usePost } from "../Context/PostContext";
 import styles from "../assets/AdminPosts.module.css";
 import { Link } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";
-import { apiUrl, baseUrl } from "../Http/Http";
+import { baseUrl } from "../Http/Http";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -44,7 +44,6 @@ const AdminPosts = () => {
     currentPostPage,
     setCurrentPostPage,
     posts,
-    setPosts,
     deletePost,
     multiDeletePost,
     searchPosts,

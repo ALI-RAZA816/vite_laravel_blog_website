@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import styles from "../assets/About.module.css";
 import { IoCameraOutline } from "react-icons/io5";
 import { GoSearch } from "react-icons/go";

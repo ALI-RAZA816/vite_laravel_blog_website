@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useState } from "react";
 import {BsFileEarmarkTextFill, BsChatSquareTextFill, BsPeopleFill, BsEyeFill, BsPlusLg } from "react-icons/bs";
 import { Line } from 'react-chartjs-2';
 import {
@@ -24,10 +24,8 @@ ChartJS.register(
 import { FaEye } from "react-icons/fa";
 import styles from "../assets/DashboardContent.module.css";
 import {Link} from 'react-router-dom';
-import { AppContext } from "../Context/AppContext";
 import { useComment } from "../Context/CommentContext";
 import { usePost } from "../Context/PostContext";
-import { useUser } from "../Context/UserContext";
 import { baseUrl } from "../Http/Http";
 import Analytics from "../components/Analytics";
 import RecentComments from "../components/RecentComments";

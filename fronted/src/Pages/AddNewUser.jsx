@@ -1,15 +1,9 @@
 import React, { useState } from "react";
 import styles from "../assets/AddNewUser.module.css";
-import { apiUrl } from "../Http/Http";
 import { apiUpload } from "../services/apiClient.js";
 import { useUser } from "../Context/UserContext";
 import { useNavigate } from "react-router-dom";
 
-/**
- * AddNewUser
- * Right-hand content area of the "Add New User" admin screen.
- * (Sidebar is intentionally excluded — this component starts at the top header.)
- */
 const AddNewUser = () => {
 
 

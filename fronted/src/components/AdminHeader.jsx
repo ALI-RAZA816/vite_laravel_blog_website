@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { BsSearch, BsBell, BsList } from "react-icons/bs";
+import { BsBell, BsList } from "react-icons/bs";
 import styles from "../assets/AdminHeader.module.css";
 import { Outlet } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";

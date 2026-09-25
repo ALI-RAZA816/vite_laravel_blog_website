@@ -7,7 +7,6 @@ import {
   BsDiagram3Fill,
   BsChatSquareTextFill,
   BsPeopleFill,
-  BsImages,
   BsGearFill,
   BsBoxArrowRight,
   BsXLg,

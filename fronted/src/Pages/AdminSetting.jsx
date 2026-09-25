@@ -1,4 +1,3 @@
-import React from "react";
 import {
   BsSave2Fill,
   BsPalette2,
@@ -12,7 +11,7 @@ import {
   BsShieldFillCheck,
 } from "react-icons/bs";
 import styles from "../assets/AdminSetting.module.css";
-import { apiUrl, baseUrl } from "../Http/Http";
+import { baseUrl } from "../Http/Http";
 import { useSetting } from "../Context/SettingContext";
 import LoadingSpinner from "../components/LoadingSpinner";
 

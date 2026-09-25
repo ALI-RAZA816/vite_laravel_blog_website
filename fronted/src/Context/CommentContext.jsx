@@ -1,11 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { apiUrl } from "../Http/Http";
 import { apiGet , apiSend, emptyPagination, toPagination } from "../services/apiClient.js";
 
 export const CommentContext = createContext();
 
 const CommentContextProvider = ({ children }) => {
-  // apna khud ka refresh signal - sirf comment data hi dobara fetch hota hai
   const [commentRefresh, setCommentRefresh] = useState(0);
   const [spinnerLoader, setSpinnerLoader] = useState(false);
   const triggerCommentRefresh = () => setCommentRefresh((prev) => prev + 1);
@@ -54,7 +52,6 @@ const CommentContextProvider = ({ children }) => {
   //     STATUS CHANGE
   // =======================
   const commentStatus = async (name, id) => {
-    const token = localStorage.getItem('token');
     try {
       const {ok, data} = await apiSend(`comments/${id}`, 'PUT', {status:name});
       if (ok) {
@@ -69,7 +66,6 @@ const CommentContextProvider = ({ children }) => {
   //        DELETE
   // =======================
   const Deletecomment = async (id) => {
-    const token = localStorage.getItem('token');
     try {
       const {ok, data} = await apiSend(`comments/${id}`,'DELETE');
 
@@ -126,7 +122,6 @@ const CommentContextProvider = ({ children }) => {
   );
 };
 
-// chhota hook taake har page me useContext likhna na pade
 export const useComment = () => {
   const ctx = useContext(CommentContext);
   if (!ctx) throw new Error("useComment ko <CommentContextProvider> ke andar use karein.");

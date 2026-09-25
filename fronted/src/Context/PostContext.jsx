@@ -1,18 +1,16 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { apiUrl } from "../Http/Http";
 import { apiGet, apiSend, emptyPagination, toPagination } from "../services/apiClient.js";
 
 export const PostContext = createContext();
 
 const PostContextProvider = ({ children }) => {
-  // apna khud ka refresh signal - sirf posts data hi dobara fetch hota hai
   const [postRefresh, setPostRefresh] = useState(0);
   const triggerPostRefresh = () => setPostRefresh((prev) => prev + 1);
 
   // =======================
   //     LIST + STATS
   // =======================
-  const [posts, setPosts] = useState([]); // current page wali list
+  const [posts, setPosts] = useState([]);
   const [spinnerLoader, setSpinnerLoader] = useState(false);
   const [totalViews, setTotalViews] = useState(0);
   const [avgViews, setAvgViews] = useState(0);
@@ -33,7 +31,6 @@ const PostContextProvider = ({ children }) => {
         setPosts(data.posts.data);
         setPostPagination(toPagination(data.posts));
 
-        // { year, month, monthly_views } ko chart-friendly { month, total } me badalna
         const formatted = (data?.last_month ?? []).map((item) => {
           const date = new Date(item.year, item.month - 1);
           return {
@@ -80,7 +77,6 @@ const PostContextProvider = ({ children }) => {
   // =======================
   const multiDeletePost = async (event, ids) => {
     event.preventDefault();
-    const token = localStorage.getItem('token');
     try {
       const {ok, data} = await apiSend(`multi-delete-post`,'POST', {ids});
       if (ok) {
@@ -131,10 +127,9 @@ const PostContextProvider = ({ children }) => {
   );
 };
 
-// chhota hook taake har page me useContext likhna na pade
 export const usePost = () => {
   const ctx = useContext(PostContext);
-  if (!ctx) throw new Error("usePost ko <PostContextProvider> ke andar use karein.");
+  if (!ctx) throw new Error(" Use the usePost in <PostContextProvider>");
   return ctx;
 };
 

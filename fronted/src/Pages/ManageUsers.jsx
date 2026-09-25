@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useRef } from "react";
-import { BsDownload, BsPersonPlusFill, BsPeopleFill, BsShieldFillCheck, BsGraphUpArrow, BsSlashCircleFill, BsFilter,
-  BsThreeDotsVertical,
+import React, { useContext,useRef } from "react";
+import { BsPersonPlusFill, BsPeopleFill, BsShieldFillCheck, BsGraphUpArrow, BsSlashCircleFill,
   BsChevronLeft,
   BsChevronRight,
 } from "react-icons/bs";
@@ -9,7 +8,7 @@ import { MdOutlineModeEdit } from "react-icons/md";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 import { AppContext } from "../Context/AppContext";
 import { useUser } from "../Context/UserContext";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link} from "react-router-dom";
 import { baseUrl } from "../Http/Http";
 import NoUsers from "../components/NoUsers";
 import LoadingSpinner from "../components/LoadingSpinner";

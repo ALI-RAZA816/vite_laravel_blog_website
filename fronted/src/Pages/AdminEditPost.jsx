@@ -3,11 +3,9 @@ import {
   BsXLg,
 } from "react-icons/bs";
 import styles from "../assets/AddAdminPost.module.css";
-import { CiImageOn } from "react-icons/ci";
 const initialTags = ["Slow Living", "Wellness", "Rituals"];
 import JoditEditor from 'jodit-react';
 import { AppContext } from "../Context/AppContext";
-import { apiUrl, baseUrl } from "../Http/Http";
 import { useNavigate, useParams } from "react-router-dom";
 import {apiGet, apiUpload} from '../services/apiClient';
 const ImageIcon = ({ size = 100, color = "#808080" }) => (
@@ -160,7 +158,6 @@ const AdminEditPost = ({placeholder}) => {
   const updatePost = async (event)=>{
       event.preventDefault();
       const publish = isPublished === true ? 'published' : 'draft';
-      const token = localStorage.getItem('token');
   
   
       const form = new FormData();

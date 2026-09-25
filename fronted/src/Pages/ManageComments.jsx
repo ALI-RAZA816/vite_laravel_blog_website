@@ -1,5 +1,5 @@
 import React from "react";
-import { BsChevronLeft, BsChevronRight, BsPersonFill } from "react-icons/bs";
+import { BsChevronLeft, BsChevronRight} from "react-icons/bs";
 import styles from "../assets/ManageComments.module.css";
 import { baseUrl } from "../Http/Http";
 import { useComment } from "../Context/CommentContext";

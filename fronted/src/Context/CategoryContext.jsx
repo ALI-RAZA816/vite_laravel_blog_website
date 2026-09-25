@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { apiUrl } from "../Http/Http";
 import { apiGet } from "../services/apiClient.js";
 import { apiSend, emptyPagination, toPagination } from "../services/apiClient.js";
 
@@ -80,7 +79,6 @@ const CategoryContextProvider = ({ children }) => {
     }
 
     const payload = { ...newCatData, icon_name: newIcon };
-    const token = localStorage.getItem('token');
 
     try {
 
@@ -127,7 +125,6 @@ const CategoryContextProvider = ({ children }) => {
 
   // ek category ko edit modal me load karna
   const viewCategory = async (cat_id) => {
-    const token = localStorage.getItem('token');
     try {
       const {ok, data} = await apiGet(`categories/${cat_id}`);
 
@@ -147,7 +144,6 @@ const CategoryContextProvider = ({ children }) => {
 
   const updateCategory = async (event) => {
     event.preventDefault();
-    const token = localStorage.getItem('token');
     const payload = { ...editCategory, icon: selectedIcon };
 
     try {

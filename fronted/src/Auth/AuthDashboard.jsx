@@ -2,14 +2,13 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Navigate, Outlet, useNavigate} from 'react-router-dom';
 import { apiUrl } from '../Http/Http';
 import { AppContext } from '../Context/AppContext';
-import { useUser } from '../Context/UserContext';
 
 export default function AuthDashboard() {
     const token = localStorage.getItem('token');
     const {setStatusCode} = useContext(AppContext);
     const navigate = useNavigate();
     const {authorized, setAuthorized} = useContext(AppContext);
-    const [loggedUser, setLoggedUser] = useState(null);
+    const [setLoggedUser] = useState(null);
 
     useEffect(()=>{
 

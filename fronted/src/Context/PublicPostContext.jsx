@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { apiUrl } from "../Http/Http";
 import { apiGet, emptyPagination, toPagination } from "../services/apiClient.js";
 
 export const PublicPostContext = createContext();
@@ -90,10 +89,9 @@ const PublicPostContextProvider = ({ children }) => {
   );
 };
 
-// chhota hook taake har page me useContext likhna na pade
 export const usePublicPost = () => {
   const ctx = useContext(PublicPostContext);
-  if (!ctx) throw new Error("usePublicPost ko <PublicPostContextProvider> ke andar use karein.");
+  if (!ctx) throw new Error(" Use the usePublicPost in <PublicPostContextProvider>");
   return ctx;
 };
 

@@ -1,6 +1,5 @@
 import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apiUrl } from "../Http/Http";
 import { apiSend } from "../services/apiClient.js";
 import { AppContext } from "./AppContext.jsx";
 
@@ -184,7 +183,7 @@ const AuthContextProvider = ({ children }) => {
     if (event) event.preventDefault();
 
     try {
-      const {ok, data} = await apiSend('logout','POST');
+      const {ok, status, data} = await apiSend('logout','POST');
 
     } catch (error) {
       console.log("logout:", error);

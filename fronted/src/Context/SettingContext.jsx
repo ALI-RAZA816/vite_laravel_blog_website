@@ -1,10 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { apiUrl } from "../Http/Http";
 import {apiGet, apiUpload, apiSend} from '../services/apiClient.js';
 export const SettingContext = createContext();
 
 const SettingContextProvider = ({ children }) => {
-  // apna khud ka refresh signal - sirf setting data hi dobara fetch hota hai
   const [settingRefresh, setSettingRefresh] = useState(0);
   const [spinnerLoader, setSpinnerLoader] = useState(false);
   const triggerSettingRefresh = () => setSettingRefresh((prev) => prev + 1);
@@ -98,7 +96,6 @@ const SettingContextProvider = ({ children }) => {
   // remove logo
   const logoHandler = async (event) => {
     event.preventDefault();
-    const token = localStorage.getItem('token');
     try {
       const {ok, data} = apiSend('logo','DELETE');
       if (ok) {
@@ -131,10 +128,9 @@ const SettingContextProvider = ({ children }) => {
   );
 };
 
-// chhota hook taake har page me useContext likhna na pade
 export const useSetting = () => {
   const ctx = useContext(SettingContext);
-  if (!ctx) throw new Error("useSetting ko <SettingContextProvider> ke andar use karein.");
+  if (!ctx) throw new Error(" Use the useSetting in <SettingContextProvider>");
   return ctx;
 };
 

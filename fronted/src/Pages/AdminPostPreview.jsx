@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import styles from "../assets/AdminPostPreview.module.css";
 import { useNavigate, useParams } from "react-router-dom";
-import { apiUrl, baseUrl } from "../Http/Http";
 import {apiGet} from '../services/apiClient';
 import { AppContext } from "../Context/AppContext";
 

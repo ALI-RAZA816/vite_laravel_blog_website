@@ -1,19 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
-  FiSearch,
-  FiBell,
   FiSave,
   FiRotateCcw,
-  FiUser,
-  FiChevronDown,
 } from "react-icons/fi";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "../assets/EditUser.module.css";
-import { Outlet, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useUser } from "../Context/UserContext";
 import { LuUserRound } from "react-icons/lu";
-import { apiUrl, baseUrl } from "../Http/Http";
+import { baseUrl } from "../Http/Http";
 import { apiGet, apiUpload } from '../services/apiClient.js';
 import { AppContext } from "../Context/AppContext.jsx";
 
@@ -96,7 +92,6 @@ const EditUser = () => {
     // update user
     const updateUser = async (event)=>{
         event.preventDefault();
-        const token = localStorage.getItem('token');
         const form = new FormData();
         const accountStatus = accountActive === true ? 'active' : 'blocked';
         form.append('name',formData.name);
