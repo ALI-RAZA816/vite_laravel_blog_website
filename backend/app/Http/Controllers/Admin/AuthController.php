@@ -2,25 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\UserRegistered;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreUserRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use App\Models\User;
-use App\Events\UserRegistered;
 
 class AuthController extends Controller
 {
-    public function createAccount(Request $request){
+    public function createAccount(Request $request, StoreUserRequest $req){
         try{
-            $request->validate([
-                'name'=>'required|string|max:50',
-                'emailaddress'=>'required|email',
-                'password'=>'required|min:5|confirmed',
-                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:3072',
-            ],[
-                'image'=>'File type must be png,jpeg,jpg or 3MB'
-            ]);
 
             $imageName = null;
             if($request->hasFile('image')){

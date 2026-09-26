@@ -2,6 +2,14 @@
 import {apiUrl} from '../Http/Http';
 
 
+// export const showToas = ()=>{
+
+//     const toastContainer = document.getElementById('toast-container');
+    
+
+// }
+
+
 export const apiGet = async (path)=>{
     const token = localStorage.getItem('token');
     const response = await fetch(`${apiUrl}/${path}`,{

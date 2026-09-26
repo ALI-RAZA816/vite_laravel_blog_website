@@ -87,6 +87,7 @@ const UserContextProvider = ({ children }) => {
       loggedUser,
       totalUsers,
       allUsers,
+      setLoggedUser,
       setAllUsers,
       Blocked,
       thisWeek,

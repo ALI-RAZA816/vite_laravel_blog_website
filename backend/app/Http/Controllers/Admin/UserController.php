@@ -47,14 +47,6 @@ class UserController extends Controller
     public function store(Request $request)
     {
         try{
-            $request->validate([
-                'name'=>'required|string|max:50',
-                'emailaddress'=>'required|email',
-                'password'=>'required|min:5|confirmed',
-                'image' => 'nullable|image|mimes:jpg,jpeg,png|max:3072',
-            ],[
-                'image'=>'File type must be png,jpeg,jpg or 3MB'
-            ]);
 
             $imageName = null;
             if($request->hasFile('image')){

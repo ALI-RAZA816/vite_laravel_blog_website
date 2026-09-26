@@ -243,18 +243,16 @@ class PostController extends Controller
 
     public function searchPost(Request $request){
         $search_term = $request->query('query');
+        $user = $request->user();
         if($search_term === 'all'){
             $search_post = Post::with(['category','author'])->latest()->paginate(10);
-            return response()->json([
-                'posts'=>$search_post
-            ]);
+        }else{
+            $search_post = Post::with(['category','author'])->where(function($query) use ($search_term){
+                $query->where('title', 'LIKE', '%' . $search_term . '%')
+                  ->orWhere('category_id', $search_term)
+                  ->orWhere('published', $search_term);
+            })->latest()->paginate(10);
         }
-        // $search_post = Post::with(['category','author'])->where('title','LIKE','%'. $search_term . '%')->orWhere("category_id", '=', $search_term)->orWhere('published','=',$search_term)->latest()->paginate(10);
-        $search_post = Post::with(['category','author'])->where(function($query) use ($search_term){
-            $query->where('title', 'LIKE', '%' . $search_term . '%')
-              ->orWhere('category_id', $search_term)
-              ->orWhere('published', $search_term);
-        })->latest()->paginate(10);
         return response()->json([
             'posts'=>$search_post
         ]);

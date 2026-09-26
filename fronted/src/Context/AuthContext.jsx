@@ -150,6 +150,7 @@ const AuthContextProvider = ({ children }) => {
 
       if (!ok) {
         const error = data.errors ?? {};
+        console.log(error);
 
         if (error.name?.[0]) {
           setRegisterErr({ ...emptyRegisterErr, nameErr: error.name[0] });
