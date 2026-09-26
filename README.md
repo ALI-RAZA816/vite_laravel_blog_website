@@ -13,7 +13,10 @@ A full-stack news/blog publishing platform built with **Laravel** (REST API) and
 
 | Dashboard | Post Management |
 |:---:|:---:|
-| ![Dashboard](https://raw.githubusercontent.com/ALI-RAZA816/vite_laravel_blog_website/6673e96e1892f39862758e2810275a36a2615961/Dashboard.png) | ![Post Management](https://raw.githubusercontent.com/ALI-RAZA816/vite_laravel_blog_website/6673e96e1892f39862758e2810275a36a2615961/Posts.png) |
+| ![Dashboard](https://raw.githubusercontent.com/ALI-RAZA816/vite_laravel_blog_website/6673e96e1892f39862758e2810275a36a2615961/Dashboard.png) | ![Post Management](https://raw.githubusercontent.com/ALI-RAZA816/vite_laravel_blog_website/6673e96e1892f39862758e2810275a36a2615961/Posts.png) | 
+| ![Category Management](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/9737042114c7538c38fea49436311ffa6f8f0bbb/Categories.png) | ![Comments Management](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/9737042114c7538c38fea49436311ffa6f8f0bbb/Comments.png) | 
+| ![User Management](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/9737042114c7538c38fea49436311ffa6f8f0bbb/Users.png) | ![Setting Management](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/9737042114c7538c38fea49436311ffa6f8f0bbb/Setting.png) | 
+
 
 
 
