@@ -21,6 +21,14 @@ A full-stack news/blog publishing platform built with **Laravel** (REST API) and
 |:---:|:---:|
 | ![User Management](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/9737042114c7538c38fea49436311ffa6f8f0bbb/Users.png) | ![Setting Management](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/9737042114c7538c38fea49436311ffa6f8f0bbb/Setting.png) | 
 
+<h3 align="center">Pulic Pages</h3>
+
+| Register Page | Login Page |
+|:---:|:---:|
+| ![Register Page](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/cf71225a7e552e6a0960c7411c5d32c0d95a5dac/Regiser%20Page.png) | ![Login Page](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/cf71225a7e552e6a0960c7411c5d32c0d95a5dac/Contact.png) | 
+| Home Page | Contact Page |
+|:---:|:---:|
+| ![Home Page](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/cf71225a7e552e6a0960c7411c5d32c0d95a5dac/HomePage.png) | ![Contact Page](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/cf71225a7e552e6a0960c7411c5d32c0d95a5dac/Contact.png) | 
 
 
 
