@@ -9,9 +9,11 @@ A full-stack news/blog publishing platform built with **Laravel** (REST API) and
 
 > Add your screenshots below by placing image files in a `screenshots/` folder in the repo and updating the paths.
 
-| Admin Dashboard |
-|
-| ![Dashboard](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/6673e96e1892f39862758e2810275a36a2615961/Dashboard.png) | ![Post Management](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/6673e96e1892f39862758e2810275a36a2615961/Posts.png) |
+<h3 align="center">Admin Dashboard</h3>
+
+| Dashboard | Post Management |
+|:---:|:---:|
+| ![Dashboard](https://raw.githubusercontent.com/ALI-RAZA816/vite_laravel_blog_website/6673e96e1892f39862758e2810275a36a2615961/Dashboard.png) | ![Post Management](https://raw.githubusercontent.com/ALI-RAZA816/vite_laravel_blog_website/6673e96e1892f39862758e2810275a36a2615961/Posts.png) |
 
 
 
