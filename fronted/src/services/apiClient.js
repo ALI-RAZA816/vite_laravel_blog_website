@@ -1,13 +1,70 @@
 
 import {apiUrl} from '../Http/Http';
 
+export const showToast = ()=>{
 
-// export const showToas = ()=>{
+    let toastContainer = document.getElementById('toast-container');
+    if(!toastContainer){
+        toastContainer = document.createElement('div');
+        toastContainer.id = 'toast-container';
+        toastContainer.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+            `;
+            
+        document.body.appendChild(toastContainer);
+    }
 
-//     const toastContainer = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = 'border-5 border-start border-success';
+    toast.style.cssText = `
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 280px;
+            max-width: 360px;
+            padding: 14px 18px;
+            background: #fff;
+            color: #333;
+            border-radius: 10px;
+            transform: translateX(100%);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transition: all .50s ease;
+    `;
+
+    toast.innerHTML = `
+        <span style="font-size: 18px;"><i class="fa-solid fa-circle-check"></i></span>
+        <span>Message</span>
+    `;
     
+    requestAnimationFrame(() => {
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateX(0)';
+    });
+    
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
 
-// }
+        setTimeout(() => {
+            toast.remove();
+
+            if (container.children.length === 0) {
+                container.remove();
+            }
+        }, 300);
+    }, 3000);
+
+
+    toastContainer.appendChild(toast);
+
+}
 
 
 export const apiGet = async (path)=>{

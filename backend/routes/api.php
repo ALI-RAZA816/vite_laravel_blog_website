@@ -37,7 +37,6 @@ Route::middleware('auth:sanctum')->group(function(){
 
     
     Route::middleware('role:admin')->group(function(){
-        // Route::post('search',[AuthController::class,'searchUser']);
         Route::apiResource('settings', SettingController::class);
         Route::post('settings', [SettingController::class, 'update']);
         Route::delete('logo', [SettingController::class, 'destroy']);

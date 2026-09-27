@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apiSend } from "../services/apiClient.js";
+import { apiSend, showToast } from "../services/apiClient.js";
 import { AppContext } from "./AppContext.jsx";
 
 export const AuthContext = createContext();
@@ -138,6 +138,8 @@ const AuthContextProvider = ({ children }) => {
 
   const registerAccount = async (event) => {
     event.preventDefault();
+    showToast()
+
     setRegisterErr(emptyRegisterErr);
 
     if (!validateRegister()) return;
