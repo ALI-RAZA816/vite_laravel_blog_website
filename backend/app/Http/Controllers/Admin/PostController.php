@@ -19,12 +19,30 @@ class PostController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
+        $search_term = $request->query('query');
         $total = Post::with(['category','author'])->get();
         $views = Post::sum('views_counter');
         if($user->role === 'admin' || $user->role === 'editor'){
-            $posts = Post::with(['category','author'])->latest()->paginate(10);
+            if($search_term !== 'all' && !empty($search_term)){
+                $posts = Post::with(['category','author'])->where(function($query) use ($search_term){
+                    $query->where('title', 'LIKE', '%' . $search_term . '%')
+                      ->orWhere('category_id', $search_term)
+                      ->orWhere('published', $search_term);
+                })->latest()->paginate(10);
+            }else{
+                $posts = Post::with(['category','author'])->latest()->paginate(10);
+            }
         }else{
-            $posts = Post::with(['category','author'])->where('author_id', $user->id)->latest()->paginate(10);
+            
+            if($search_term !== 'all' && !empty($search_term)){
+                $posts = Post::with(['category','author'])->where('author_id',$user->id)->where(function($query) use ($search_term){
+                    $query->where('title', 'LIKE', '%' . $search_term . '%')
+                        ->orWhere('category_id', $search_term)
+                        ->orWhere('published', $search_term);
+                })->latest()->paginate(10);
+            }else{
+                $posts = Post::with(['category','author'])->where('author_id',$user->id)->latest()->paginate(10);
+            }
         }
         $total_posts = Post::count();
         $this_month = Post::whereMonth('created_at',now()->month)->count();
@@ -239,25 +257,6 @@ class PostController extends Controller
             'message' => 'Post deleted successfully'
         ], 200);
     }
-
-
-    public function searchPost(Request $request){
-        $search_term = $request->query('query');
-        $user = $request->user();
-        if($search_term === 'all'){
-            $search_post = Post::with(['category','author'])->latest()->paginate(10);
-        }else{
-            $search_post = Post::with(['category','author'])->where(function($query) use ($search_term){
-                $query->where('title', 'LIKE', '%' . $search_term . '%')
-                  ->orWhere('category_id', $search_term)
-                  ->orWhere('published', $search_term);
-            })->latest()->paginate(10);
-        }
-        return response()->json([
-            'posts'=>$search_post
-        ]);
-    }
-
 
     public function multiDeletePost(Request $request){
         $user = $request->user();

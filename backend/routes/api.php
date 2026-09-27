@@ -37,7 +37,7 @@ Route::middleware('auth:sanctum')->group(function(){
 
     
     Route::middleware('role:admin')->group(function(){
-        Route::post('search',[AuthController::class,'searchUser']);
+        // Route::post('search',[AuthController::class,'searchUser']);
         Route::apiResource('settings', SettingController::class);
         Route::post('settings', [SettingController::class, 'update']);
         Route::delete('logo', [SettingController::class, 'destroy']);
@@ -46,14 +46,13 @@ Route::middleware('auth:sanctum')->group(function(){
         
     Route::middleware('role:admin,editor')->group(function(){
         Route::apiResource('users', UserController::class)->only(['index','show']);
-        });
+    });
         
         
-        Route::middleware('role:admin,editor,author')->group(function(){
-            Route::get('dashboard',[DashboardController::class,'DashboardAnalysis']);
-            Route::get('filter-comments',[CommentController::class,'searchComments']);
-            Route::put('update-comments/{id}',[CommentController::class,'updateComment']);
-        Route::post('search-post',[PostController::class,'searchPost']);
+    Route::middleware('role:admin,editor,author')->group(function(){
+        Route::get('dashboard',[DashboardController::class,'DashboardAnalysis']);
+        Route::get('filter-comments',[CommentController::class,'searchComments']);
+        Route::put('update-comments/{id}',[CommentController::class,'updateComment']);
         Route::get('month-report',[MonthlyReportController::class,'report']);
         Route::post('multi-delete-post',[PostController::class,'multiDeletePost']);
         Route::apiResource('comments', CommentController::class);

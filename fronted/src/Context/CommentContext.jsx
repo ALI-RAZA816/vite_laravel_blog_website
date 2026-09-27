@@ -15,13 +15,19 @@ const CommentContextProvider = ({ children }) => {
   const [allComments, setAllComments] = useState([]); // poori list (stats + tab counts ke liye)
   const [commentAvg, setCommentAvg] = useState(0);
   const [currentComments, setCurrentComments] = useState(1);
+  const [activeFilter, setActiveFilter] = useState('all');
   const [commentsPagination, setCommentsPagination] = useState(emptyPagination);
 
   const fetchcomments = async () => {
     setSpinnerLoader(true);
     try {
-      
-      const {ok, data} = await apiGet(`comments?page=${currentComments}`);
+      let response;
+      if(!activeFilter && activeFilter == null){
+        response = await apiGet(`comments?page=${currentComments}`);
+      }else{
+        response = await apiGet(`comments?query=${activeFilter}&page=${currentComments}`);
+      }
+      const {ok, data} = response;
       
       if (ok) {
         setCommentAvg(data.average);
@@ -41,7 +47,7 @@ const CommentContextProvider = ({ children }) => {
     if(token && user.role !== 'user'){
       fetchcomments();
     }
-  }, [currentComments, commentRefresh]);
+  }, [currentComments,activeFilter, commentRefresh]);
 
   // status ke hisaab se derived lists - stat cards aur tab counts ke liye
   const pendingComments = allComments.filter((comment) => comment.status === "pending");
@@ -80,19 +86,9 @@ const CommentContextProvider = ({ children }) => {
   // =======================
   //     SEARCH / FILTER
   // =======================
-  const [activeFilter, setActiveFilter] = useState('all');
 
   const Searchcomment = async (search_term) => {
     setActiveFilter(search_term);
-    try {
-      const {ok, data} = await apiGet(`filter-comments?page=${currentComments}&query=${search_term}`);
-
-      if (ok) {
-        setComments(data.searchComments.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   return (

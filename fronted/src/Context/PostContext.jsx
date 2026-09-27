@@ -17,13 +17,20 @@ const PostContextProvider = ({ children }) => {
   const [velocity, setVelocity] = useState(0);
   const [lastMonthViews, setLastMonthViews] = useState([]);
 
+  const [searchTerm, setSearchTerm] = useState('');
   const [currentPostPage, setCurrentPostPage] = useState(1);
   const [postPagination, setPostPagination] = useState(emptyPagination);
 
   const fetchPosts = async () => {
     setSpinnerLoader(true);
     try {
-      const {ok, data} = await apiGet(`posts?page=${currentPostPage}`);
+      let response ;
+      if(!searchTerm && searchTerm == null){
+        response = await apiGet(`posts?page=${currentPostPage}`);
+      }else{
+        response = await apiGet(`posts??query=${searchTerm}&page=${currentPostPage}`);
+      }
+      const {ok, data} = response;
       if (ok) {
         setAvgViews(data.averageViews);
         setTotalViews(data.views);
@@ -51,8 +58,9 @@ const PostContextProvider = ({ children }) => {
     const user = JSON.parse(localStorage.getItem('UserInfo'));
     if(token && user.role !== 'user'){
       fetchPosts();
+      // setPostPagination(1);
     }
-  }, [currentPostPage, postRefresh]);
+  }, [currentPostPage, postRefresh, searchTerm]);
 
   // =======================
   //        DELETE
@@ -89,21 +97,6 @@ const PostContextProvider = ({ children }) => {
     }
   };
 
-  // =======================
-  //     SEARCH / FILTER
-  // =======================
-  const searchPosts = async (searchTerm) => {
-    
-    try {
-      const {ok, data} = await apiSend(`search-post?query=${searchTerm}&page=${currentPostPage}`,'POST');
-      if (ok) {
-        setPosts(data.posts.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <PostContext.Provider value={{
       posts,
@@ -120,7 +113,7 @@ const PostContextProvider = ({ children }) => {
       spinnerLoader,
       deletePost,
       multiDeletePost,
-      searchPosts,
+      setSearchTerm
     }}>
       {children}
     </PostContext.Provider>

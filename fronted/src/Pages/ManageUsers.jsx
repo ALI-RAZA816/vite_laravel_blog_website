@@ -25,7 +25,7 @@ const ManageUsers = () => {
     thisWeek,
     Blocked,
     allEditors,
-    searchUsers,
+    setSearchTerm,
     loggedUser,
     spinnerLoader
   } = useUser();
@@ -64,31 +64,27 @@ const ManageUsers = () => {
 
 
   const searchTimeout = useRef(null);
-  const searchHandler = (searchTerm)=>{
-    searchUsers(searchTerm);
-  }
-
 
   const getValue = (event)=>{
     const searchTerm = event.target.value;
     clearTimeout(searchTimeout.current);
     searchTimeout.current =  setTimeout(()=>{
-      searchHandler(searchTerm);
+      setSearchTerm(searchTerm);
     },600);
   }
-
+  
   const getRole = (event)=>{
     const searchTerm = event.target.value;
     clearTimeout(searchTimeout.current);
     searchTimeout.current =  setTimeout(()=>{
-      searchHandler(searchTerm);
+      setSearchTerm(searchTerm);
     },600);
   }
   const getStatus = (event)=>{
     const searchTerm = event.target.value;
     clearTimeout(searchTimeout.current);
     searchTimeout.current =  setTimeout(()=>{
-      searchHandler(searchTerm);
+      setSearchTerm(searchTerm);
     },600);
   }
 

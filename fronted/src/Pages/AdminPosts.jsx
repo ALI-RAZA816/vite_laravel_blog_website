@@ -46,7 +46,7 @@ const AdminPosts = () => {
     posts,
     deletePost,
     multiDeletePost,
-    searchPosts,
+    setSearchTerm,
     spinnerLoader,
     setSpinnerLoader
   } = usePost();
@@ -111,28 +111,26 @@ const AdminPosts = () => {
   }
 
   const searchTimeout = useRef(null);
-  const searchHandler = (searchTerm)=>{
-    searchPosts(searchTerm);
-  }
+
 
   const getValue = (event)=>{
     const searchTerm = event.target.value;
     clearTimeout(searchTimeout.current);
     searchTimeout.current =  setTimeout(()=>{
-      searchHandler(searchTerm);
+      setSearchTerm(searchTerm);
     },600);
   }
-
+  
   const getCategory= (event)=>{
     const searchTerm = event.target.value;
     clearTimeout(searchTimeout.current);
     searchTimeout.current =  setTimeout(()=>{
-      searchHandler(searchTerm);
+      setSearchTerm(searchTerm);
     },600);
   }
-
+  
   const statusFilter = (searchTerm)=>{
-    searchHandler(searchTerm);
+    setSearchTerm(searchTerm);
   }
 
 
@@ -211,7 +209,7 @@ const AdminPosts = () => {
           <input type="text" onChange={getValue} placeholder="Search post" className="form-control border-0 shadow-none" />
         </div>
         <div className={`d-flex align-items-center ${styles.selectBox}`}>
-          <select name="" id="" onChange={getCategory} className="form-select border-0 shadow-none">
+          <select name="categories" onChange={getCategory} className="form-select border-0 shadow-none">
           <option value="all">All Categories</option>
             {allCat.map((category, index)=>{
               return <option index={index} value={category.id}>{category.name}</option>

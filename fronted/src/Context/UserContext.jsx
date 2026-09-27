@@ -25,6 +25,7 @@ const UserContextProvider = ({ children }) => {
   const {setStatusCode} = useContext(AppContext);
   const {navigate} = useNavigate();
 
+  const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [pagination, setPagination] = useState(emptyPagination);
 
@@ -32,7 +33,14 @@ const UserContextProvider = ({ children }) => {
   const fetchUsers = async () => {
     setSpinnerLoader(true);
     try {
-      const {ok, status, data} = await apiGet(`users?page=${currentPage}`);
+
+      let response ; 
+      if(!searchTerm && searchTerm == null){
+        response = await apiGet(`users?page=${currentPage}`);
+      }else{
+        response = await apiGet(`users?query=${searchTerm}&page=${currentPage}`);
+      }
+      const {ok, status, data} = response;
       
       if (ok) {
         if (data.status === true) {
@@ -61,26 +69,8 @@ const UserContextProvider = ({ children }) => {
     if(token && user.role !== 'user'){
       fetchUsers();
     }
-  }, [currentPage, userRefresh]);
+  }, [currentPage, searchTerm, userRefresh]);
 
-  // =======================
-  //     SEARCH / FILTER
-  // =======================
-  const searchUsers = async (searchTerm) => {
-    try {
-      const {ok, status, data} = await apiSend(`search?query=${searchTerm}&page=${currentPage}`,'POST');
-      
-      if (ok) {
-        setAllUsers(data.users.data);
-      }else{
-        setStatusCode(status);
-        // setSpinnerLoader(false);
-        navigate('/aunauthorized');
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <UserContext.Provider value={{
@@ -98,8 +88,7 @@ const UserContextProvider = ({ children }) => {
       fetchUsers,
       triggerUserRefresh,
       spinnerLoader,
-
-      searchUsers,
+      setSearchTerm
     }}>
       {children}
     </UserContext.Provider>

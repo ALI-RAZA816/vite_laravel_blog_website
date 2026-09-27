@@ -14,14 +14,23 @@ class CommentController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
+        $search_term = $request->query('query');
         $allComments = Comment::all();
         $total_comment = Comment::count();
         $this_month = Comment::whereMonth('created_at',now()->month)->count();
         $average = $total_comment > 0 ? round(($this_month / $total_comment) * 100, 2) : 0;
-        if($user->role === 'admin'){
-            $comments = Comment::with(['user','post'])->paginate(10);
+        if($user->role === 'admin' || $user->role === 'editor'){
+            if($search_term !== 'all' && !empty($search_term)){
+                $comments = Comment::with(['user','post'])->where('status', $search_term )->latest()->paginate(10);
+            }else{
+                $comments = Comment::with(['user','post'])->paginate(10);
+            }
         }else{
-            $comments = Comment::with(['user','post'])->where('user_id', $user->id)->paginate(10);
+            if($search_term !== 'all' && !empty($search_term)){
+                $comments = Comment::with(['user','post'])->where('user_id',$user->id)->where('status', $search_term )->latest()->paginate(10);
+            }else{
+                $comments = Comment::with(['user','post'])->where('user_id',$user->id)->paginate(10);
+            }
         }
 
         return response()->json([
@@ -129,21 +138,6 @@ class CommentController extends Controller
         return response()->json([
             'message'=>'Comment deleted'
         ],200);
-    }
-
-
-    public function searchComments(Request $request){
-        $search_term = $request->query('query');
-        if($search_term === 'all'){
-            $search_comment = Comment::with(['user','post'])->paginate(10);
-        }else{
-            $search_comment = Comment::with(['user','post'])->where('status', $search_term )->latest()->paginate(10);
-
-        }
-        return response()->json([
-            'searchComments'=>$search_comment
-        ]);
-
     }
 
     public function fetchPostComments(int $id){

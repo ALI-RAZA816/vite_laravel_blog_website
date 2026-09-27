@@ -14,11 +14,16 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $total = User::all();
+        $search_term = $request->query('query');
+        if($search_term !== 'all' && !empty($search_term)){
+            $users = User::where('name','LIKE','%'. $search_term . '%')->orWhere('email','LIKE','%'. $search_term . '%')->orWhere('role','LIKE','%'. $search_term . '%')->orWhere('status',$search_term )->latest()->paginate(10);
+        }else{
+            $users = User::paginate(10);
+        }
         $loggedUser = User::where('id',Auth::id())->select('id','name','email','role','join_date','status','image')->first();
-        $users = User::select('id','name','email','role','join_date','status','image')->latest()->paginate(10);
         $editor = User::where('role','=','editor')->get();
         $this_week = User::whereDate('created_at','=',now())->get();
         $blocked = User::where('status','=','blocked')->get();
