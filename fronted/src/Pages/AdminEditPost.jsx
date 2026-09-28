@@ -166,10 +166,7 @@ const AdminEditPost = ({placeholder}) => {
         showToast('Description is required','Error','danger');
         return;
       }
-      if(!image){
-        showToast('Image is required','Error','danger');
-        return;
-      }
+
       if(!formData.category){
         showToast('Select required category','Error','danger');
         return;
@@ -222,9 +219,12 @@ const AdminEditPost = ({placeholder}) => {
               showToast(data.message,'Error','danger');
               return false;
             }
-        }else{
-          setRefresh(prev => prev + 1);
-          navigate('/admin-panel/posts');
+          }else{
+            setRefresh(prev => prev + 1);
+            showToast(data.message,'Success','success');
+            setTimeout(() => {
+              navigate('/admin-panel/posts');
+            }, 3000);
         }
 
       }catch(error){

@@ -1,8 +1,9 @@
 .panel {
   background-color: #f6f5fb;
   width: 420px;
-  position: absolute;
+  position: fixed;
   top: 0;
+  z-index: 999;
   right:-100% !important;
   transition: .20s ease;
   height: 100vh;

@@ -26,7 +26,6 @@ const AdminAddCategoryModel = () => {
     newIcon,
     setNewIcon,
     newCatData,
-    newCatErr,
     newCatFormHandler,
     addCategory,
   } = useCategory();
@@ -52,7 +51,6 @@ const AdminAddCategoryModel = () => {
             className={styles.input}
             placeholder="e.g., Sustainable Living"
           />
-          <span className="text-danger">{newCatErr.cat_nameErr}</span>
         </div>
 
         {/* Slug */}
@@ -69,7 +67,6 @@ const AdminAddCategoryModel = () => {
               placeholder="sustainable-living"
             />
           </div>
-             <span className="text-danger">{newCatErr.slugErr}</span>
         </div>
 
         {/* Description */}
@@ -83,7 +80,6 @@ const AdminAddCategoryModel = () => {
             rows={4}
             placeholder="Brief overview of this category..."
           />
-           <span className="text-danger">{newCatErr.descriptionErr}</span>
         </div>
 
         {/* Select Icon */}
@@ -102,6 +98,7 @@ const AdminAddCategoryModel = () => {
                 {icon.symbol}
               </button>
             ))}
+            <input type="hidden" value={newIcon} name="icon_name" />
           </div>
         </div>
         <button type="submit" className={styles.createBtn}>Create Category</button>

@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
-use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -32,18 +33,8 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
-        $request->validate([
-            'cat_name'=>'required',
-            'slug'=>['required', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/'],
-            'description'=>'nullable|max:100',
-            'icon_name'=>'required'
-        ],[
-            'cat_name'=>"The category name is required",
-            'slug'=>"The slug_name is incorrect",
-            'icon_name'=>"The icon_name is required",
-        ]);
 
         Category::create([
             'name'=>$request->cat_name,
@@ -53,7 +44,7 @@ class CategoryController extends Controller
         ]);
 
         return response()->json([
-            'message'=>'Category added',
+            'message'=>'Category added successfully',
         ],200);    }
 
     /**
@@ -86,7 +77,7 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateCategoryRequest $request, string $id)
     {
         $category = Category::where('id',$id)->first();
         if(!$category){
@@ -121,7 +112,7 @@ class CategoryController extends Controller
 
         $category->delete();
         return response()->json([
-            'message'=>'Category Deleted'
+            'message'=>'Category deleted successfully'
         ]);
     }
 }

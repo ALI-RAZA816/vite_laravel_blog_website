@@ -1,11 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { apiGet } from "../services/apiClient.js";
+import { apiGet, showToast } from "../services/apiClient.js";
 import { apiSend, emptyPagination, toPagination } from "../services/apiClient.js";
 
 export const CategoryContext = createContext();
 
 const CategoryContextProvider = ({ children }) => {
-  // apna khud ka refresh signal - sirf category data hi dobara fetch hota hai
   const [catRefresh, setCatRefresh] = useState(0);
   const [spinnerLoader, setSpinnerLoader] = useState(false);
   const triggerCatRefresh = () => setCatRefresh((prev) => prev + 1);
@@ -13,8 +12,8 @@ const CategoryContextProvider = ({ children }) => {
   // =======================
   //     LIST + PAGINATION
   // =======================
-  const [categories, setCategories] = useState([]); // current page wali list
-  const [allCat, setAllCat] = useState([]); // dropdowns ke liye poori list
+  const [categories, setCategories] = useState([]);
+  const [allCat, setAllCat] = useState([]);
   const [currentCatPage, setCurrentCatPage] = useState(1);
   const [catPagination, setCatPagination] = useState(emptyPagination);
 
@@ -53,8 +52,6 @@ const CategoryContextProvider = ({ children }) => {
   const emptyNewCat = { cat_name: '', slug: '', description: '', icon_name: '' };
   const [newCatData, setNewCatData] = useState(emptyNewCat);
 
-  const emptyNewCatErr = { cat_nameErr: '', slugErr: '', descriptionErr: '', icon_nameErr: '' };
-  const [newCatErr, setNewCatErr] = useState(emptyNewCatErr);
 
   const newCatFormHandler = (event) => {
     const { name, value } = event.target;
@@ -63,18 +60,17 @@ const CategoryContextProvider = ({ children }) => {
 
   const addCategory = async (event) => {
     event.preventDefault();
-    setNewCatErr(emptyNewCatErr);
 
     if (!newCatData.cat_name) {
-      setNewCatErr({ ...emptyNewCatErr, cat_nameErr: 'The category name is required' });
+      showToast('Category name required','Error','danger');
       return;
     }
     if (!newCatData.slug) {
-      setNewCatErr({ ...emptyNewCatErr, slugErr: 'The slug-name is required' });
+      showToast('Slug is required','Error','danger');
       return;
     }
     if (!newIcon) {
-      setNewCatErr({ ...emptyNewCatErr, slugErr: 'The icon-name is required' });
+      showToast('Ican is required','Error','danger');
       return;
     }
 
@@ -84,16 +80,19 @@ const CategoryContextProvider = ({ children }) => {
 
       const {ok, data} = await apiSend('categories','POST', payload);
       if (!ok) {
-        if (data?.errors?.cat_name) {
-          setNewCatErr({ ...emptyNewCatErr, cat_nameErr: data.errors.cat_name[0] });
-        } else if (data?.errors?.slug) {
-          setNewCatErr({ ...emptyNewCatErr, slugErr: data.errors.slug[0] });
+        if(error?.cat_name?.[0]){
+          showToast(error?.cat_name?.[0], 'Error','danger');
+          return;
+        }
+        if(error?.slug?.[0]){
+          showToast(error?.slug?.[0], 'Error','danger');
+          return;
         }
         return;
       }
-
+      
+      showToast(data.message, 'Success','success');
       setNewCatData(emptyNewCat);
-      setNewCatErr(emptyNewCatErr);
       setNewIcon("sprout");
       triggerCatRefresh();
       setShowCategoryModel(false);
@@ -123,7 +122,6 @@ const CategoryContextProvider = ({ children }) => {
     setEditCategory((prev) => ({ ...prev, [name]: value }));
   };
 
-  // ek category ko edit modal me load karna
   const viewCategory = async (cat_id) => {
     try {
       const {ok, data} = await apiGet(`categories/${cat_id}`);
@@ -144,6 +142,19 @@ const CategoryContextProvider = ({ children }) => {
 
   const updateCategory = async (event) => {
     event.preventDefault();
+    if (!editCategory.cat_name) {
+      showToast('Category name required','Error','danger');
+      return;
+    }
+    if (!editCategory.slug) {
+      showToast('Slug is required','Error','danger');
+      return;
+    }
+    if (!selectedIcon) {
+      showToast('Ican is required','Error','danger');
+      return;
+    }
+
     const payload = { ...editCategory, icon: selectedIcon };
 
     try {
@@ -152,6 +163,22 @@ const CategoryContextProvider = ({ children }) => {
       if (ok) {
         triggerCatRefresh();
         setShowEditCategoryModel(false);
+        showToast('Category updated successfully', 'Success','success');
+      }else{
+        const error = data.errors;
+        if(error?.cat_name?.[0]){
+          showToast(error?.cat_name?.[0], 'Error','danger');
+          return;
+        }
+        if(error?.slug?.[0]){
+          showToast(error?.slug?.[0], 'Error','danger');
+          return;
+        }
+        if(data.message){
+          showToast(data.message, 'Error','danger');
+          return;
+        }
+        return;
       }
     } catch (error) {
       console.log(error);
@@ -166,7 +193,10 @@ const CategoryContextProvider = ({ children }) => {
     try {
       const {ok, data} = await apiSend(`categories/${delete_id}`,'DELETE');
       if (ok) {
+        showToast(data.message, 'Success','success');
         triggerCatRefresh();
+      }else{
+        showToast(data.message, 'Error','danger');
       }
     } catch (error) {
       console.log(error);
@@ -190,7 +220,7 @@ const CategoryContextProvider = ({ children }) => {
       newIcon,
       setNewIcon,
       newCatData,
-      newCatErr,
+      // newCatErr,
       newCatFormHandler,
       addCategory,
 
@@ -216,7 +246,7 @@ const CategoryContextProvider = ({ children }) => {
 // chhota hook taake har page me useContext likhna na pade
 export const useCategory = () => {
   const ctx = useContext(CategoryContext);
-  if (!ctx) throw new Error("useCategory ko <CategoryContextProvider> ke andar use karein.");
+  if (!ctx) throw new Error("Use useCategory in <CategoryContextProvider>");
   return ctx;
 };
 

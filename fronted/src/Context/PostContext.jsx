@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { apiGet, apiSend, emptyPagination, toPagination } from "../services/apiClient.js";
+import { apiGet, apiSend, emptyPagination, showToast, toPagination } from "../services/apiClient.js";
 
 export const PostContext = createContext();
 
@@ -71,7 +71,10 @@ const PostContextProvider = ({ children }) => {
 
       const {ok, data} = await apiSend(`posts/${id}`,'DELETE');
       if (ok) {
+        showToast(data.message, 'Success','success');
         triggerPostRefresh();
+      }else{
+        showToast(data.message, 'Error','error');
       }
 
     } catch (error) {
@@ -87,7 +90,10 @@ const PostContextProvider = ({ children }) => {
     try {
       const {ok, data} = await apiSend(`multi-delete-post`,'POST', {ids});
       if (ok) {
+        showToast(data.message, 'Success','success');
         triggerPostRefresh();
+      }else{
+        showToast(data.message, 'Error','danger');
       }
       return ok;
     } catch (error) {

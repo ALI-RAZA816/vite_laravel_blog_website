@@ -99,6 +99,7 @@ const EditAdminCategory = () => {
               </button>
             ))}
           </div>
+          <input type="hidden" value={selectedIcon} name="icon_name" />
         </div>
         <button type="submit" className={styles.createBtn}>Update Category</button>
       </form>
