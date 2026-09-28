@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 use App\Models\Category;
 use App\Models\MonthlyReport;
 use App\Models\MonthlyViewsModel;
@@ -158,20 +159,9 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdatePostRequest $request, string $id)
     {
         $user = $request->user();
-        $request->validate([
-            'title'=>'required',
-            'description'=>'required',
-            'category'=>'required',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:3072',
-        ],[
-            'image.image' => 'The file must be an image.',
-            'image.mimes' => 'File type must be jpg, jpeg, or png.',
-            'image.max' => 'Image size must not be greater than 3MB.',
-        ]);
-
         if($user->role === 'admin' || $user->role === 'editor'){
             $post = Post::with(['category','author'])->where('id',$id)->first();
         }else{
@@ -210,6 +200,19 @@ class PostController extends Controller
         if($oldCategory != $NewCategory){
             Category::where('id', $oldCategory)->decrement('post_count');
             Category::where('id', $NewCategory)->increment('post_count');
+        }
+
+        $parseTags = json_decode($request->tags);
+        if(!is_array($parseTags) || count($parseTags) === 0){
+            return response()->json([
+                'message'=>'At lease one tag is required'
+            ],422);
+        }
+
+        if(count($parseTags) > 5 ){
+            return response()->json([
+                'message'=>'Maximum 5 tags allowed'
+            ],422);
         }
 
         $post->update([

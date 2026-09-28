@@ -3,11 +3,11 @@ import {
   BsXLg,
 } from "react-icons/bs";
 import styles from "../assets/AddAdminPost.module.css";
-const initialTags = ["Slow Living", "Wellness", "Rituals"];
 import JoditEditor from 'jodit-react';
 import { AppContext } from "../Context/AppContext";
 import { useNavigate, useParams } from "react-router-dom";
-import {apiGet, apiUpload} from '../services/apiClient';
+import {apiGet, apiUpload, showToast} from '../services/apiClient';
+import { baseUrl } from "../Http/Http";
 const ImageIcon = ({ size = 100, color = "#808080" }) => (
   <svg
     width={size}
@@ -93,13 +93,6 @@ const AdminEditPost = ({placeholder}) => {
     image:''
   });
 
-  const [formDataErr, setFormDataErr] = useState({
-    titleErr:'',
-    descriptionErr:'',
-    imageErr:'',
-    categoryErr:'',
-  });
-
   const previewHandler = (event)=>{
     const file = event.target.files[0];
     if(!file) return;
@@ -112,8 +105,16 @@ const AdminEditPost = ({placeholder}) => {
     if(event.key === 'Enter'){
       event.preventDefault();
       if(!tag) return;
-      if(tags.length >= 5) return;
-      if(tags.includes(tag)) return;
+      if(tags.length >= 5){
+        showToast('Maximum 5 tags allowed','Error','danger');
+        setTag('');
+        return;
+      };
+      if(tags.includes(tag)){
+        showToast('Tag already exist','Error','danger');
+        setTag('');
+        return;
+      }
       setTags([...tags, tag.trim()]);
       setTag('');
     }
@@ -157,6 +158,22 @@ const AdminEditPost = ({placeholder}) => {
 
   const updatePost = async (event)=>{
       event.preventDefault();
+      if(!formData.title){
+        showToast('Title is required','Error','danger');
+        return;
+      }
+      if(!content){
+        showToast('Description is required','Error','danger');
+        return;
+      }
+      if(!image){
+        showToast('Image is required','Error','danger');
+        return;
+      }
+      if(!formData.category){
+        showToast('Select required category','Error','danger');
+        return;
+      }
       const publish = isPublished === true ? 'published' : 'draft';
   
   
@@ -174,13 +191,37 @@ const AdminEditPost = ({placeholder}) => {
       try{
 
         const {ok, data} = await apiUpload (`posts/${formData.id}`,'POST',form);
+        console.log(data);
+        const error = data?.errors;
         if(!ok){
-          setFormDataErr({
-            titleErr: data?.errors?.title?.[0] || '',
-            descriptionErr: data?.errors?.description?.[0] || '',
-            imageErr: data?.errors?.image?.[0] || '',
-            categoryErr: data?.errors?.category?.[0] || '',
-          });
+           if(error?.title?.[0]){
+              showToast(error?.title?.[0],'Error','danger');
+              return false;
+            }
+            if(error?.description?.[0]){
+              showToast(error?.description?.[0],'Error','danger');
+              return false;
+            }
+            if(error?.image?.[0]){
+              showToast(error?.image?.[0],'Error','danger');
+              return false;
+            }
+            if(error?.image?.[1]){
+              showToast(error?.image?.[1],'Error','danger');
+              return false;
+            }
+            if(error?.category?.[0]){
+              showToast(error?.category?.[0],'Error','danger');
+              return false;
+            }
+            if(error?.tags?.[0]){
+              showToast(error?.tags?.[0],'Error','danger');
+              return false;
+            }
+            if(data.message){
+              showToast(data.message,'Error','danger');
+              return false;
+            }
         }else{
           setRefresh(prev => prev + 1);
           navigate('/admin-panel/posts');
@@ -212,7 +253,6 @@ const AdminEditPost = ({placeholder}) => {
               placeholder="Post Title..."
               className={styles.titleInput}
             />
-            <span className="text-danger">{formDataErr.titleErr}</span>
           </div>
 
           <div className={`${styles.editorCard}`}>
@@ -226,7 +266,6 @@ const AdminEditPost = ({placeholder}) => {
               />
             {/* </div> */}
           </div>
-          <span className="text-danger">{formDataErr.descriptionErr}</span>
         </div>
 
         {/* Right rail */}
@@ -245,7 +284,6 @@ const AdminEditPost = ({placeholder}) => {
                     <input type="file" onChange={previewHandler} name="post-image" id="post-image" hidden />
                 </div>
                 </label>
-              <span className="text-danger">{formDataErr.imageErr}</span>
           </div>
 
           {/* Categories */}

@@ -164,7 +164,6 @@ const AddAdminPost = ({placeholder}) => {
 
     try{
       const {ok, data} = await apiUpload ('posts','POST',form);
-      console.log(data.message);
       const error = data?.errors;
       if(!ok){
         if(error?.title?.[0]){
