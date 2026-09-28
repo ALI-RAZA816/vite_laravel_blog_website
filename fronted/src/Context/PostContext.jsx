@@ -58,7 +58,6 @@ const PostContextProvider = ({ children }) => {
     const user = JSON.parse(localStorage.getItem('UserInfo'));
     if(token && user.role !== 'user'){
       fetchPosts();
-      // setPostPagination(1);
     }
   }, [currentPostPage, postRefresh, searchTerm]);
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StorePostRequest;
 use App\Models\Category;
 use App\Models\MonthlyReport;
 use App\Models\MonthlyViewsModel;
@@ -76,24 +77,25 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
-        $request->validate([
-            'title'=>'required',
-            'description'=>'required',
-            'category'=>'required',
-            'image' => 'required|image|mimes:jpg,jpeg,png|max:3072',
-        ],[
-            'image.required' => 'Image is required.',
-            'image.image' => 'The file must be an image.',
-            'image.mimes' => 'File type must be jpg, jpeg, or png.',
-            'image.max' => 'Image size must not be greater than 3MB.',
-        ]);
         $date = date('M d, y');
         $image = $request->file('image');
         $ext = $image->getClientOriginalExtension();
         $imageName = time(). '.' . $ext;
         $image->move(public_path('posts-images'),$imageName);
+        $parseTags = json_decode($request->tags);
+        if(!is_array($parseTags) || count($parseTags) === 0){
+            return response()->json([
+                'message'=>'At lease one tag is required'
+            ],422);
+        }
+
+        if(count($parseTags) > 5 ){
+            return response()->json([
+                'message'=>'Maximum 5 tags allowed'
+            ],422);
+        }
         Post::create([
             'title'=>$request->title,
             'description'=>$request->description,

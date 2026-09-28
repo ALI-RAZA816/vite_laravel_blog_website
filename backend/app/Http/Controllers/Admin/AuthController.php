@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Events\UserRegistered;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -41,7 +42,7 @@ class AuthController extends Controller
 
             return response()->json([
                 'status'=>200,
-                'message'=>'Account created'
+                'message'=>'You created account successfully'
             ]);
 
         }catch(ValidationException $e){
@@ -53,13 +54,9 @@ class AuthController extends Controller
     }
 
 
-    public function loginAccount(Request $request){
+    public function loginAccount(Request $request, LoginUserRequest $req){
 
         try{
-            $request->validate([
-                'email'=>'required|email',
-                'password'=>'required'
-            ]);
 
             $restricted_user = User::where('email',$request->email)->where('status','=','blocked')->first();
             if($restricted_user){
@@ -72,7 +69,7 @@ class AuthController extends Controller
 
             if(!$user){
                 return response()->json([
-                    'message'=>"User doesn't exist"
+                    'message'=>"Email doesn't exist"
                 ],404);
             }
 
@@ -114,7 +111,7 @@ class AuthController extends Controller
             $user->currentAccessToken()->delete();
             return response()->json([
                 'status'=>true,
-                'message'=>'You logged out'
+                'message'=>'You logout your account'
             ],200);
         }
 

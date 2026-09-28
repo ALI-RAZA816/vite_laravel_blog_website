@@ -1,23 +1,11 @@
 import React, { useContext, useMemo, useRef, useState } from "react";
 import {
-  BsTypeBold,
-  BsTypeItalic,
-  BsTypeUnderline,
-  BsBlockquoteLeft,
-  BsListUl,
-  BsLink45Deg,
-  BsImage,
   BsXLg,
-  BsPlusLg,
-  BsTrashFill,
 } from "react-icons/bs";
 import styles from "../assets/AddAdminPost.module.css";
-import { CiImageOn } from "react-icons/ci";
-const initialTags = ["Slow Living", "Wellness", "Rituals"];
 import JoditEditor from 'jodit-react';
 import { AppContext } from "../Context/AppContext";
-import { apiUrl } from "../Http/Http";
-import { apiUpload } from "../services/apiClient.js";
+import { apiUpload, showToast } from "../services/apiClient.js";
 import { useNavigate } from "react-router-dom";
 
 const ImageIcon = ({ size = 100, color = "#808080" }) => (
@@ -60,7 +48,6 @@ const ImageIcon = ({ size = 100, color = "#808080" }) => (
 const AddAdminPost = ({placeholder}) => {
 
   const navigate = useNavigate();
-  const {categories} = useContext(AppContext);
   const {allCat} = useContext(AppContext);
   const config = useMemo(
     () => ({
@@ -102,12 +89,6 @@ const AddAdminPost = ({placeholder}) => {
     title:'',
     category:'',
   });
-  const [formDataErr, setFormDataErr] = useState({
-    titleErr:'',
-    descriptionErr:'',
-    imageErr:'',
-    categoryErr:'',
-  });
 
   
   const previewHandler = (event)=>{
@@ -122,8 +103,16 @@ const AddAdminPost = ({placeholder}) => {
     if(event.key === 'Enter'){
       event.preventDefault();
       if(!tag) return;
-      if(tags.length >= 5) return;
-      if(tags.includes(tag)) return;
+      if(tags.length >= 5){
+        showToast('Maximum 5 tags allowed','Error','danger');
+        setTag('');
+        return;
+      }
+      if(tags.includes(tag)){
+        showToast('Tag already exist','Error','danger');
+        setTag('');
+        return;
+      };
       setTags([...tags, tag.trim()]);
       setTag('');
     }
@@ -145,39 +134,24 @@ const AddAdminPost = ({placeholder}) => {
 
   const submitPost = async (event)=>{
     event.preventDefault();
-    setFormDataErr({
-      titleErr: '',
-      descriptionErr: '',
-      imageErr: '',
-      categoryErr: '',
-    });
     if(!formData.title){
-      setFormDataErr({
-        titleErr:'Post title is required'
-      });
+      showToast('Title is required','Error','danger');
       return;
     }
     if(!content){
-      setFormDataErr({
-        descriptionErr:'Post description is required'
-      });
+      showToast('Description is required','Error','danger');
       return;
     }
     if(!image){
-      setFormDataErr({
-        imageErr:'Post image is required'
-      });
+      showToast('Image is required','Error','danger');
       return;
     }
     if(!formData.category){
-      setFormDataErr({
-        categoryErr:'Category is required'
-      });
+      showToast('Select required category','Error','danger');
       return;
     }
 
     const publish = isPublished === true ? 'published' : 'draft';
-    const token = localStorage.getItem('token');
 
 
     const form = new FormData();
@@ -190,13 +164,38 @@ const AddAdminPost = ({placeholder}) => {
 
     try{
       const {ok, data} = await apiUpload ('posts','POST',form);
+      console.log(data.message);
+      const error = data?.errors;
       if(!ok){
-        setFormDataErr({
-          titleErr: data?.errors?.title?.[0] || '',
-          descriptionErr: data?.errors?.description?.[0] || '',
-          imageErr: data?.errors?.image?.[0] || '',
-          categoryErr: data?.errors?.category?.[0] || '',
-        });
+        if(error?.title?.[0]){
+          showToast(error?.title?.[0],'Error','danger');
+          return false;
+        }
+        if(error?.description?.[0]){
+          showToast(error?.description?.[0],'Error','danger');
+          return false;
+        }
+        if(error?.image?.[0]){
+          showToast(error?.image?.[0],'Error','danger');
+          return false;
+        }
+        if(error?.image?.[1]){
+          showToast(error?.image?.[1],'Error','danger');
+          return false;
+        }
+        if(error?.category?.[0]){
+          showToast(error?.category?.[0],'Error','danger');
+          return false;
+        }
+        if(error?.tags?.[0]){
+          showToast(error?.tags?.[0],'Error','danger');
+          return false;
+        }
+        if(data.message){
+          showToast(data.message,'Error','danger');
+          return false;
+        }
+
       }else{
           setFormData({
             title: '',
@@ -227,7 +226,6 @@ const AddAdminPost = ({placeholder}) => {
               placeholder="Post Title..."
               className={styles.titleInput}
             />
-            <span className="text-danger">{formDataErr.titleErr}</span>
           </div>
 
           <div className={`${styles.editorCard}`}>
@@ -241,7 +239,6 @@ const AddAdminPost = ({placeholder}) => {
               />
             {/* </div> */}
           </div>
-          <span className="text-danger">{formDataErr.descriptionErr}</span>
         </div>
 
         {/* Right rail */}
@@ -258,10 +255,9 @@ const AddAdminPost = ({placeholder}) => {
                   {/* <CiImageOn /> */}
                   {!preview ? <ImageIcon/>:
                   <img src={preview} alt="" />}
-                  <input type="file" onChange={previewHandler} name="post-image" id="post-image" hidden />
+                  <input type="file" onChange={previewHandler}  id="post-image" hidden />
                 </label>
               </div>
-              <span className="text-danger">{formDataErr.imageErr}</span>
           </div>
 
           {/* Categories */}
@@ -273,7 +269,6 @@ const AddAdminPost = ({placeholder}) => {
                 return <option index={index} value={category.id}>{category.name}</option>
               })}
             </select>
-            <span className="text-danger">{formDataErr.categoryErr}</span>
           </div>
 
           {/* Tags */}
@@ -291,6 +286,7 @@ const AddAdminPost = ({placeholder}) => {
               type="text"
               onChange={(event)=>setTag(event.target.value)}
               value={tag}
+              name="tags"
               onKeyDown={tagsHandler}
               placeholder="Add a tag..."
               className={styles.tagInput}

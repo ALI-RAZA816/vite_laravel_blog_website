@@ -5,8 +5,6 @@ import { useAuth } from "../Context/AuthContext";
 export default function Login() {
   const {
     loginData,
-    loginErr,
-    restricted,
     loginFormHandler,
     loginAccount,
     showLoadingSpinner,
@@ -19,7 +17,6 @@ export default function Login() {
         <div className={styles.card}>
           <h2 className={styles.cardTitle}>Welcome back</h2>
           <p className={styles.cardSubtitle}>Sign in to your editorial account</p>
-          <p className="text-danger">{restricted}</p>
 
           <form onSubmit={loginAccount}>
             <div>
@@ -32,7 +29,6 @@ export default function Login() {
                 type="email"
                 placeholder="name@example.com"
               />
-              <span className="text-danger">{loginErr.emailErr}</span>
             </div>
 
             <div className={`${styles.passwordRow} d-flex align-items-center`}>
@@ -47,7 +43,6 @@ export default function Login() {
               type="password"
               placeholder="••••••••"
             />
-            <span className="text-danger">{loginErr.passwordErr}</span>
 
             <button
               disabled={disabledField}

@@ -5,7 +5,6 @@ import { useAuth } from "../Context/AuthContext";
 export default function Register() {
   const {
     registerData,
-    registerErr,
     registerFormHandler,
     registerAccount,
     showLoadingSpinner,
@@ -30,7 +29,6 @@ export default function Register() {
                 name="name"
                 placeholder="Enter full name"
               />
-              <span className="text-danger">{registerErr.nameErr}</span>
             </div>
 
             <div>
@@ -43,7 +41,6 @@ export default function Register() {
                 name="emailaddress"
                 placeholder="name@example.com"
               />
-              <span className="text-danger">{registerErr.emailaddressErr}</span>
             </div>
 
             <div>
@@ -56,7 +53,6 @@ export default function Register() {
                 name="password"
                 placeholder="••••••••"
               />
-              <span className="text-danger">{registerErr.passwordErr}</span>
             </div>
 
             <div>
@@ -69,7 +65,6 @@ export default function Register() {
                 name="password_confirmation"
                 placeholder="••••••••"
               />
-              <span className="text-danger">{registerErr.password_confirmationErr}</span>
             </div>
 
             <button

@@ -44,7 +44,7 @@ class StoreUserRequest extends FormRequest
             'username.unique'=>'Username already exists',
             'password.required'=>'Password is required',
             'password.min'=>'Password must be at least 5 characters',
-            'password.confirmed'=>'Password confirmation does not match',
+            'password.confirmed'=>'Password does not match',
             'image'=>'File type must be png,jpeg,jpg or 3MB',
         ];
     }

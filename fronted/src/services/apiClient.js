@@ -1,7 +1,7 @@
 
 import {apiUrl} from '../Http/Http';
 
-export const showToast = ()=>{
+export const showToast = (message, msgType, type)=>{
 
     let toastContainer = document.getElementById('toast-container');
     if(!toastContainer){
@@ -9,9 +9,9 @@ export const showToast = ()=>{
         toastContainer.id = 'toast-container';
         toastContainer.style.cssText = `
             position: fixed;
-            top: 20px;
+            top: 100px;
             right: 20px;
-            z-index: 9999;
+            z-index: 999;
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -22,16 +22,15 @@ export const showToast = ()=>{
     }
 
     const toast = document.createElement('div');
-    toast.className = 'border-5 border-start border-success';
+    toast.className = `border-5 border-start border-${type}`;
     toast.style.cssText = `
             display: flex;
             align-items: center;
-            gap: 12px;
             min-width: 280px;
             max-width: 360px;
-            padding: 14px 18px;
             background: #fff;
-            color: #333;
+            color: rgba(51, 51, 51,.80);
+            padding:5px 5px;
             border-radius: 10px;
             transform: translateX(100%);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
@@ -39,8 +38,13 @@ export const showToast = ()=>{
     `;
 
     toast.innerHTML = `
-        <span style="font-size: 18px;"><i class="fa-solid fa-circle-check"></i></span>
-        <span>Message</span>
+        <div class='d-flex align-items-center'>
+            <span style="font-size:25px;" class='text-${type} me-2'>${type === 'success' ? '<i class="fa-solid fa-circle-check"></i>' : type === 'danger' ? '<i class="fa-solid fa-circle-xmark"></i>' : '<i class="fa-solid fa-triangle-exclamation"></i>'}</span>
+            <div class='d-flex flex-column'>
+                <span class='text-${type}'>${msgType}!</span>
+                <span style="font-size:14px;font-weight:normal !important;">${message}</span>
+            </div>
+        </div>
     `;
     
     requestAnimationFrame(() => {
@@ -55,8 +59,8 @@ export const showToast = ()=>{
         setTimeout(() => {
             toast.remove();
 
-            if (container.children.length === 0) {
-                container.remove();
+            if (toastContainer.children.length === 0) {
+                toastContainer.remove();
             }
         }, 300);
     }, 3000);

@@ -8,12 +8,10 @@ export const AuthContext = createContext();
 const AuthContextProvider = ({ children }) => {
   const navigate = useNavigate();
 
-  // spinner + fields disable (login aur register dono ke liye)
   const [showLoadingSpinner, setShowLoadingSpinner] = useState(false);
   const [disabledField, setDisabledField] = useState(false);
   const {setStatusCode} = useContext(AppContext);
 
-  // request shuru / khatam hone par ek hi jagah se control
   const startRequest = () => {
     setShowLoadingSpinner(true);
     setDisabledField(true);
@@ -27,16 +25,10 @@ const AuthContextProvider = ({ children }) => {
   // =======================
   //        LOGIN
   // =======================
-  const [restricted, setRestricted] = useState(null);
 
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
-  });
-
-  const [loginErr, setLoginErr] = useState({
-    emailErr: "",
-    passwordErr: "",
   });
 
   const loginFormHandler = (event) => {
@@ -46,8 +38,15 @@ const AuthContextProvider = ({ children }) => {
 
   const loginAccount = async (event) => {
     event.preventDefault();
-    setLoginErr({ emailErr: "", passwordErr: "" });
-    setRestricted(null);
+    if(!loginData.email){
+      showToast('Email is required','Error','danger');
+      return false;
+    }
+    if(!loginData.password){
+      showToast('Password is required','Error','danger');
+      return false;
+    }
+
     startRequest();
 
     try {
@@ -55,32 +54,25 @@ const AuthContextProvider = ({ children }) => {
 
       if (!ok) {
         const error = data.errors;
-
         if (error?.email?.[0]) {
-          setLoginErr({ emailErr: error.email[0], passwordErr: "" });
+          showToast(error.email?.[0],'Error','danger');
         } else if (error?.password?.[0]) {
-          setLoginErr({ emailErr: "", passwordErr: error.password[0] });
-        } else if (data.status === 404) {
-          setLoginErr({ emailErr: "", passwordErr: data.password });
+          showToast(error.password?.[0],'Error','danger');
         } else if (data.message) {
-          setLoginErr({ emailErr: data.message, passwordErr: "" });
+          showToast(data.message,'Error','danger');
         }
         return;
       }
-
+      
       if(status){
         setStatusCode(status);
         navigate('/aunauthorized');
       }
 
-      if (data.status === 401) {
-        setRestricted(data.message);
-        return;
-      }
-
       localStorage.setItem("UserInfo", JSON.stringify(data.user));
       localStorage.setItem("token", data.token);
       navigate("/");
+      showToast(data.message,'Success','success');
     } catch (error) {
       console.log("loginAccount:", error);
     } finally {
@@ -98,39 +90,27 @@ const AuthContextProvider = ({ children }) => {
     password_confirmation: "",
   });
 
-  const emptyRegisterErr = {
-    nameErr: "",
-    emailaddressErr: "",
-    passwordErr: "",
-    password_confirmationErr: "",
-  };
-
-  const [registerErr, setRegisterErr] = useState(emptyRegisterErr);
-
+  
   const registerFormHandler = (event) => {
     const { name, value } = event.target;
     setRegisterData((prev) => ({ ...prev, [name]: value }));
   };
-
-  // submit se pehle khali fields check karna
+  
   const validateRegister = () => {
     if (!registerData.name) {
-      setRegisterErr({ ...emptyRegisterErr, nameErr: "The name field is required" });
+      showToast('Name is required','Error','danger');
       return false;
     }
     if (!registerData.emailaddress) {
-      setRegisterErr({ ...emptyRegisterErr, emailaddressErr: "The email field is required" });
+      showToast('Email is required','Error','danger');
       return false;
     }
     if (!registerData.password) {
-      setRegisterErr({ ...emptyRegisterErr, passwordErr: "The password field is required" });
+      showToast('Password is required','Error','danger');
       return false;
     }
     if (!registerData.password_confirmation) {
-      setRegisterErr({
-        ...emptyRegisterErr,
-        password_confirmationErr: "The confirm password field is required",
-      });
+      showToast('Confirm password is required','Error','danger');
       return false;
     }
     return true;
@@ -138,9 +118,7 @@ const AuthContextProvider = ({ children }) => {
 
   const registerAccount = async (event) => {
     event.preventDefault();
-    showToast()
 
-    setRegisterErr(emptyRegisterErr);
 
     if (!validateRegister()) return;
 
@@ -149,29 +127,27 @@ const AuthContextProvider = ({ children }) => {
     try {
 
       const {ok, data} = await apiSend('account','POST', registerData);
-
+      
       if (!ok) {
         const error = data.errors ?? {};
-        console.log(error);
 
         if (error.name?.[0]) {
-          setRegisterErr({ ...emptyRegisterErr, nameErr: error.name[0] });
+          showToast(error.name?.[0],'Error','danger');
         } else if (error.emailaddress?.[0]) {
-          setRegisterErr({ ...emptyRegisterErr, emailaddressErr: error.emailaddress[0] });
+          showToast(error.emailaddress?.[0],'Error','danger');
         } else if (error.password?.[0]) {
-          setRegisterErr({ ...emptyRegisterErr, passwordErr: error.password[0] });
+          showToast(error.password?.[0],'Error','danger');
         } else if (error.password_confirmation?.[0]) {
-          setRegisterErr({
-            ...emptyRegisterErr,
-            password_confirmationErr: error.password_confirmation[0],
-          });
-        } else if (data.message) {
-          setRegisterErr({ ...emptyRegisterErr, emailaddressErr: data.message });
+          showToast(error.password_confirmation?.[0],'Error','danger');
+        }else if (data.message) {
+          showToast(data.message,'Error','danger');
         }
         return;
       }
 
       navigate("/login");
+      showToast(data.message,'Success','success');
+
     } catch (error) {
       console.log("registerAccount:", error);
     } finally {
@@ -206,14 +182,12 @@ const AuthContextProvider = ({ children }) => {
 
         // login
         loginData,
-        loginErr,
-        restricted,
+        // loginErr,
         loginFormHandler,
         loginAccount,
 
         // register
         registerData,
-        registerErr,
         registerFormHandler,
         registerAccount,
 
@@ -226,10 +200,9 @@ const AuthContextProvider = ({ children }) => {
   );
 };
 
-// chhota hook taake har page me useContext likhna na pade
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth ko <AuthContextProvider> ke andar use karein.");
+  if (!ctx) throw new Error("Use useAuth in the  <AuthContextProvider>");
   return ctx;
 };
 

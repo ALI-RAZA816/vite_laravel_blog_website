@@ -8,6 +8,7 @@ import { apiUrl, baseUrl } from '../Http/Http';
 import { AppContext } from '../Context/AppContext';
 import { usePublicSetting } from '../Context/PublicSettingContext';
 import { useUser } from '../Context/UserContext';
+import { showToast } from '../services/apiClient';
 
 
 export default function Header() {
@@ -35,7 +36,11 @@ export default function Header() {
         },
       });
       const data = await response.json();
-      console.log(data);
+      if(response.ok){
+        showToast(data?.message,'Success','success');
+      }else{
+        showToast(data?.message,'Error','error');
+      }
       if(data.status === true){
         localStorage.clear();
         navigate('/');
