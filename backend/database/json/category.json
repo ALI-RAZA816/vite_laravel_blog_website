@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Technology",
+    "slug": "technology",
+    "description": "Latest technology news, trends, and innovations.",
+    "icon": "globe"
+  },
+  {
+    "name": "Programming",
+    "slug": "programming",
+    "description": "Programming tutorials, coding tips, and development resources.",
+    "icon": "sprout"
+  },
+  {
+    "name": "Business",
+    "slug": "business",
+    "description": "Business news, strategies, startups, and entrepreneurship.",
+    "icon": "palette"
+  },
+  {
+    "name": "Lifestyle",
+    "slug": "lifestyle",
+    "description": "Articles about lifestyle, productivity, and everyday living.",
+    "icon": "leaf"
+  },
+  {
+    "name": "Education",
+    "slug": "education",
+    "description": "Educational resources, learning tips, and academic content.",
+    "icon": "book"
+  }
+]

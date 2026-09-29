@@ -39,11 +39,10 @@ const AppContextProvider = ({children})=>{
     }
 
     // fetch all users
-    const [currentPage, setCurrentPage] = useState(1);
     const fetchUsers = async ()=>{
         try{
             const token = localStorage.getItem('token');
-            const response = await fetch(`${apiUrl}/users?page=${currentPage}`,{
+            const response = await fetch(`${apiUrl}/users`,{
                 method:'GET',
                 headers:{
                     'Content-type':'application/json',
@@ -100,6 +99,7 @@ const AppContextProvider = ({children})=>{
             });
             const data = await response.json();
             console.log(data.posts);
+            // console.log(data.selected);
             if(response.ok){
                 setPosts(data.posts);
                 
@@ -159,7 +159,7 @@ const AppContextProvider = ({children})=>{
         fetchUsers();
         fetchPosts();
         fetchCategory();
-    },[refresh,currentPage]);
+    },[refresh]);
 
     return (
         <AppContext.Provider value={{

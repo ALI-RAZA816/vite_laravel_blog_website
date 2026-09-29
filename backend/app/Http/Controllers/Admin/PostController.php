@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\MonthlyReport;
 
 class PostController extends Controller
 {
@@ -15,8 +16,9 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::with('category')->with('author')->get();
+
         return response()->json([
-            'posts'=>$posts
+            'posts'=>$posts,
         ],200);
     }
 
@@ -58,6 +60,16 @@ class PostController extends Controller
             'author_id'=>Auth::id(),
             'tags'=>$request->tags,
             'image'=>$imageName
+        ]);
+
+        $total = Post::with('category')->with('author')->whereMonth('created_at',now()->month)->whereYear('created_at', now()->year)->count();
+
+        MonthlyReport::updateOrCreate([
+            'user_id'=>Auth::id(),
+            'month'=>now()->month,
+            'year'=>now()->year
+        ],[
+            'total_post'=>$total
         ]);
 
         return response()->json([

@@ -41,13 +41,14 @@ const post = [
 
 const AdminPosts = () => {
   const chartData2 = [30, 45, 40, 90, 55, 48, 62];
+  const months =  ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",'Aug','Sep','Oct','Nov','Dec']
   
   const {posts} = useContext(AppContext);
   const {setPosts} = useContext(AppContext);
   const {categories} = useContext(AppContext);
   const {setRefresh} = useContext(AppContext);
   const chartData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",'Aug','Sep','Oct','Nov','Dec'],
+    labels:months,
     datasets: [
       {
         label: "Posts",

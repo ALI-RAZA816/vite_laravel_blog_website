@@ -1,0 +1,102 @@
+[
+  {
+    "name": "Ali Raza",
+    "username": "ali_raza",
+    "email": "ali.raza@example.com",
+    "role": "admin",
+    "join_date": "Oct 29 ,26",
+    "status": "active",
+    "password": "Ali@2026Pass",
+    "bio": "Full stack developer and website administrator."
+  },
+  {
+    "name": "Sarah Khan",
+    "username": "sarah_khan",
+    "email": "sarah.khan@example.com",
+    "role": "editor",
+    "join_date": "Sep 14 ,26",
+    "status": "active",
+    "password": "Sarah#789Pass",
+    "bio": "Content editor focused on technology and lifestyle articles."
+  },
+  {
+    "name": "Ahmed Hassan",
+    "username": "ahmed_hassan",
+    "email": "ahmed.hassan@example.com",
+    "role": "author",
+    "join_date": "Aug 07 ,26",
+    "status": "active",
+    "password": "Ahmed@456Pass",
+    "bio": "Writer and blogger who enjoys creating informative content."
+  },
+  {
+    "name": "Ayesha Malik",
+    "username": "ayesha_malik",
+    "email": "ayesha.malik@example.com",
+    "role": "user",
+    "join_date": "Jul 22 ,26",
+    "status": "blocked",
+    "password": "Ayesha@321Pass",
+    "bio": "Regular platform user interested in technology and education."
+  },
+  {
+    "name": "Usman Tariq",
+    "username": "usman_tariq",
+    "email": "usman.tariq@example.com",
+    "role": "moderator",
+    "join_date": "Jun 18 ,26",
+    "status": "active",
+    "password": "Usman#654Pass",
+    "bio": "Community moderator responsible for maintaining content quality."
+  },
+  {
+    "name": "Hina Shah",
+    "username": "hina_shah",
+    "email": "hina.shah@example.com",
+    "role": "contributor",
+    "join_date": "May 11 ,26",
+    "status": "active",
+    "password": "Hina@987Pass",
+    "bio": "Creative contributor who writes articles and shares useful resources."
+  },
+  {
+    "name": "Bilal Ahmed",
+    "username": "bilal_ahmed",
+    "email": "bilal.ahmed@example.com",
+    "role": "editor",
+    "join_date": "Apr 03 ,26",
+    "status": "blocked",
+    "password": "Bilal#852Pass",
+    "bio": "Experienced editor with an interest in digital publishing."
+  },
+  {
+    "name": "Maria Joseph",
+    "username": "maria_joseph",
+    "email": "maria.joseph@example.com",
+    "role": "author",
+    "join_date": "Mar 27 ,26",
+    "status": "active",
+    "password": "Maria@741Pass",
+    "bio": "Professional writer creating educational and creative content."
+  },
+  {
+    "name": "Hamza Iqbal",
+    "username": "hamza_iqbal",
+    "email": "hamza.iqbal@example.com",
+    "role": "user",
+    "join_date": "Feb 15 ,26",
+    "status": "active",
+    "password": "Hamza#369Pass",
+    "bio": "Technology enthusiast and active community member."
+  },
+  {
+    "name": "Zainab Noor",
+    "username": "zainab_noor",
+    "email": "zainab.noor@example.com",
+    "role": "moderator",
+    "join_date": "Jan 09 ,26",
+    "status": "blocked",
+    "password": "Zainab@258Pass",
+    "bio": "Community moderator interested in managing online discussions."
+  }
+]
