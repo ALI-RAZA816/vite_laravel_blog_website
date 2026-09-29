@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "../assets/AddNewUser.module.css";
-import { apiUpload } from "../services/apiClient.js";
+import { apiUpload, showToast } from "../services/apiClient.js";
 import { useUser } from "../Context/UserContext";
 import { useNavigate } from "react-router-dom";
 
@@ -10,21 +10,10 @@ const AddNewUser = () => {
   const navigate = useNavigate();
   const {triggerUserRefresh} = useUser();
   const [image, setImage] = useState(null);
-  const [imageErr, setImageErr] = useState(null);
   const [Status, setStatus] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [instruction, setInstruction] = useState(false);
-  const [formDataErr, setFormDataErr] = useState({
-    nameErr:'',
-    usernameErr:'',
-    emailaddressErr:'',
-    bioErr:'',
-    roleErr:'',
-    statusErr:'',
-    passwordErr:'',
-    password_confirmationErr:'',
-    imageErr:'',
-  });
+
 
   const [formData, setFormData] = useState({
     name:'',
@@ -80,60 +69,33 @@ const AddNewUser = () => {
   const addUser = async (event)=>{
 
     event.preventDefault();
-    if(!formData.name){
-      setFormDataErr((prev)=>({
-        ...prev,
-        nameErr:'The name field is required'
-      }));
-      return;
-    }
-    if(!formData.emailaddress){
-      setFormDataErr((prev)=>({
-        ...prev,
-        emailaddressErr:'The emailaddress field is required'
-      }));
-      return;
-    }
-    if(!formData.role){
-      setFormDataErr((prev)=>(
-        {
-        ...prev,
-        roleErr:'The role field is required'
-        }
-      ));
-      return;
-    }
-    if(!Status){
-      setFormDataErr((prev)=>(
-        {
-          ...prev,
-        statusErr:'The status field is required'
-      }
-      ));
-      return;
-    }
-    if(!formData.password){
-      setFormDataErr((prev)=>({
-        ...prev,
-        passwordErr:'The password field is required'
-      }));
-      return;
-    }
-    if(!formData.password_confirmation){
-      setFormDataErr((prev)=>(
-        {
-          ...prev,
-        password_confirmationErr:'The confirm password field is required'
-      }
-      ));
-      return;
-    }
-    if(formData.password != formData.password_confirmation ){
-      setFormDataErr((prev)=>({
-        ...prev,
-        password_confirmationErr:'The password field confirmation does not match'
-      }))
-    }
+    // if(!formData.name){
+    
+    //   return;
+    // }
+    // if(!formData.emailaddress){
+    
+    //   return;
+    // }
+    // if(!formData.role){
+     
+    //   return;
+    // }
+    // if(!Status){
+    
+    //   return;
+    // }
+    // if(!formData.password){
+      
+    //   return;
+    // }
+    // if(!formData.password_confirmation){
+      
+    //   return;
+    // }
+    // if(formData.password != formData.password_confirmation ){
+      
+    // }
     const form = new FormData();
     form.append("name",formData.name);
     form.append("username",formData.username);
@@ -149,15 +111,42 @@ const AddNewUser = () => {
     }
 
     try{
-      const token = localStorage.getItem('token');
       const {ok, status, data} = await apiUpload('users','POST',form);
       if(!ok){
-        if(status.status === 422){
-          if(data?.errors?.image[0]){
-            setImageErr(data?.errors?.image[0]);
-          }
+        const error = data?.errors;
+        if(error?.name?.[0]){
+          showToast(error?.name?.[0], 'Error','danger');
+          return;
+        }
+
+        if(error?.username?.[0]){
+          showToast(error?.username?.[0], 'Error','danger');
+          return;
+        }
+
+        if(error?.emailaddress?.[0]){
+          showToast(error?.emailaddress?.[0], 'Error','danger');
+          return;
+        }
+
+        if(error?.bio?.[0]){
+          showToast(error?.bio?.[0], 'Error','danger');
+          return;
+        }
+        if(error?.role?.[0]){
+          showToast(error?.role?.[0], 'Error','danger');
+          return;
+        }
+        if(error?.password?.[0]){
+          showToast(error?.password?.[0], 'Error','danger');
+          return;
+        }
+        if(error?.image?.[0]){
+          showToast(error?.image?.[0], 'Error','danger');
+          return;
         }
       }else{
+        showToast(data.message, 'Success','success');
         triggerUserRefresh();
         navigate('/admin-panel/users');
       }
@@ -222,7 +211,6 @@ const AddNewUser = () => {
                   <div className={styles.photoHint}>
                     Recommended: Square image, at least 400x400px. JPG or PNG.
                     <br />
-                    <span className="text-danger">{imageErr}</span>
                   </div>
                 </div>
               </div>
@@ -241,7 +229,6 @@ const AddNewUser = () => {
                     className={styles.input}
                     placeholder="e.g. Jane Doe"
                   />
-                  <span className="text-danger">{formDataErr.nameErr}</span>
                 </div>
                 <div className="col-12 col-md-6">
                   <label htmlFor="username" className={styles.label}>
@@ -272,7 +259,6 @@ const AddNewUser = () => {
                   className={styles.input}
                   placeholder="jane.doe@example.com"
                 />
-                <span className="text-danger">{formDataErr.emailaddressErr}</span>
               </div>
             </section>
 
@@ -319,7 +305,6 @@ const AddNewUser = () => {
                   <option value="admin">Admin</option>
                   <option value="author">Author</option>
                 </select>
-                <span className="text-danger">{formDataErr.roleErr}</span>
               </div>
 
               <div className="d-flex align-items-center justify-content-between mt-4">
@@ -329,12 +314,11 @@ const AddNewUser = () => {
                 </div>
                 <label htmlFor="status" className={styles.switch}>
                   <input
-                    type="checkbox" id="status" onChange={statuHandler}
+                    type="checkbox" name="status" id="status" onChange={statuHandler}
                   />
                   <span className={styles.slider} />
                 </label>
               </div>
-                  <span className="text-danger">{formDataErr.statusErr}</span>
             </section>
 
             {/* Security card */}
@@ -353,7 +337,6 @@ const AddNewUser = () => {
                   value={formData.password}
                   className={styles.input}
                 />
-                <span className="text-danger">{formDataErr.passwordErr}</span>
               </div>
               <div className="mt-3">
                 <label htmlFor="confirm" className={styles.label}>
@@ -367,7 +350,6 @@ const AddNewUser = () => {
                   value={formData.password_confirmation}
                   className={styles.input}
                 />
-                <span className="text-danger">{formDataErr.password_confirmationErr}</span>
               </div>
               <div className={`${styles.checkboxRow} d-flex align-items-start gap-2 mt-4`}>
                 <input

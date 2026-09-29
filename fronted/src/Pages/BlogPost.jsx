@@ -8,7 +8,7 @@ import { MdOutlineEdit } from "react-icons/md";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { useUser } from "../Context/UserContext";
 import { usePublicPost } from "../Context/PublicPostContext";
-import {apiGet, apiSend} from '../services/apiClient.js';
+import {apiGet, apiSend, showToast} from '../services/apiClient.js';
 import LoadingSpinner from "../components/LoadingSpinner.jsx";
 export default function BlogPost() {
 
@@ -44,16 +44,27 @@ export default function BlogPost() {
 
   // update comment
   const updateComment = async (id)=>{
-    const token = localStorage.getItem('token');
+
+    if(!EditComment){
+      showToast('Type something in the box', 'Error','danger');
+      return;
+    }
+
     try{
 
-      const {ok, status, data} = await apiSend(`public-comments/${id}`, 'PUT', {comment:EditComment});
+      const {ok, data} = await apiSend(`public-comments/${id}`, 'PUT', {comment:EditComment});
+      console.log(data);
       if(ok){
         setRefresh(prev => prev + 1);
         setActiveEdit(null);
+        showToast(data.message,'Success','success');
       }else{
-        setStatusCode(status);
-        navigate('/aunauthorized');
+        const error = data?.errors;
+        if(error?.comment?.[0]){
+          showToast(error?.comment?.[0],'Error','danger');
+        }else if(data.message){
+          showToast(data.message,'Error','danger');
+        }
       }
     }catch(error){
       console.log(error);
@@ -128,11 +139,10 @@ export default function BlogPost() {
 
   
   const [comment, setComment] = useState('');
-  const [commentErr, setCommentErr] = useState('');
   const addComment = async (event)=>{
     event.preventDefault();
     if(!comment){
-      setCommentErr('Express your vision');
+      showToast('Type something to comment box','Error','danger');
       return;
     }
     const payload ={
@@ -141,13 +151,17 @@ export default function BlogPost() {
     }
     try{
       const {ok, status, data} = await apiSend('public-comments','POST',payload);
+      const error = data?.errors;
+      console.log(data);
       if(ok){
+        showToast(data.message,'Success','success');
         setRefresh(prev => prev + 1);
         setComment('');
-        setCommentErr('');
       }else{
-        setStatusCode(status);
-        navigate('/aunauthorized');
+        if(error?.comment?.[0]){
+
+        }
+        showToast(error?.comment?.[0],'Error','danger');
       }
 
     }catch(error){
@@ -158,13 +172,13 @@ export default function BlogPost() {
   const deleteComment = async (id)=>{
 
     try{
-      const {ok, status, data} = await apiSend(`public-comments/${id}`,'DELETE');
+      const {ok, data} = await apiSend(`public-comments/${id}`,'DELETE');
       if(ok){
         setRefresh(prev => prev + 1);
         setActive(null);
+        showToast(data.message, 'Success','success');
       }else{
-        setStatusCode(status);
-        navigate('/aunauthorized');
+        showToast(data.message, 'Error','danger');
       }
 
     }catch(error){
@@ -256,7 +270,6 @@ export default function BlogPost() {
                     value={comment}
                     onChange={(event)=>setComment(event.target.value)}
                   />
-                  <span className="text-danger">{commentErr}</span>
                   <button onClick={addComment} className={`${styles.postBtn} ms-auto`} >
                     Post Comment
                   </button>

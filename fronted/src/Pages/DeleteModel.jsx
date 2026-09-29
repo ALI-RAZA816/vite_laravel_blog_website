@@ -13,14 +13,12 @@ const DeleteModel = () => {
   const {deleteModel} = useContext(AppContext);
   const {setDeleteModel} = useContext(AppContext);
   const {triggerUserRefresh} = useUser();
-  const [setConfirmDelete] = useState(false);
 
   const deleteUser = async (delete_id)=>{
     try{
       const {ok, status, data} = await apiSend(`users/${delete_id}`,'DELETE');
       if(ok){
         setDeleteModel(!deleteModel);
-        setConfirmDelete(false);
         triggerUserRefresh();
       }else{
         setStatusCode(status);
@@ -33,7 +31,6 @@ const DeleteModel = () => {
   }
 
   const confirmDeleteHandler = ()=>{
-    setConfirmDelete(true);
     deleteUser(deletId);
   }
   

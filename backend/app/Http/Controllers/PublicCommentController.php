@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCommentRequest;
+use App\Http\Requests\UpdateCommentRequest;
 use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -10,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class PublicCommentController extends Controller
 {
-    public function addComment(Request $request)
+    public function addComment(StoreCommentRequest $request)
     {
         $date = date('M d, y');
         $post_title = Post::where('id',$request->post_id)->select('title')->first();
@@ -24,7 +26,7 @@ class PublicCommentController extends Controller
         ]);
 
         return response()->json([
-            'message'=>'Comment added'
+            'message'=>'Comment added to this post'
         ],200);
 
     }
@@ -49,11 +51,12 @@ class PublicCommentController extends Controller
         ],200);
     }
 
-    public function updateComment (Request $request, int $id){
+    public function updateComment (UpdateCommentRequest $request, int $id){
+
         $status = Comment::where('id', $id)->first();
         if(!$status){
             return response()->json([
-                'message'=>'Not found'
+                'message'=>'Category not found'
             ],404);
         }
 
@@ -62,8 +65,9 @@ class PublicCommentController extends Controller
         ]);
 
         return response()->json([
-            'message'=>'Comment updated'
+            'message'=>'Comment updated successfully'
         ],200);
+
     }
 
     public function deleteComment(Request $request, int $id)
@@ -76,12 +80,12 @@ class PublicCommentController extends Controller
         }
         if(!$status){
             return response()->json([
-                'message'=>'Not found'
+                'message'=>'Category not found'
             ],404);
         }
         $status->delete();
         return response()->json([
-            'message'=>'Comment deleted'
+            'message'=>'Comment deleted successfully'
         ],200);
     }
 

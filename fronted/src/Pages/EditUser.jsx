@@ -10,7 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useUser } from "../Context/UserContext";
 import { LuUserRound } from "react-icons/lu";
 import { baseUrl } from "../Http/Http";
-import { apiGet, apiUpload } from '../services/apiClient.js';
+import { apiGet, apiUpload, showToast } from '../services/apiClient.js';
 import { AppContext } from "../Context/AppContext.jsx";
 
 
@@ -108,13 +108,31 @@ const EditUser = () => {
             if(ok){
                 if(data.status === 200){
                     triggerUserRefresh();
+                    showToast(data.message, 'Success','success');
                     navigate('/admin-panel/users');
                 }
-            }else if(data.status === 422){
-                setImageErr(data?.errors?.image[0]);
             }else{
-                setStatusCode(status);
-                navigate('/aunauthorized');
+                const error = data?.errors;
+                if(error?.name?.[0]){
+                    showToast(error?.name?.[0], 'Error','danger');
+                    return;
+                }
+                if(error?.username?.[0]){
+                    showToast(error?.username?.[0], 'Error','danger');
+                    return;
+                }
+                if(error?.emailaddress?.[0]){
+                    showToast(error?.emailaddress?.[0], 'Error','danger');
+                    return;
+                }
+                if(error?.role?.[0]){
+                    showToast(error?.role?.[0], 'Error','danger');
+                    return;
+                }
+                if(data.message){
+                    showToast(data.message, 'Error','danger');
+                    return;
+                }
             }
 
         }catch(error){

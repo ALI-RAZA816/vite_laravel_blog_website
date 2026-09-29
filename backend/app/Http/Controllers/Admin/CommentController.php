@@ -40,9 +40,7 @@ class CommentController extends Controller
         ]);
     }
 
-    public function publicComments(){
-        
-    }
+  
 
     /**
      * Show the form for creating a new resource.
@@ -74,7 +72,7 @@ class CommentController extends Controller
 
         if(!$comment){
             return response()->json([
-                'message'=>'Not found'
+                'message'=>'Comment not found'
             ],404);
         }
 
@@ -102,10 +100,9 @@ class CommentController extends Controller
         } else {
             $status = Comment::where('id', $id)->where('user_id', $user->id)->first();
         }
-        // $status = Comment::where('id', $id)->first();
         if(!$status){
             return response()->json([
-                'message'=>'Not found'
+                'message'=>'Comment not found'
             ],404);
         }
 
@@ -113,9 +110,23 @@ class CommentController extends Controller
             'status'=>$request->status
         ]);
 
-        return response()->json([
-            'message'=>'Status updated'
-        ],200);
+        if($request->status === 'approved'){
+            return response()->json([
+                'message'=>'Status updated to approved'
+            ],200);
+        }
+
+        if($request->status === 'rejected'){
+            return response()->json([
+                'message'=>'Status updated to rejected'
+            ],200);
+        }
+        if($request->status === 'spam'){
+            return response()->json([
+                'message'=>'Status updated to spam'
+            ],200);
+        }
+
     }
 
     /**
@@ -131,12 +142,12 @@ class CommentController extends Controller
         }
         if(!$status){
             return response()->json([
-                'message'=>'Not found'
+                'message'=>'Comment not found'
             ],404);
         }
         $status->delete();
         return response()->json([
-            'message'=>'Comment deleted'
+            'message'=>'Comment deleted successfully'
         ],200);
     }
 
@@ -144,7 +155,7 @@ class CommentController extends Controller
         $postComment = Comment::with(['user','post'])->where('post_id',$id)->get();
         if(!$postComment){
             return response()->json([
-                'message'=>'Not found'
+                'message'=>'Comment not found'
             ],404);
         }
         return response()->json([

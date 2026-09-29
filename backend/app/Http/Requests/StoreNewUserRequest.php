@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreUserRequest extends FormRequest
+class StoreNewUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user()?->role === 'admin';
     }
 
     /**
@@ -25,8 +25,10 @@ class StoreUserRequest extends FormRequest
             'name'=>'required|string|max:50',
             'username'=>'nullable|string|max:50|unique:users,username',
             'emailaddress'=>'required|email|unique:users,email',
+            'bio'=>'nullable|string|max:100',
             'password'=>'required|min:5|confirmed',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:3072',
+            'role'=>'required|in:admin,editor,author,user',
+            'image' => 'required|image|mimes:jpg,jpeg,png|max:3072',
         ];
     }
 
@@ -45,6 +47,7 @@ class StoreUserRequest extends FormRequest
             'password.required'=>'Password is required',
             'password.min'=>'Password must be at least 5 characters',
             'password.confirmed'=>'Password does not match',
+            'bio.max'=>'Bio must not be exceed 100 characters',
             'image.mimes'=>'File type must be png,jpeg,jpg or 3MB',
         ];
     }

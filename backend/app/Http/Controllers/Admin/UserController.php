@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 use App\Events\UserRegistered;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreNewUserRequest;
+use App\Http\Requests\UpdateNewUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -49,7 +51,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreNewUserRequest $request)
     {
         try{
 
@@ -79,7 +81,7 @@ class UserController extends Controller
 
             return response()->json([
                 'status'=>200,
-                'message'=>'Account created'
+                'message'=>'New user added successfully'
             ]);
 
         }catch(ValidationException $e){
@@ -120,7 +122,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, int $id)
+    public function update(UpdateNewUserRequest $request, int $id)
     {
         $user = User::where("id",$id)->first();
         if(!$user){
@@ -129,12 +131,6 @@ class UserController extends Controller
                 'message'=>'Unauthorized'
             ],401);
         }
-
-        $request->validate([
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:3072',
-        ],[
-            'image'=>'File type must be png,jpeg,jg or 3MB'
-        ]);
 
         $imageName = $user->image;
         if($request->hasFile('image')){
@@ -167,7 +163,7 @@ class UserController extends Controller
 
         return response()->json([
             'status'=>200,
-            'message'=>'User updated'
+            'message'=>'User updated successfully'
         ],200);
     }
 

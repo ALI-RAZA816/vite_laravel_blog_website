@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { apiGet , apiSend, emptyPagination, toPagination } from "../services/apiClient.js";
+import { apiGet , apiSend, emptyPagination, showToast, toPagination } from "../services/apiClient.js";
 
 export const CommentContext = createContext();
 
@@ -61,7 +61,10 @@ const CommentContextProvider = ({ children }) => {
     try {
       const {ok, data} = await apiSend(`comments/${id}`, 'PUT', {status:name});
       if (ok) {
+        showToast(data.message,'Success','success');
         triggerCommentRefresh();
+      }else{
+        showToast(data.message,'Error','danger');
       }
     } catch (error) {
       console.log(error);
@@ -74,9 +77,11 @@ const CommentContextProvider = ({ children }) => {
   const Deletecomment = async (id) => {
     try {
       const {ok, data} = await apiSend(`comments/${id}`,'DELETE');
-
       if (ok) {
+        showToast(data.message, 'Success','success');
         triggerCommentRefresh();
+      }else{
+        showToast(data.message, 'Error','danger');
       }
     } catch (error) {
       console.log(error);
