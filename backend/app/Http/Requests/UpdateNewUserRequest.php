@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Requests;
-
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateNewUserRequest extends FormRequest
 {
@@ -11,7 +11,7 @@ class UpdateNewUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user()?->role === 'admin';
     }
 
     /**
@@ -21,11 +21,12 @@ class UpdateNewUserRequest extends FormRequest
      */
       public function rules(): array
     {
+        $id = $this->route('user');
         return [
             'name'=>'required|string|max:50',
-            'username'=>'nullable|string|max:50|unique:users,username',
-            'emailaddress'=>'required|email|unique:users,email',
-            'bio'=>'nullable|string|max:100',
+            'username'=>['nullable', 'string', 'max:50', Rule::unique('users', 'username')->ignore($id)],
+            'email'=>['required', 'email', Rule::unique('users', 'email')->ignore($id)],
+            'bio'=>'nullable|string|max:300',
             'role'=>'required|in:admin,editor,author,user',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:3072',
         ];
@@ -44,7 +45,8 @@ class UpdateNewUserRequest extends FormRequest
             'username.max'=>'Username must not exceed 50 characters',
             'username.unique'=>'Username already exists',
             'bio.max'=>'Bio must not be exceed 100 characters',
-            'image.mimes'=>'File type must be png,jpeg,jpg or 3MB',
+            'image.mimes'=>'File type must be png,jpeg,jpg',
+            'image.max'=>'File size must be 3MB or less',
         ];
     }
 }

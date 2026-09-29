@@ -231,7 +231,6 @@ const ManageUsers = () => {
                     <button className="p-0" disabled={user.role === 'admin'} style={{background:'none !important',color:'none',backgroundColor:'none !important',outline:'none',border:'none'}}>
                       <RiDeleteBin5Fill  onClick={()=>DeleteModelHandler(user.id)} className={styles.deleteIcon}  />
                     </button>
-                    {/* <BsThreeDotsVertical className={styles.actionsIcon} /> */}
                   </td>}
                 </tr>
               ))}

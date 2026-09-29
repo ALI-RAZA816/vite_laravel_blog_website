@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateSettingRequest;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 
@@ -59,7 +60,7 @@ class SettingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(UpdateSettingRequest $request)
     {
         $setting = Setting::first();
         $imageName = $setting?->site_logo;
@@ -95,7 +96,7 @@ class SettingController extends Controller
         ]);
 
         return response()->json([
-            'message'=>'Changes saved'
+            'message'=>'Setting successfully saved'
         ],200);
     }
 
@@ -107,7 +108,7 @@ class SettingController extends Controller
         $setting = Setting::first();
         if(!$setting){
             return response()->json([
-                'message'=>'not found'
+                'message'=>'Not found'
             ],404);
         }
 
@@ -117,13 +118,17 @@ class SettingController extends Controller
             if(file_exists($old_image)){
                 unlink($old_image);
             }
+        }else{
+            return response()->json([
+                'message'=>'No logo to deleted'
+            ],200);
         }
 
         $setting->update([
             'site_logo'=>null
         ]);
         return response()->json([
-            'message'=>'Logo deleted successfully'
+            'message'=>'Logo successfully deleted'
         ],200);
     }
 }

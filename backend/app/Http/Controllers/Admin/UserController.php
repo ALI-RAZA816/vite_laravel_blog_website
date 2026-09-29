@@ -150,6 +150,7 @@ class UserController extends Controller
         }else{
             $imageName = $user->image;
         }
+        
         User::where('id',$id)->update([
             'name'=>$request->name,
             'username'=>$request->username,

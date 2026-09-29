@@ -48,7 +48,8 @@ class StoreNewUserRequest extends FormRequest
             'password.min'=>'Password must be at least 5 characters',
             'password.confirmed'=>'Password does not match',
             'bio.max'=>'Bio must not be exceed 100 characters',
-            'image.mimes'=>'File type must be png,jpeg,jpg or 3MB',
+            'image.mimes'=>'File type must be png,jpeg,jpg',
+            'image.max'=>'File size must be 3MB or less',
         ];
     }
 }

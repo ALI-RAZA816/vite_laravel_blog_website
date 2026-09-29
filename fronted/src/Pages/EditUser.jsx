@@ -20,7 +20,6 @@ const EditUser = () => {
     const {setStatusCode} = useContext(AppContext);
     const navigate = useNavigate();
     const {triggerUserRefresh} = useUser();
-    const [imageErr, setImageErr]= useState(null);
     const [accountActive, setAccountActive] = useState(false);
     const [twoFactor, setTwoFactor] = useState(false);
     const [imagePreview, setImagePreview] = useState(null);
@@ -73,7 +72,8 @@ const EditUser = () => {
                         role:user.role,
                         status:user.status,
                         image:user.image
-                    })
+                    });
+                    setAccountActive(user.status === 'active');
                 }
             }else{
                 setStatusCode(status);
@@ -92,6 +92,18 @@ const EditUser = () => {
     // update user
     const updateUser = async (event)=>{
         event.preventDefault();
+        if(!formData.name){
+            showToast('The name field is required','Error','danger');
+            return;
+        }
+        if(!formData.email){
+            showToast('The emai field is required','Error','danger');
+            return;
+        }
+        if(!formData.role){
+            showToast('Please select the role','Error','danger');
+            return;
+        }
         const form = new FormData();
         const accountStatus = accountActive === true ? 'active' : 'blocked';
         form.append('name',formData.name);
@@ -121,8 +133,8 @@ const EditUser = () => {
                     showToast(error?.username?.[0], 'Error','danger');
                     return;
                 }
-                if(error?.emailaddress?.[0]){
-                    showToast(error?.emailaddress?.[0], 'Error','danger');
+                if(error?.email?.[0]){
+                    showToast(error?.email?.[0], 'Error','danger');
                     return;
                 }
                 if(error?.role?.[0]){
@@ -183,7 +195,6 @@ const EditUser = () => {
                                 </label>
                                 <input type="file" name="image" onChange={imageHandler} id="file" hidden/>
                             </label>
-                            <span className="text-danger">{imageErr}</span>
                         </div>
                         </div>
 

@@ -27,8 +27,8 @@ const AuthContextProvider = ({ children }) => {
   // =======================
 
   const [loginData, setLoginData] = useState({
-    email: "",
-    password: "",
+    email: "hamza.raza1@example.com",
+    password: "Hamza@958Pass",
   });
 
   const loginFormHandler = (event) => {

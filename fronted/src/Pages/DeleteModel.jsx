@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import styles from "../assets/DeleteModel.module.css";
 import { AppContext } from "../Context/AppContext";
-import { apiSend } from "../services/apiClient.js";
+import { apiSend, showToast } from "../services/apiClient.js";
 import { useUser } from "../Context/UserContext";
 import { useNavigate } from "react-router-dom";
 
@@ -18,9 +18,11 @@ const DeleteModel = () => {
     try{
       const {ok, status, data} = await apiSend(`users/${delete_id}`,'DELETE');
       if(ok){
+        showToast(data.message,'Success','success');
         setDeleteModel(!deleteModel);
         triggerUserRefresh();
       }else{
+        showToast(data.message,'Error','danger');
         setStatusCode(status);
         navigate('/aunauthorized');
       }

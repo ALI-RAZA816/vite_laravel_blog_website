@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import {apiGet, apiUpload, apiSend} from '../services/apiClient.js';
+import {apiGet, apiUpload, apiSend, showToast} from '../services/apiClient.js';
 export const SettingContext = createContext();
 
 const SettingContextProvider = ({ children }) => {
@@ -71,7 +71,6 @@ const SettingContextProvider = ({ children }) => {
 
   // save settings
   const settingHandler = async () => {
-    const token = localStorage.getItem('token');
     const form = new FormData();
     form.append('site_title', settingData.site_title);
     form.append('site_desc', settingData.site_desc);
@@ -81,12 +80,33 @@ const SettingContextProvider = ({ children }) => {
     form.append('i_url', settingData.i_url);
     form.append('l_url', settingData.l_url);
     form.append('maintence', maintenance);
-    form.append('site_logo', logo);
+    if(logo instanceof File){
+      form.append('site_logo', logo);
+    }
 
     try {
       const {ok, data} = await apiUpload('settings','POST',form);
       if (ok) {
+        showToast(data.message, 'Success','success');
         triggerSettingRefresh();
+      }else{
+        const error = data?.errors;
+        if(error?.site_title?.[0]){
+          showToast(error?.site_title?.[0], 'Error','danger');
+          return;
+        }
+        if(error?.site_desc?.[0]){
+          showToast(error?.site_desc?.[0], 'Error','danger');
+          return;
+        }
+        if(error?.site_copyright?.[0]){
+          showToast(error?.site_copyright?.[0], 'Error','danger');
+          return;
+        }
+        if(data.message){
+          showToast(data.message, 'Error','danger');
+          return;
+        }
       }
     } catch (error) {
       console.log(error);
@@ -97,9 +117,12 @@ const SettingContextProvider = ({ children }) => {
   const logoHandler = async (event) => {
     event.preventDefault();
     try {
-      const {ok, data} = apiSend('logo','DELETE');
+      const {ok, data} = await apiSend('logo','DELETE');
       if (ok) {
+        showToast(data.message,'Success','success');
         triggerSettingRefresh();
+      }else{
+        showToast(data.message,'Error','danger');
       }
     } catch (error) {
       console.log(error);
