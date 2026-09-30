@@ -28,7 +28,7 @@ class StoreNewUserRequest extends FormRequest
             'bio'=>'nullable|string|max:100',
             'password'=>'required|min:5|confirmed',
             'role'=>'required|in:admin,editor,author,user',
-            'image' => 'required|image|mimes:jpg,jpeg,png|max:3072',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:3072',
         ];
     }
 

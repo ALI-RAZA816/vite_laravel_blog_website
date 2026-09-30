@@ -11,7 +11,7 @@ const AdminHeader = () => {
   const { toggleSidebar } = useContext(AppContext);
   const location = useLocation();
   const {loggedUser} = useUser();
-  const lastSegment = location.pathname.split('/').pop();
+  const lastSegment = location.pathname.split('/');
   return (
     <>
     <div className="container-fluid">
@@ -30,7 +30,7 @@ const AdminHeader = () => {
                   <BsList />
                 </button>
                 {/* Search */}
-                <h3 className='text-capitalize fw-bold'>{lastSegment}</h3>
+                <h3 className='text-capitalize fw-bold'>{lastSegment[2]}</h3>
 
                 {/* Right side */}
                 <div className={`d-flex align-items-center ${styles.rightSection}`}>

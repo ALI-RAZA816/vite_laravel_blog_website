@@ -69,33 +69,37 @@ const AddNewUser = () => {
   const addUser = async (event)=>{
 
     event.preventDefault();
-    // if(!formData.name){
+    if(!formData.name){
+      showToast('The name is required','Error','danger');
+      return;
+    }
     
-    //   return;
-    // }
-    // if(!formData.emailaddress){
+    if(!formData.emailaddress){
+      showToast('The email is required','Error','danger');
+      return;
+    }
     
-    //   return;
-    // }
-    // if(!formData.role){
-     
-    //   return;
-    // }
-    // if(!Status){
+    if(!formData.role){
+      showToast('Please select user role','Error','danger');
+      return;
+    }
+    if(!Status){
+      showToast('Select acount status Active or Block','Error','danger');
+      return;
+    }
+    if(!formData.password){
+      showToast('Password is required','Error','danger');
+      return;
+    }
+    if(!formData.password_confirmation){
+      showToast('Confirm password is required','Error','danger');
+      return;
+    }
     
-    //   return;
-    // }
-    // if(!formData.password){
-      
-    //   return;
-    // }
-    // if(!formData.password_confirmation){
-      
-    //   return;
-    // }
-    // if(formData.password != formData.password_confirmation ){
-      
-    // }
+    if(formData.password != formData.password_confirmation ){
+      showToast("Password doesn't match",'Error','daner');
+      return;
+    }
     const form = new FormData();
     form.append("name",formData.name);
     form.append("username",formData.username);
@@ -111,7 +115,7 @@ const AddNewUser = () => {
     }
 
     try{
-      const {ok, status, data} = await apiUpload('users','POST',form);
+      const {ok, data} = await apiUpload('users','POST',form);
       if(!ok){
         const error = data?.errors;
         if(error?.name?.[0]){
@@ -353,6 +357,7 @@ const AddNewUser = () => {
               </div>
               <div className={`${styles.checkboxRow} d-flex align-items-start gap-2 mt-4`}>
                 <input
+                  disabled={formData.role === 'user'}
                   onChange={instructionHandler}
                   id="sendWelcome"
                   type="checkbox"

@@ -15,6 +15,7 @@ export default function Home() {
 
 
   const { publicCategories: categories } = usePublicCategory();
+  const {searchHandler, searchTerm} = usePublicPost();
   const { publicPosts: totalPosts, spinnerLoader, popularPosts ,publicPostPage:pagination, setCurrentPage: setCurrentPostPage, currentPage :currentPostPage} = usePublicPost();
   
   const pages = [];
@@ -54,7 +55,6 @@ export default function Home() {
           {/* Main content */}
           <div className="col-lg-8">
             <div className={styles.sectionHeader}>
-              <h2 className={styles.sectionTitle}>Recent Stories</h2>
             </div>
             <div className="row">
               {spinnerLoader ? (
@@ -75,7 +75,7 @@ export default function Home() {
             </div>
 
            {/* Pagination */}
-            {totalPosts.length !== 0 && <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
+            {totalPosts.length === 0 ? <div className="d-flex fs-2 text-secondary justify-content-center align-items-center vh-100">Not found</div> : <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
               <span className={styles.showingText}>Showing {pagination.from} to {pagination.to} of {pagination.total} users</span>
               <div className="d-flex align-items-center gap-2">
                 <button disabled={pagination.currentPage === 1} onClick={()=> setCurrentPostPage(pagination.currentPage - 1)} className={styles.pageBtn}>
@@ -98,8 +98,8 @@ export default function Home() {
             <div className={styles.sidebarBlock}>
               <h4 className={styles.sidebarTitle}>SEARCH THE JOURNAL</h4>
               <div className={styles.searchBox}>
-                <input type="text" placeholder="Type keywords..." />
-                <span><IoMdSearch /></span>
+                <input type="text" onKeyDown={(event)=>searchHandler(event, event.target.value)} placeholder="Search post" />
+                <span className="fs-5"><IoMdSearch /></span>
               </div>
             </div>
 

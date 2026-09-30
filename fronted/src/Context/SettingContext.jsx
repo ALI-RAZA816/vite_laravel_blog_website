@@ -7,7 +7,6 @@ const SettingContextProvider = ({ children }) => {
   const [spinnerLoader, setSpinnerLoader] = useState(false);
   const triggerSettingRefresh = () => setSettingRefresh((prev) => prev + 1);
 
-  const [maintenance, setMaintenance] = useState(false);
   const [logoPreview, setLogoPreview] = useState(null);
   const [logo, setLogo] = useState(null);
   const [settingData, setSettingData] = useState({
@@ -53,7 +52,6 @@ const SettingContextProvider = ({ children }) => {
           l_url: data?.setting?.l_url,
         });
         setLogo(data?.setting?.site_logo);
-        setMaintenance(data?.setting?.site_maintence === "true");
         setSpinnerLoader(false);
       }
     } catch (error) {
@@ -79,7 +77,6 @@ const SettingContextProvider = ({ children }) => {
     form.append('t_url', settingData.t_url);
     form.append('i_url', settingData.i_url);
     form.append('l_url', settingData.l_url);
-    form.append('maintence', maintenance);
     if(logo instanceof File){
       form.append('site_logo', logo);
     }
@@ -131,8 +128,6 @@ const SettingContextProvider = ({ children }) => {
 
   return (
     <SettingContext.Provider value={{
-      maintenance,
-      setMaintenance,
       logoPreview,
       setLogoPreview,
       logo,

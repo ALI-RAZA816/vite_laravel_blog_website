@@ -18,7 +18,6 @@ import LoadingSpinner from "../components/LoadingSpinner";
 const GeneralSetting = () => {
 
   const {
-    maintenance, setMaintenance,
     logoPreview, logo,
     settingData: formData,   
     settingFormHandler: formHandler,
@@ -201,38 +200,6 @@ const GeneralSetting = () => {
                 />
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Maintenance Mode */}
-        <div className={`d-flex justify-content-between align-items-center flex-wrap gap-3 ${styles.maintenancePanel}`}>
-          <div className="d-flex align-items-start gap-3">
-            <div className={styles.maintenanceIcon}>
-              <BsShieldFillCheck />
-            </div>
-            <div>
-              <h5 className={styles.maintenanceTitle}>Maintenance Mode</h5>
-              <p className={styles.maintenanceText}>
-                When enabled, visitors will see a "Coming Soon" page while you make changes.
-              </p>
-            </div>
-          </div>
-
-          <div className="d-flex align-items-center gap-3">
-            <div className={styles.statusLabel}>
-              Status:<br />
-              <span className={styles.statusValue}>
-                {maintenance ? "Enabled" : "Disabled"}
-              </span>
-            </div>
-            <label className={styles.switch}>
-              <input
-                type="checkbox"
-                checked={maintenance}
-                onChange={() => setMaintenance(!maintenance)}
-              />
-              <span className={styles.slider}></span>
-            </label>
           </div>
         </div>
       </>}

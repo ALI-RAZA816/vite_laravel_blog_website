@@ -47,7 +47,6 @@ const chartData = [
 const DashboardContent = () => {
 
   const [monthlyRecord, setMonthlyRecord] = useState('');
-  // const {totalUsers} = useContext(AppContext);
 
   const { lastMonthViews, spinnerLoader, posts, totalViews,velocity, avgViews } = usePost();
   const { totalPosts, totalUsers, allComments} = useDashboard();
@@ -123,7 +122,6 @@ const DashboardContent = () => {
       value:totalViews <= 1000 ? `${totalViews}` : `${(totalViews/1000).toFixed(1)}k`,
     },
   ];
-  const maxValue = Math.max(...chartData.map((d) => d.value));
 
   return (
     <div className={styles.content}>

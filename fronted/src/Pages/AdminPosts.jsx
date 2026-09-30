@@ -183,6 +183,7 @@ const AdminPosts = () => {
 
   useEffect(()=>{
     monthReportHandler();
+    setActive('all');
   },[]);
 
   return (

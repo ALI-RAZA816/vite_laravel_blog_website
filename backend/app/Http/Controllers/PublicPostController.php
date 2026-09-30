@@ -10,8 +10,11 @@ use Laravel\Sanctum\PersonalAccessToken;
 
 class PublicPostController extends Controller
 {
-    public function publicPosts(){
-        $publicPost = Post::with(['category','author'])->paginate(40);
+    public function publicPosts(Request $request){
+        $search_term = $request->query('query');
+        $publicPost = Post::with(['category','author'])->where(function($query) use ($search_term){
+                    $query->where('title', 'LIKE', '%' . $search_term . '%');
+                })->latest()->paginate(10);
         $popularPost = Post::with(['category','author'])->orderBy('views_counter','desc')->limit(5)->get();
         return response()->json([
             'allPost'=>$publicPost,

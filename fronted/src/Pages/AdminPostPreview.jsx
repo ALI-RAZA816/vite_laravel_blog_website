@@ -3,6 +3,7 @@ import styles from "../assets/AdminPostPreview.module.css";
 import { useNavigate, useParams } from "react-router-dom";
 import {apiGet} from '../services/apiClient';
 import { AppContext } from "../Context/AppContext";
+import { baseUrl } from "../Http/Http";
 
 const AdminPostPreview = () => {
 

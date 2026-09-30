@@ -14,10 +14,19 @@ const PublicPostContextProvider = ({ children }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [publicPostPage, setPublicPostPage] = useState(emptyPagination);
 
+
+  const [searchTerm, setSearchTerm] = useState('');
   const fetchPublicPosts = async () => {
     setSpinnerLoader(true);
     try {
-      const {ok, data} = await apiGet(`public-posts?page=${currentPage}`);
+      let response ;
+      if(!searchTerm && searchTerm == null){
+        response = await apiGet(`public-posts?page=${currentPage}`);
+      }else{
+        response = await apiGet(`public-posts?query=${searchTerm}&page=${currentPage}`);
+        
+      }
+      const {ok, data} = response;
       if (ok) {
         setPopularPosts(data.popularPost);
         setPublicPosts(data.allPost.data);
@@ -29,9 +38,16 @@ const PublicPostContextProvider = ({ children }) => {
     }
   };
 
+  const searchHandler = (event, search)=>{
+    if(event.key === 'Enter'){
+      if(!searchTerm && searchTerm == null) return;
+      setSearchTerm(search);
+    }
+  }
+
   useEffect(() => {
     fetchPublicPosts();
-  }, [currentPage]);
+  }, [currentPage, searchTerm]);
 
   // =======================
   //   SINGLE POST VIEW (BlogPost.jsx)
@@ -81,7 +97,9 @@ const PublicPostContextProvider = ({ children }) => {
       currentPage,   
       setCurrentPage,
       postView,
+      searchHandler,
       spinnerLoader,
+      searchTerm,
       fetchPostView,
     }}>
       {children}
