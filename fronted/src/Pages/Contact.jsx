@@ -11,10 +11,11 @@ export default function Contact() {
     <div className={styles.page}>
 
       <div className="container text-center">
-        <h1 className={styles.title}>Let's Connect</h1>
+        <h1 className={styles.title}>Get in Touch</h1>
         <p className={styles.subtitle}>
-          Whether you have a question about our slow-living practices, want to collaborate, or
-          just want to share a quiet moment of inspiration, we'd love to hear from you.
+          Have a question about our blog, want to write as a guest author, suggest a topic,
+          or report an issue? Send us a message and our team will get back to you as soon
+          as possible.
         </p>
       </div>
 
@@ -25,11 +26,11 @@ export default function Contact() {
               <div className="row">
                 <div className="col-md-6 mb-3">
                   <label>Name</label>
-                  <input type="text" placeholder="Evelyn Thorne" />
+                  <input type="text" placeholder="John Carter" />
                 </div>
                 <div className="col-md-6 mb-3">
                   <label>Email</label>
-                  <input type="email" placeholder="evelyn@slowliving.com" />
+                  <input type="email" placeholder="john@example.com" />
                 </div>
               </div>
               <div className="mb-3">
@@ -38,7 +39,7 @@ export default function Contact() {
               </div>
               <div className="mb-3">
                 <label>Message</label>
-                <textarea rows="5" placeholder="Your thoughts here..."></textarea>
+                <textarea rows="5" placeholder="Write your message here..."></textarea>
               </div>
               <button className={styles.sendBtn}>Send Message</button>
             </div>
@@ -47,34 +48,34 @@ export default function Contact() {
           <div className="col-lg-6">
             <img
               className={styles.sideImg}
-              src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=600"
-              alt="desk"
+              src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600"
+              alt="Laptop and phone on a work desk"
             />
             <h4 className={styles.otherWaysTitle}>Other ways to reach us</h4>
             <p className={styles.quoteText}>
-              "True connection happens in the spaces between the digital noise."
+              "Every great blog starts with a conversation. We'd love to hear yours."
             </p>
 
             <div className={styles.contactRow}>
               <span className={styles.iconCircle}>&#9993;</span>
               <div>
                 <p className={styles.contactLabel}>Email</p>
-                <p className={styles.contactValue}>hello@slowlivingblog.com</p>
+                <p className={styles.contactValue}>support@yourblog.com</p>
               </div>
             </div>
             <div className={styles.contactRow}>
               <span className={styles.iconCircle}><AiFillSnippets /></span>
               <div>
-                <p className={styles.contactLabel}>Studio</p>
+                <p className={styles.contactLabel}>Editorial Office</p>
                 <p className={styles.contactValue}>
-                  The Quiet Corner, 42 Mindfulness Way
+                  Content Team, 25 Main Boulevard
                   <br />
-                  Portland, Oregon 97201
+                  Lahore, Punjab 54000
                 </p>
               </div>
             </div>
             <hr />
-            <p className={styles.socialLabel}>SOCIAL PRESENCE</p>
+            <p className={styles.socialLabel}>FOLLOW US</p>
             <div className={styles.socialRow}>
               <span><IoCameraOutline /></span>
               <span><GrNotes /></span>

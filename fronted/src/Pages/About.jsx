@@ -11,47 +11,44 @@ export default function About() {
       <div className="container">
         <div className="row align-items-center">
           <div className="col-lg-6">
-            <p className={styles.eyebrow}>THE VOICE BEHIND THE WORDS</p>
+            <p className={styles.eyebrow}>ABOUT OUR BLOG PLATFORM</p>
             <h1 className={styles.title}>
-              Designing a life with intention, one slow breath at a time.
+              A simple space to write, publish and share your stories with the world.
             </h1>
             <p className={styles.quoteLine}>
-              "Slow living isn't about doing things at a snail's pace. It's about doing
-              everything at the right pace."
+              "Great content deserves a great home. We make publishing easy so you can
+              focus on what you want to say."
             </p>
           </div>
           <div className="col-lg-6">
             <img
               className={styles.heroImg}
-              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500"
-              alt="Elena"
+              src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=500"
+              alt="Writing a blog post on a laptop"
             />
           </div>
         </div>
 
         <div className="row mt-5">
           <div className="col-lg-8 offset-lg-2">
-            <h3 className={styles.journeyTitle}>My Journey to the Slow Lane</h3>
+            <h3 className={styles.journeyTitle}>Why We Built This Blog</h3>
             <p className={styles.paragraph}>
-              For years, I lived my life in the "fast-forward" setting. Coffee was a fuel for
-              spreadsheets rather than a ritual to enjoy. My home was a pitstop between
-              deadlines, and my digital life was a cacophony of notifications that never seemed
-              to sleep.
+              Managing a blog should not feel complicated. Many writers spend more time
+              fighting with tools than actually writing. We wanted a platform where creating,
+              editing and publishing posts takes only a few clicks.
             </p>
             <p className={styles.paragraph}>
-              Everything changed during a quiet morning in late autumn. I realized I was so busy
-              curating a life that I had forgotten to actually live it. That was the day I
-              decided to reclaim my time, my focus, and my peace.
+              Our content management system lets admins and authors handle everything from one
+              dashboard, including posts, categories, tags and media. No technical knowledge is
+              needed, just your ideas and a little time.
             </p>
             <blockquote className={styles.quoteBox}>
-              "I discovered that when you stop racing through life, you actually start seeing
-              the scenery."
+              "When the tools stay out of the way, the writing gets better."
             </blockquote>
             <p className={styles.paragraph}>
-              SlowLiving Blog was born from this transition. It's a space where I explore what
-              it means to live intentionally in an age of distraction. From the art of sourdough
-              to the discipline of digital minimalism, this is my laboratory for a more
-              meaningful existence.
+              This blog is a place for tutorials, tips, stories and insights on technology,
+              lifestyle and creativity. Whether you are a reader looking for something
+              valuable or a writer ready to share, you are in the right place.
             </p>
           </div>
         </div>
@@ -59,46 +56,45 @@ export default function About() {
 
       <div className={styles.fillDaysSection}>
         <div className="container text-center">
-          <h2 className={styles.fillDaysTitle}>What Fills My Days</h2>
-          <p className={styles.fillDaysSubtitle}>The pillars of my intentional lifestyle.</p>
+          <h2 className={styles.fillDaysTitle}>What You Can Do Here</h2>
+          <p className={styles.fillDaysSubtitle}>The key features that power our blog.</p>
 
           <div className="row mt-4 text-start">
             <div className="col-md-6 mb-4">
               <div className={styles.pillarCard}>
                 <div className={styles.pillarIcon}><IoCameraOutline /></div>
-                <h4>Atmospheric Photography</h4>
+                <h4>Media Library</h4>
                 <p>
-                  Capturing the quiet moments and subtle light shifts that most people rush
-                  past. I believe every photograph should tell a story of stillness.
+                  Upload and manage images for your posts in one place. Add featured images
+                  and visuals that make every article more engaging.
                 </p>
                 <img
                   src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400"
-                  alt="coffee"
+                  alt="Coffee and notebook on a desk"
                 />
               </div>
             </div>
             <div className="col-md-6 mb-4">
               <div className={styles.pillarCard}>
                 <div className={styles.rowBetween}>
-                  <h4>Slow Cooking</h4>
+                  <h4>Search &amp; Discovery</h4>
                   <div className={styles.pillarIconSmall}><GoSearch /></div>
                 </div>
                 <p>
-                  Finding meditative joy in the kitchen through fermentation and heirloom
-                  recipes.
+                  Readers can quickly find posts by keywords, categories and tags.
                 </p>
               </div>
               <div className="row mt-3">
                 <div className="col-6">
                   <div className={styles.philosophyCard}>
-                    <span>&#128683; PHILOSOPHY</span>
-                    <h5>Digital Minimalism</h5>
+                    <span>&#128683; SIMPLICITY</span>
+                    <h5>Clean Editor</h5>
                   </div>
                 </div>
                 <div className="col-6">
                   <div className={styles.impactCard}>
-                    <span>&#127811; IMPACT</span>
-                    <h5>Zero Waste Living</h5>
+                    <span>&#127811; COMMUNITY</span>
+                    <h5>Reader Friendly</h5>
                   </div>
                 </div>
               </div>

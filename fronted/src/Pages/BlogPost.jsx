@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import styles from "../assets/BlogPost.module.css";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { baseUrl } from "../Http/Http";
 import { AppContext } from "../Context/AppContext";
 import { IoEllipsisVerticalSharp } from "react-icons/io5";
@@ -138,15 +138,16 @@ export default function BlogPost() {
   }
 
   
-  const [comment, setComment] = useState('');
+  const comment = useRef(null);
   const addComment = async (event)=>{
     event.preventDefault();
-    if(!comment){
+    const commentValue = comment.current.value.trim();
+    if(!commentValue){
       showToast('Type something to comment box','Error','danger');
       return;
     }
     const payload ={
-        comment:comment,
+        comment:commentValue,
         post_id:id
     }
     try{
@@ -156,12 +157,16 @@ export default function BlogPost() {
       if(ok){
         showToast(data.message,'Success','success');
         setRefresh(prev => prev + 1);
-        setComment('');
+        comment.current.value = '';
       }else{
         if(error?.comment?.[0]){
-
+          showToast(error?.comment?.[0],'Error','danger');
+          return;
         }
-        showToast(error?.comment?.[0],'Error','danger');
+        if(data.message){
+          showToast(data.message,'Error','danger');
+          return;
+        }
       }
 
     }catch(error){
@@ -250,9 +255,10 @@ export default function BlogPost() {
             <h5 className={styles.heading}>Comments ({postComment.length < 1000 ? postComment.length : `${(postComment.length/1000).toFixed(1)}k` })</h5>
     
             {/* Add a comment */}
-            {localStorage.getItem('token') && <div className={`d-flex align-items-start ${styles.addCommentRow}`}>
+            {/* {localStorage.getItem('token') &&  */}
+            <div className={`d-flex align-items-start ${styles.addCommentRow}`}>
               <div className="rounded-5 text-center overflow-hidden text-white" style={{lineHeight:'40px',height:'40px', width:'40px'}}>
-                {loggedUser.image ? <img
+                {loggedUser?.image ? <img
                     src={`${baseUrl}/uploads/${loggedUser.image}`}
                     alt=""
                     className={styles.authorAvatar}
@@ -267,18 +273,20 @@ export default function BlogPost() {
                     className={styles.commentInput}
                     placeholder="Add a comment..."
                     rows={3}
-                    value={comment}
-                    onChange={(event)=>setComment(event.target.value)}
+                    // value={comment}
+                    ref={comment}
+                    // onChange={(event)=>setComment(event.target.value)}
                   />
                   <button onClick={addComment} className={`${styles.postBtn} ms-auto`} >
                     Post Comment
                   </button>
                 </div>
-            </div>}
+            </div>
+            {/* // } */}
       
             {/* Comment list */}
             <div className={styles.commentList}>
-              {postComment.map((comment, index)=>{
+              {postComment?.map((comment, index)=>{
                 return <div key={index} className={`${styles.commentItem} d-flex justify-content-between mb-3`}>
                           <div className="d-flex w-100">
                             <div className={`${styles.avatarInitials} ${styles.avatarPurple} me-2 overflow-hidden`}>
@@ -312,7 +320,7 @@ export default function BlogPost() {
                               </div>)}
                             </div>
                           </div>
-                          {comment.user_id === userInfo.id && (<div className="position-relative">
+                          {comment.user_id === userInfo?.id && (<div className="position-relative">
                             <IoEllipsisVerticalSharp style={{cursor:'pointer'}} onClick={(e)=> {e.stopPropagation(), setActive(index)}} />
                             {active === index && (<div className={`${styles.commentAction} d-flex flex-column bg-white shadow-sm px-3 py-2 rounded-2`}>
                               <span onClick={(e)=> {e.stopPropagation(), fetchComment(comment.id), setActive(null), setActiveEdit(index)}}  style={{cursor:'pointer',fontSize:'13px'}} className="d-flex mb-1"><MdOutlineEdit className="fs-5 me-2" />Edit</span>

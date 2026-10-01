@@ -31,6 +31,7 @@ const AuthDashboard = lazy(() => import("./Auth/AuthDashboard"));
 const NotFound = lazy(() => import("./components/NotFound"));
 const Unauthorized = lazy(() => import("./components/Unauthorized"));
 const RouteProtected = lazy(() => import("./Auth/RouteProtected"));
+const AdminMessage = lazy(() => import("./Pages/AdminMessage"));
 
 
 function App() {
@@ -94,6 +95,11 @@ function App() {
                     <Route element={<RouteProtected allowRoles={["admin"]}/>}>
                       <Route path="settings" element={<AdminHeader/>}>
                         <Route index element={<AdminSetting/>}/>
+                      </Route>
+                  </Route>
+                    <Route element={<RouteProtected allowRoles={["admin"]}/>}>
+                      <Route path="messages" element={<AdminHeader/>}>
+                        <Route index element={<AdminMessage/>}/>
                       </Route>
                   </Route>
                 </Route>

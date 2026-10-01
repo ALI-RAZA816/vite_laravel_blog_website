@@ -3,12 +3,7 @@ import {apiGet, apiUpload, apiSend} from '../services/apiClient.js';
 export const PublicSetting = createContext();
 
 const PublicSettingContext = ({ children }) => {
-  const [settingRefresh, setSettingRefresh] = useState(0);
-  const [spinnerLoader, setSpinnerLoader] = useState(false);
-  const triggerSettingRefresh = () => setSettingRefresh((prev) => prev + 1);
 
-  const [maintenance, setMaintenance] = useState(false);
-  const [logoPreview, setLogoPreview] = useState(null);
   const [logo, setLogo] = useState(null);
   const [settingData, setSettingData] = useState({
     site_title: '',
@@ -20,26 +15,12 @@ const PublicSettingContext = ({ children }) => {
     l_url: '',
   });
 
-  // settings form handler
-  const settingFormHandler = (event) => {
-    const { name, value } = event.target;
-    setSettingData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+ 
 
-  // site logo handler
-  const siteLogo = (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-    setLogo(file);
-    setLogoPreview(URL.createObjectURL(file));
-  };
+
 
   // fetch settings
   const fetchSetting = async () => {
-    setSpinnerLoader(true);
     try {
       const {ok, data} = await apiGet('show-setting');
       if (ok) {
@@ -53,8 +34,6 @@ const PublicSettingContext = ({ children }) => {
           l_url: data?.setting?.l_url,
         });
         setLogo(data?.setting?.site_logo);
-        setMaintenance(data?.setting?.site_maintence === "true");
-        setSpinnerLoader(false);
       }
     } catch (error) {
       console.log(error);
@@ -62,67 +41,17 @@ const PublicSettingContext = ({ children }) => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const user = JSON.parse(localStorage.getItem('UserInfo'));
-    if(token && user.role !== 'user'){
       fetchSetting();
-    }
-  }, [settingRefresh]);
+  }, []);
 
-  // save settings
-  const settingHandler = async () => {
-    const token = localStorage.getItem('token');
-    const form = new FormData();
-    form.append('site_title', settingData.site_title);
-    form.append('site_desc', settingData.site_desc);
-    form.append('site_copyright', settingData.site_copyright);
-    form.append('f_url', settingData.f_url);
-    form.append('t_url', settingData.t_url);
-    form.append('i_url', settingData.i_url);
-    form.append('l_url', settingData.l_url);
-    form.append('maintence', maintenance);
-    form.append('site_logo', logo);
-
-    try {
-      const {ok, data} = await apiUpload('settings','POST',form);
-      if (ok) {
-        triggerSettingRefresh();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // remove logo
-  const logoHandler = async (event) => {
-    event.preventDefault();
-    const token = localStorage.getItem('token');
-    try {
-      const {ok, data} = apiSend('logo','DELETE');
-      if (ok) {
-        triggerSettingRefresh();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <PublicSetting.Provider value={{
-      maintenance,
-      setMaintenance,
-      logoPreview,
-      setLogoPreview,
       logo,
       setLogo,
       settingData,
       setSettingData,
-      settingFormHandler,
-      siteLogo,
-      settingHandler,
-      logoHandler,
       fetchSetting,
-      spinnerLoader
     }}>
       {children}
     </PublicSetting.Provider>

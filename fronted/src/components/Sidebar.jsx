@@ -22,6 +22,7 @@ const menuItems = [
   { icon: <BsDiagram3Fill />, label: "categories", roles:['admin', 'editor'] },
   { icon: <BsChatSquareTextFill />, label: "comments" , roles:['admin', 'editor', 'author'] },
   { icon: <BsPeopleFill />, label: "users", roles:['admin', 'editor'] },
+  { icon: <BsChatSquareTextFill />, label: "messages", roles:['admin'] },
   { icon: <BsGearFill />, label: "settings", roles:['admin'] },
 ];
 

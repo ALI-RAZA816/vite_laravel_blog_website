@@ -14,6 +14,12 @@ class PublicCommentController extends Controller
 {
     public function addComment(StoreCommentRequest $request)
     {
+        if(!$request->user()->role && !Auth::id()){
+            return response()->json([
+                'message'=>'Unauthorized'
+            ],401);
+        }
+
         $date = date('M d, y');
         $post_title = Post::where('id',$request->post_id)->select('title')->first();
 
@@ -53,6 +59,12 @@ class PublicCommentController extends Controller
 
     public function updateComment (UpdateCommentRequest $request, int $id){
 
+       if(!$request->user()->role && !Auth::id()){
+            return response()->json([
+                'message'=>'Unauthorized'
+            ],401);
+        }
+
         $status = Comment::where('id', $id)->first();
         if(!$status){
             return response()->json([
@@ -73,16 +85,24 @@ class PublicCommentController extends Controller
     public function deleteComment(Request $request, int $id)
     {
         $user = $request->user();
+        if(!$request->user()->role && !Auth::id()){
+            return response()->json([
+                'message'=>'Unauthorized'
+            ],401);
+        }
+
         if($user->role === 'admin') {
             $status = Comment::where('id', $id)->first();
         } else {
             $status = Comment::where('id', $id)->where('user_id', $user->id)->first();
         }
+
         if(!$status){
             return response()->json([
                 'message'=>'Category not found'
             ],404);
         }
+        
         $status->delete();
         return response()->json([
             'message'=>'Comment deleted successfully'
