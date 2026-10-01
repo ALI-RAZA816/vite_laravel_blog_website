@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\SubscribedUser;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Category;
 use App\Models\MonthlyReport;
 use App\Models\MonthlyViewsModel;
+use App\Models\NewsLetter;
 use App\Models\Post;
 use App\Models\PostView;
 use Illuminate\Http\Request;
@@ -65,6 +67,7 @@ class PostController extends Controller
             'last_month'=>$monthlyPostViews,
             'averageViews'=>$average_views,
         ],200);
+
     }
 
     /**
@@ -107,6 +110,13 @@ class PostController extends Controller
             'tags'=>$request->tags,
             'image'=>$imageName
         ]);
+        
+
+        $subscribedUser = NewsLetter::pluck('email')->toArray();
+        if($request->published === 'published'){
+            SubscribedUser::dispatch($subscribedUser);
+        }
+
 
         Category::where('id', $request->category)->increment('post_count');
 

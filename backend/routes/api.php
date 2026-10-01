@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\MonthlyReportController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\NewsLetterController;
 use App\Http\Controllers\PublicCategryController;
 use App\Http\Controllers\PublicCommentController;
 use App\Http\Controllers\PublicPostController;
@@ -34,7 +35,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::put('public-comments/{id}',[PublicCommentController::class,'updateComment']);
     Route::get('public-comments/{id}',[PublicCommentController::class,'showComment']);
     Route::delete('public-comments/{id}',[PublicCommentController::class,'deleteComment']);
-
+    Route::post('newsletter',[NewsLetterController::class, 'Subscribed']);
     
     Route::middleware('role:admin')->group(function(){
         Route::apiResource('settings', SettingController::class);

@@ -10,12 +10,14 @@ import {
   BsChevronRight
 } from "react-icons/bs";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { useNewsLetter } from "../Context/NewsLetter";
 
 export default function Home() {
 
 
   const { publicCategories: categories } = usePublicCategory();
   const {searchHandler, searchTerm} = usePublicPost();
+  const {newsletter, subscribeNews} = useNewsLetter();
   const { publicPosts: totalPosts, spinnerLoader, popularPosts ,publicPostPage:pagination, setCurrentPage: setCurrentPostPage, currentPage :currentPostPage} = usePublicPost();
   
   const pages = [];
@@ -136,8 +138,8 @@ export default function Home() {
                 A curated collection of thoughts, inspiration, and slow-living tips delivered
                 every Sunday morning.
               </p>
-              <input type="email" placeholder="Your email a" />
-              <button>Join the Circle</button>
+              <input type="email" name="newsletter" ref={newsletter} placeholder="Your email a" />
+              <button onClick={subscribeNews}>Join the Circle</button>
               <span className={styles.newsletterNote}>We respect your space. Unsubscribe anytime.</span>
             </div>
           </div>

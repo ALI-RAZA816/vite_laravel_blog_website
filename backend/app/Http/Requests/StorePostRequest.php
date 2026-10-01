@@ -24,7 +24,7 @@ class StorePostRequest extends FormRequest
         return [
             'title'=>'required|string|max:255',
             'description'=>'required|string',
-            'image'=> 'required|image|mimes:jpg,jpeg,png|max:3072',
+            // 'image'=> 'required|image|mimes:jpg,jpeg,png|max:3072', commented for temporarily to upload the hight quality pictures
             'category'=> 'required|exists:categories,id',
             'tags'=>'required|string',
         ];

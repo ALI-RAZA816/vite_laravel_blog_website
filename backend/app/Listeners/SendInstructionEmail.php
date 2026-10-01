@@ -2,11 +2,10 @@
 
 namespace App\Listeners;
 
+use App\Events\UserRegistered;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use App\Events\UserRegistered;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\instructionMail;
 
 class SendInstructionEmail implements ShouldQueue
 {
@@ -25,7 +24,7 @@ class SendInstructionEmail implements ShouldQueue
     public function handle(UserRegistered $event): void
     {
         if($event->Instruction === true && $event->user->role != 'user' ){
-            Mail::to($event->user->email)->send(new instructionMail($event->user->name,
+            Mail::to($event->user->email)->send(new \App\Mail\instructionMail($event->user->name,
             $event->user->email, $event->plainPassword));
         }
     }

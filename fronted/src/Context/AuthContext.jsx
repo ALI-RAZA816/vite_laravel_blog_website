@@ -69,6 +69,10 @@ const AuthContextProvider = ({ children }) => {
         navigate('/aunauthorized');
       }
 
+      setLoginData ({
+        email: "",
+        password: "",
+      });
       localStorage.setItem("UserInfo", JSON.stringify(data.user));
       localStorage.setItem("token", data.token);
       navigate("/");
@@ -145,6 +149,12 @@ const AuthContextProvider = ({ children }) => {
         return;
       }
 
+      setRegisterData({
+        name: "",
+        emailaddress: "",
+        password: "",
+        password_confirmation: "",
+      });
       navigate("/login");
       showToast(data.message,'Success','success');
 

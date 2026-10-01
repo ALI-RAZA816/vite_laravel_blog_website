@@ -17,6 +17,7 @@ import PublicCategoryContextProvider from "./Context/PublicCategoryContext.jsx";
 import PublicPostContextProvider from "./Context/PublicPostContext.jsx";
 import DashboardContextProvider from "./Context/DashboardContext.jsx";
 import PublicSettingContext from "./Context/PublicSettingContext.jsx";
+import NewsLetterContextProvide from "./Context/NewsLetter.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -33,7 +34,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                         <PublicPostContextProvider>
                           <DashboardContextProvider>
                             <PublicSettingContext>
-                              <App />
+                              <NewsLetterContextProvide>
+                                <App />
+                              </NewsLetterContextProvide>
                             </PublicSettingContext>
                           </DashboardContextProvider>
                         </PublicPostContextProvider>
