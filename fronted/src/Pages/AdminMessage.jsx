@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import styles from "../assets/AdminMessage.module.css";
+import JoditEditor from "jodit-react";
 
 /* ---------- tiny inline icons (no extra dependency needed) ---------- */
 const Icon = ({ children, size = 20, ...rest }) => (
@@ -19,31 +20,6 @@ const Icon = ({ children, size = 20, ...rest }) => (
   </svg>
 );
 
-const SearchIcon = () => (
-  <Icon size={18}>
-    <circle cx="11" cy="11" r="7" />
-    <path d="m20 20-3.5-3.5" />
-  </Icon>
-);
-const BellIcon = () => (
-  <Icon>
-    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-  </Icon>
-);
-const CheckAllIcon = () => (
-  <Icon size={18}>
-    <path d="M18 6 7 17l-5-5" />
-    <path d="m22 10-7.5 7.5L13 16" />
-  </Icon>
-);
-const DownloadIcon = () => (
-  <Icon size={18}>
-    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-    <path d="m7 10 5 5 5-5" />
-    <path d="M12 15V3" />
-  </Icon>
-);
 const InboxIcon = () => (
   <Icon>
     <path d="M22 12h-6l-2 3h-4l-2-3H2" />
@@ -68,7 +44,6 @@ const MailOpenIcon = () => (
     <path d="m3 10 9 6 9-6" />
   </Icon>
 );
-
 const TrashIcon = () => (
   <Icon>
     <path d="M3 6h18" />
@@ -137,7 +112,6 @@ const stats = [
 const tabs = [
   { key: "all", label: "All", count: 28 },
   { key: "unread", label: "Unread", count: 4 },
-  { key: "spam", label: "Spam", count: 8 },
 ];
 
 const messages = [
@@ -209,16 +183,38 @@ const avatarAdmin =
   "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&h=120&fit=crop&crop=faces";
 
 /* ---------- component ---------- */
-export default function ContactMessages() {
+export default function ContactMessages({placeholder}) {
+
+  const config = useMemo(
+    () => ({
+      readonly: false,
+      height:500,
+      statusbar: false,
+      placeholder: placeholder || 'Type your response......',
+      buttons: [
+        "bold",
+        "italic",
+        "underline",
+        "|",
+        "fontsize",
+        "|",
+        "ul",
+        "source"
+    ],
+    }),
+    [placeholder]
+  );
+
   const [activeTab, setActiveTab] = useState("all");
   const [selectedId, setSelectedId] = useState(1);
   const [reply, setReply] = useState("");
+  const [content, setContent] = useState('');
+  const editor = useRef(null);
 
   const visible = activeTab === "unread" ? messages.filter((m) => m.unread) : messages;
 
   return (
     <div className={styles.page}>
-
       <main className={styles.main}>
         {/* heading */}
         <div className={styles.heading}>
@@ -268,10 +264,19 @@ export default function ContactMessages() {
                   className={`${styles.item} ${selectedId === m.id ? styles.itemActive : ""}`}
                   onClick={() => setSelectedId(m.id)}
                 >
+                  <div className={styles.itemActions}>
+                    <button type="button" aria-label={m.unread ? "Mark as read" : "Mark as unread"}>
+                      {m.unread ? <MailOpenIcon /> : <MailIcon />}
+                    </button>
+                    <button type="button" aria-label="Delete message">
+                      <TrashIcon />
+                    </button>
+                  </div>
                   <div className={styles.itemTop}>
                     <span className={styles.itemName}>
                       {m.unread && <i className={styles.unreadDot} />}
                       {m.name}
+                      {m.unread && <span className="badge bg-primary">Unread</span>}
                     </span>
                     <span className={styles.itemTime}>{m.time}</span>
                   </div>
@@ -303,7 +308,6 @@ export default function ContactMessages() {
               </div>
               <div className={styles.detailActions}>
                 <button type="button" aria-label="Mark as read"><MailOpenIcon /></button>
-                <button type="button" aria-label="Delete"><TrashIcon /></button>
                 <span className={styles.barDivider} />
                 <button type="button" className={styles.replyBtn}>
                   <ReplyIcon /> Reply
@@ -378,6 +382,26 @@ export default function ContactMessages() {
                   </button>
                   <div className={styles.sendGroup}>
                     <button type="button" className={styles.draft}>Save Draft</button>
+                    <button type="button" className={styles.sendBtn}>
+                      Send Reply <SendIcon />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className={styles.composerWrap}>
+              <div className={`${styles.composer} ${styles.editorWrap}`}>
+                 <JoditEditor
+                  ref={editor}
+                  value={content}
+                  config={config}
+                  name="description"
+                  onChange={newContent => setContent(newContent)}
+              />
+                <div className={styles.composerBottom}>
+                  <button type="button" className={styles.attach}>
+                  </button>
+                  <div className={styles.sendGroup}>
                     <button type="button" className={styles.sendBtn}>
                       Send Reply <SendIcon />
                     </button>

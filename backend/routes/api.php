@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\MonthlyReportController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NewsLetterController;
 use App\Http\Controllers\PublicCategryController;
 use App\Http\Controllers\PublicCommentController;
@@ -28,6 +29,7 @@ Route::get('public-category',[PublicCategryController::class, 'publicCategory'])
 Route::get('post-comments/{id}',[CommentController::class, 'fetchPostComments']);
 Route::get('post-view/{id}',[PublicPostController::class, 'singleView']);
 Route::get('show-setting', [PublicSettingController::class, 'publicSetting']);
+Route::post('message', [MessageController::class, 'sendMessage']);
 
 Route::middleware('auth:sanctum')->group(function(){
     Route::post('logout',[AuthController::class,'logoutAccount']);

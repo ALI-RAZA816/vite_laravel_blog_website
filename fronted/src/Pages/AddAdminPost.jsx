@@ -228,7 +228,7 @@ const AddAdminPost = ({placeholder}) => {
           </div>
 
           <div className={`${styles.editorCard}`}>
-            {/* <div className={styles.editorBody}> */}
+            <div className={`${styles.editorWrap}`}>
               <JoditEditor
                 ref={editor}
                 value={content}
@@ -236,7 +236,7 @@ const AddAdminPost = ({placeholder}) => {
                 name="description"
                 onChange={newContent => setContent(newContent)}
               />
-            {/* </div> */}
+            </div>
           </div>
         </div>
 

@@ -92,7 +92,7 @@ export const apiSend = async (path, method = 'POST', body = null)=>{
         headers:{
             'Content-type':'application/json',
             'Accept':'application/json',
-             ...(path !== 'account' ? {'Authorization':`Bearer ${token}`} : {})
+             ...(path !== 'account' || path !== 'message' ? {'Authorization':`Bearer ${token}`} : {})
         },
         body: body ? JSON.stringify(body) : null
     });

@@ -3,10 +3,14 @@ import { IoCameraOutline } from "react-icons/io5";
 import { GrNotes } from "react-icons/gr";
 import { GiRadarDish } from "react-icons/gi";
 import { AiFillSnippets } from "react-icons/ai";
+import { useContact } from "../Context/ContactContext";
 
 
 
 export default function Contact() {
+
+  const {formHandler,submitMessage, contactForm} = useContact();
+
   return (
     <div className={styles.page}>
 
@@ -22,27 +26,27 @@ export default function Contact() {
       <div className="container">
         <div className="row mt-4">
           <div className="col-lg-6">
-            <div className={styles.formCard}>
+            <form onSubmit={submitMessage} className={styles.formCard}>
               <div className="row">
                 <div className="col-md-6 mb-3">
                   <label>Name</label>
-                  <input type="text" placeholder="John Carter" />
+                  <input type="text" value={contactForm.name} onChange={formHandler} name="name" placeholder="John Carter" />
                 </div>
                 <div className="col-md-6 mb-3">
                   <label>Email</label>
-                  <input type="email" placeholder="john@example.com" />
+                  <input type="email" value={contactForm.email} onChange={formHandler} name="email" placeholder="john@example.com" />
                 </div>
               </div>
               <div className="mb-3">
                 <label>Subject</label>
-                <input type="text" placeholder="What is this regarding?" />
+                <input type="text" value={contactForm.subject} onChange={formHandler} name="subject" placeholder="What is this regarding?" />
               </div>
               <div className="mb-3">
                 <label>Message</label>
-                <textarea rows="5" placeholder="Write your message here..."></textarea>
+                <textarea rows="5" value={contactForm.message} onChange={formHandler} name="message" placeholder="Write your message here..."></textarea>
               </div>
-              <button className={styles.sendBtn}>Send Message</button>
-            </div>
+              <button type="submit" className={styles.sendBtn}>Send Message</button>
+            </form>
           </div>
 
           <div className="col-lg-6">

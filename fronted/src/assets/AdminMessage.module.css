@@ -322,6 +322,7 @@
 }
 
 .item {
+  position: relative;
   padding: 18px 20px;
   border-top: 1px solid var(--border);
   border-left: 4px solid transparent;
@@ -743,6 +744,75 @@
   background: #3230b8;
 }
 
+/* ---------- hover actions on message item ---------- */
+.itemActions {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(40, 30, 90, 0.1);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s;
+}
+
+.itemActions button {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #4a475a;
+  padding: 0;
+}
+
+.itemActions button svg {
+  width: 18px;
+  height: 18px;
+}
+
+.itemActions button:hover {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.itemActions button:last-child:hover {
+  background: #fdeaea;
+  color: #d93025;
+}
+
+.item:hover .itemActions,
+.item:focus-within .itemActions {
+  opacity: 1;
+  visibility: visible;
+}
+
+.item:hover .itemTime,
+.item:focus-within .itemTime {
+  visibility: hidden;
+}
+
+@media (hover: none) {
+  .itemActions {
+    opacity: 1;
+    visibility: visible;
+    top: auto;
+    bottom: 10px;
+  }
+
+  .item:hover .itemTime {
+    visibility: visible;
+  }
+}
+
 /* ---------- footer ---------- */
 .footer {
   display: flex;
@@ -883,4 +953,52 @@
     align-items: flex-start;
     gap: 8px;
   }
+}
+
+/* ===== Jodit: sab white, koi border ni ===== */
+
+/* Jodit ke colors ke variables white kar do */
+.editorWrap {
+  --jd-color-border: transparent;
+  --jd-color-panel: #ffffff;
+  --jd-color-background-default: #ffffff;
+  --jd-color-background-gray: #ffffff;
+}
+
+/* outer border + background */
+.editorWrap :global(.jodit-container:not(.jodit_inline)) {
+  border: none !important;
+  background: #ffffff !important;
+}
+
+/* toolbar: white background, neeche line ni */
+.editorWrap :global(.jodit-toolbar__box:not(:empty)),
+.editorWrap :global(.jodit-toolbar-editor-collection),
+.editorWrap :global(.jodit-ui-group) {
+  background: #ffffff !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.editorWrap :global(.jodit-toolbar-editor-collection::after),
+.editorWrap :global(.jodit-toolbar-editor-collection::before) {
+  display: none !important;
+}
+
+/* writing area */
+.editorWrap :global(.jodit-workplace),
+.editorWrap :global(.jodit-wysiwyg) {
+  background: #ffffff !important;
+  border: none !important;
+}
+
+/* neeche wali status bar: white, border ni, advertisement ni */
+.editorWrap :global(.jodit-status-bar) {
+  background: #ffffff !important;
+  border: none !important;
+}
+
+.editorWrap :global(.jodit-status-bar-link) {
+  display: none !important;
 }

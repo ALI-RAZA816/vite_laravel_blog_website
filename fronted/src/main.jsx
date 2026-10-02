@@ -18,6 +18,7 @@ import PublicPostContextProvider from "./Context/PublicPostContext.jsx";
 import DashboardContextProvider from "./Context/DashboardContext.jsx";
 import PublicSettingContext from "./Context/PublicSettingContext.jsx";
 import NewsLetterContextProvide from "./Context/NewsLetter.jsx";
+import ContactContextProvider from './Context/ContactContext.jsx';
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -35,7 +36,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                           <DashboardContextProvider>
                             <PublicSettingContext>
                               <NewsLetterContextProvide>
-                                <App />
+                                <ContactContextProvider>
+                                  <App />
+                                </ContactContextProvider>
                               </NewsLetterContextProvide>
                             </PublicSettingContext>
                           </DashboardContextProvider>

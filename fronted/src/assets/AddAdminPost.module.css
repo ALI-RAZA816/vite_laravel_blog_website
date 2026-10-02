@@ -357,3 +357,51 @@
     height: auto;
   }
 }
+
+/* ===== Jodit: sab white, koi border ni ===== */
+
+/* Jodit ke colors ke variables white kar do */
+.editorWrap {
+  --jd-color-border: transparent;
+  --jd-color-panel: #ffffff;
+  --jd-color-background-default: #ffffff;
+  --jd-color-background-gray: #ffffff;
+}
+
+/* outer border + background */
+.editorWrap :global(.jodit-container:not(.jodit_inline)) {
+  border: none !important;
+  background: #ffffff !important;
+}
+
+/* toolbar: white background, neeche line ni */
+.editorWrap :global(.jodit-toolbar__box:not(:empty)),
+.editorWrap :global(.jodit-toolbar-editor-collection),
+.editorWrap :global(.jodit-ui-group) {
+  background: #ffffff !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.editorWrap :global(.jodit-toolbar-editor-collection::after),
+.editorWrap :global(.jodit-toolbar-editor-collection::before) {
+  display: none !important;
+}
+
+/* writing area */
+.editorWrap :global(.jodit-workplace),
+.editorWrap :global(.jodit-wysiwyg) {
+  background: #ffffff !important;
+  border: none !important;
+}
+
+/* neeche wali status bar: white, border ni, advertisement ni */
+.editorWrap :global(.jodit-status-bar) {
+  background: #ffffff !important;
+  border: none !important;
+}
+
+.editorWrap :global(.jodit-status-bar-link) {
+  display: none !important;
+}
