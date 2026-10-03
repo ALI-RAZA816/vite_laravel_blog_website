@@ -146,7 +146,19 @@ class AdminMessageController extends Controller
             ],400);
         }
 
-        $message->update(['reply' => 'replied']);
+        $replyAt = now();
+        $message->update([
+            'reply' => 'replied',
+            'reply_at' => $replyAt,
+        ]);
+
+        $difference = $message->reply_at->diffInHours($message->created_at);
+        // $avg = $difference / $message->where('reply','replied')->count();
+        $message->update([
+            'reply_diff' => $difference,
+            // 'reply_avg' => Message::where('reply','replied')->avg('reply_diff')
+        ]);
+        
         ReplyMessage::dispatch($message->email, $request->reply);
         return response()->json([
             'message' => 'Reply sent successfully'

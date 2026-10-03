@@ -2,6 +2,12 @@ import { useMemo, useRef, useState } from "react";
 import styles from "../assets/AdminMessage.module.css";
 import JoditEditor from "jodit-react";
 import { useContact } from "../Context/ContactContext";
+import { FaAngleLeft } from "react-icons/fa6";
+import { FaChevronRight } from "react-icons/fa";
+import LoadingSpinner from "../components/LoadingSpinner";
+import NoMessage from "../components/NoMessage";
+
+
 
 /* ---------- tiny inline icons (no extra dependency needed) ---------- */
 const Icon = ({ children, size = 20, ...rest }) => (
@@ -99,15 +105,19 @@ export default function ContactMessages({placeholder}) {
     markAsUnread,
     sendReply,
     content,
+    setPage,
+    messagesPagination,
     totalMessages,
     setContent,
+    responseAvg,
+    spinnerLoader,
     fetchSingleMessage,singleMessage
   } = useContact();
   const unreadCount = totalMessages.filter(item => item.status === 'unread');
   const stats = [
     { id: 1, label: "Total Inquiries", value: totalMessages.length <= 1000 ? `${totalMessages.length}` : `${(totalMessages.length/1000).toFixed(1)}k`, icon: <InboxIcon /> },
     { id: 2, label: "Unread Messages", value: unreadCount.length <= 1000 ? `${unreadCount.length}` : `${(unreadCount.length/1000).toFixed(1)}k`, badge: "New", icon: <MailIcon />, accent: true },
-    { id: 3, label: "Avg Response Time", value: "2.4 hrs", icon: <ClockIcon /> },
+    { id: 3, label: "Avg Response Time", value: responseAvg ? `${responseAvg.toFixed(1)} hrs` : "N/A", icon: <ClockIcon /> },
   ];
 
   const tabs = [
@@ -183,7 +193,9 @@ export default function ContactMessages({placeholder}) {
               ))}
             </div>
 
-            <ul className={styles.items}>
+            {spinnerLoader ? (
+                  <div style={{height:'480px'}} className="d-flex justify-content-center align-items-center"><LoadingSpinner /></div>
+              ) :visible.length === 0 ? (<div className="p-3"><NoMessage/></div>) :<ul className={styles.items}>
               {visible.map((m) => (
                 <li
                   key={m.id}
@@ -229,9 +241,27 @@ export default function ContactMessages({placeholder}) {
                   )}
                 </li>
               ))}
-            </ul>
+            </ul>}
 
-            <div className={styles.showing}>Showing 5 of 28 total inquiries</div>
+            <div className={styles.showingRow}>
+              <button
+                type="button"
+                onClick={()=> setPage(messagesPagination.currentPage - 1)} disabled={messagesPagination.currentPage <= 1}
+                className={styles.chevronBtn}
+              >
+                <FaAngleLeft />
+              </button>
+
+              <div className={styles.showing}>Showing {messagesPagination.from} to {messagesPagination.to} of {messagesPagination.total} total inquiries</div>
+
+              <button
+                type="button"
+                onClick={()=> setPage(messagesPagination.currentPage + 1)} disabled={messagesPagination.currentPage === messagesPagination.lastPage}
+                className={styles.chevronBtn}
+              >
+                <FaChevronRight />
+              </button>
+            </div>
           </aside>
 
           {/* detail */}

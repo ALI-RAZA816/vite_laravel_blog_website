@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class Message extends Model
 {
     protected $table = 'messages';
-    protected $fillable = ['id','name','email','subject','message','date','status'];
+    protected $fillable = ['id','name','email','subject','message','date','status','reply','reply_at','reply_diff'];
 }

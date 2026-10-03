@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { apiGet, apiSend, showToast } from "../services/apiClient";
+import { apiGet, apiSend, emptyPagination, showToast, toPagination } from "../services/apiClient";
 
 export const ContactContext = createContext();
 
@@ -24,18 +24,26 @@ const ContactContextProvider = ({children})=>{
         }));
     }
 
-
+    const [spinnerLoader, setSpinnerLoader] = useState(false);
     const [messages, setMessages] = useState([]);
-    const [totalMessages, setTotalMessages] = useState(0);
+    const [page, setPage] = useState(1);
+    const [messagesPagination, setMessagesPagination] = useState(emptyPagination);
+    const [totalMessages, setTotalMessages] = useState([]);
+    const [responseAvg, setResponseAvg] = useState(0);
     const fetchMessages = async ()=>{
+        setSpinnerLoader(true);
         try{
-            const {ok, data} = await apiGet('messages');
+            const {ok, data} = await apiGet(`messages?page=${page}`);
             if(ok){
                 setTotalMessages(data.totalMessages);
+                setResponseAvg(data.response_avg);
                 setMessages(data.messages.data);
+                setMessagesPagination(toPagination(data.messages));
             }
         }catch(error){
             console.log(error);
+        }finally{
+            setSpinnerLoader(false);
         }
     };
 
@@ -210,7 +218,8 @@ const ContactContextProvider = ({children})=>{
         if(token && user.role !== 'user'){
             fetchMessages();
         }
-    },[contactRefresh]);
+        console.log(responseAvg);
+    },[contactRefresh, page]);
 
     return (
         <ContactContext.Provider value={{
@@ -228,7 +237,11 @@ const ContactContextProvider = ({children})=>{
             sendReply,
             content,
             setContent,
-            totalMessages
+            totalMessages,
+            setPage,
+            responseAvg,
+            spinnerLoader,
+            messagesPagination
         }}>
             {children}
         </ContactContext.Provider>

@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('status')->default('unread');
             $table->string('date');
             $table->string('reply')->nullable();
+            $table->timestamp('reply_at')->nullable();
+            $table->string('reply_diff')->nullable();
+            $table->string('reply_avg')->nullable();
             $table->timestamps();
         });
     }
