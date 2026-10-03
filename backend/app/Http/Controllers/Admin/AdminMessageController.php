@@ -15,6 +15,7 @@ class AdminMessageController extends Controller
     public function index()
     {
         $totalMessages = Message::all();
+        $response_avg = Message::where('reply','replied')->avg('reply_diff');
         $messages = Message::latest()->paginate(5);
         if($messages->isEmpty()){
             return response()->json([
@@ -24,7 +25,8 @@ class AdminMessageController extends Controller
 
         return response()->json([
             'messages' => $messages,
-            'totalMessages' => $totalMessages
+            'totalMessages' => $totalMessages,
+            'response_avg' => $response_avg,
         ],200);
     }
 
@@ -147,16 +149,13 @@ class AdminMessageController extends Controller
         }
 
         $replyAt = now();
-        $message->update([
-            'reply' => 'replied',
-            'reply_at' => $replyAt,
-        ]);
 
-        $difference = $message->reply_at->diffInHours($message->created_at);
-        // $avg = $difference / $message->where('reply','replied')->count();
+        $difference = $message->created_at->diffInHours($replyAt);
+
         $message->update([
+            'reply'      => 'replied',
+            'reply_at'   => $replyAt,
             'reply_diff' => $difference,
-            // 'reply_avg' => Message::where('reply','replied')->avg('reply_diff')
         ]);
         
         ReplyMessage::dispatch($message->email, $request->reply);

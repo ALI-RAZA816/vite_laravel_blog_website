@@ -1,67 +1,77 @@
 import React, { useContext } from "react";
 import { BsBell, BsList } from "react-icons/bs";
 import styles from "../assets/AdminHeader.module.css";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";
-import { useLocation } from "react-router-dom";
 import { useUser } from "../Context/UserContext";
 import { baseUrl } from "../Http/Http";
 
 const AdminHeader = () => {
   const { toggleSidebar } = useContext(AppContext);
   const location = useLocation();
-  const {loggedUser} = useUser();
+  const { loggedUser } = useUser();
   const lastSegment = location.pathname.split('/');
+
+  // Naam se initials (single word naam par bhi crash nahi karega)
+  const initials = (loggedUser?.name || '')
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0])
+    .join('')
+    .toUpperCase();
+
   return (
     <>
-    <div className="container-fluid">
+      <div className="container-fluid">
         <div className="row p-0">
-            <div className="col-12">
-                <div
-                className={`d-flex align-items-center justify-content-between ${styles.header} ${styles.sticky}`}
-                >
-                {/* Sidebar toggle (tablet & mobile only) */}
-                <button
-                  type="button"
-                  className={styles.menuBtn}
-                  onClick={toggleSidebar}
-                  aria-label="Toggle menu"
-                >
-                  <BsList />
-                </button>
-                {/* Search */}
-                <h3 className='text-capitalize fw-bold'>{lastSegment[2]}</h3>
+          <div className="col-12">
+            <div
+              className={`d-flex align-items-center justify-content-between ${styles.header} ${styles.stickyHeader}`}
+            >
+              {/* Sidebar toggle (tablet & mobile only) */}
+              <button
+                type="button"
+                className={styles.menuBtn}
+                onClick={toggleSidebar}
+                aria-label="Toggle menu"
+              >
+                <BsList />
+              </button>
 
-                {/* Right side */}
-                <div className={`d-flex align-items-center ${styles.rightSection}`}>
-                    <div className={styles.bellWrapper}>
-                    <BsBell className={styles.bellIcon} />
-                    <span className={styles.notificationDot}></span>
-                    </div>
+              {/* Page heading */}
+              <h3 className={`text-capitalize ${styles.pageHeading}`}>{lastSegment[2]}</h3>
 
-                    <div className={`d-flex align-items-center ${styles.userSection}`}>
-                    <div className={styles.userInfo}>
-                        <p className={`${styles.userName} text-capitalize`}>{loggedUser?.name}</p>
-                        <p className={`${styles.userRole} text-capitalize`}>{loggedUser?.role}</p>
-                    </div>
-                   {loggedUser.image ? <div className="rounded-5 text-center text-white" style={{lineHeight:'40px',height:'40px', width:'40px', backgroundColor: '#5b3fd9', overflow:'hidden'}}>
+              {/* Right side */}
+              <div className={`d-flex align-items-center ${styles.rightSection}`}>
+                <div className={styles.bellWrapper}>
+                  <BsBell className={styles.bellIcon} />
+                  <span className={styles.notificationDot}></span>
+                </div>
+
+                <div className={`d-flex align-items-center ${styles.userSection}`}>
+                  <div className={styles.userInfo}>
+                    <p className={`${styles.userName} text-capitalize`}>{loggedUser?.name}</p>
+                    <p className={`${styles.userRole} text-capitalize`}>{loggedUser?.role}</p>
+                  </div>
+                  <div className={styles.userAvatar}>
+                    {loggedUser?.image ? (
                       <img
                         src={`${baseUrl}/uploads/${loggedUser.image}`}
                         alt=""
-                        className={styles.authorAvatar}
+                        className={styles.userAvatarImg}
                       />
-                    </div>: <div className="rounded-5 text-center text-white" style={{lineHeight:'40px',height:'40px', width:'40px', backgroundColor: '#5b3fd9', overflow:'hidden'}}>
-                            {loggedUser?.name?.split(' ')[0].substr(0, 1)}
-                            {loggedUser?.name?.split(' ')[1].substr(0, 1)}
-                        </div>
-                    }
-                    </div>
+                    ) : (
+                      initials
+                    )}
+                  </div>
                 </div>
-                </div>
-                <Outlet/>
+              </div>
             </div>
+            <Outlet />
+          </div>
         </div>
-    </div>
+      </div>
     </>
   );
 };

@@ -1,17 +1,16 @@
 import styles from "../assets/About.module.css";
-import { IoCameraOutline } from "react-icons/io5";
+import { IoCameraOutline, IoCreateOutline, IoPeopleOutline } from "react-icons/io5";
 import { GoSearch } from "react-icons/go";
-
-
 
 export default function About() {
   return (
     <div className={styles.page}>
 
+      {/* Intro */}
       <div className="container">
-        <div className="row align-items-center">
+        <div className="row align-items-center gy-4 pt-5">
           <div className="col-lg-6">
-            <p className={styles.eyebrow}>ABOUT OUR BLOG PLATFORM</p>
+            <p className={styles.eyebrow}>About Our Blog Platform</p>
             <h1 className={styles.title}>
               A simple space to write, publish and share your stories with the world.
             </h1>
@@ -21,15 +20,18 @@ export default function About() {
             </p>
           </div>
           <div className="col-lg-6">
-            <img
-              className={styles.heroImg}
-              src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=500"
-              alt="Writing a blog post on a laptop"
-            />
+            <div className={styles.heroImgWrap}>
+              <img
+                className={styles.heroImg}
+                src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800"
+                alt="Writing a blog post on a laptop"
+              />
+            </div>
           </div>
         </div>
 
-        <div className="row mt-5">
+        {/* Story */}
+        <div className="row mt-5 pt-4">
           <div className="col-lg-8 offset-lg-2">
             <h3 className={styles.journeyTitle}>Why We Built This Blog</h3>
             <p className={styles.paragraph}>
@@ -54,12 +56,13 @@ export default function About() {
         </div>
       </div>
 
+      {/* Features */}
       <div className={styles.fillDaysSection}>
         <div className="container text-center">
           <h2 className={styles.fillDaysTitle}>What You Can Do Here</h2>
           <p className={styles.fillDaysSubtitle}>The key features that power our blog.</p>
 
-          <div className="row mt-4 text-start">
+          <div className="row mt-5 text-start">
             <div className="col-md-6 mb-4">
               <div className={styles.pillarCard}>
                 <div className={styles.pillarIcon}><IoCameraOutline /></div>
@@ -69,11 +72,12 @@ export default function About() {
                   and visuals that make every article more engaging.
                 </p>
                 <img
-                  src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400"
+                  src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600"
                   alt="Coffee and notebook on a desk"
                 />
               </div>
             </div>
+
             <div className="col-md-6 mb-4">
               <div className={styles.pillarCard}>
                 <div className={styles.rowBetween}>
@@ -84,16 +88,17 @@ export default function About() {
                   Readers can quickly find posts by keywords, categories and tags.
                 </p>
               </div>
-              <div className="row mt-3">
+
+              <div className="row mt-3 g-3">
                 <div className="col-6">
                   <div className={styles.philosophyCard}>
-                    <span>&#128683; SIMPLICITY</span>
+                    <span className={styles.cardLabel}><IoCreateOutline /> Simplicity</span>
                     <h5>Clean Editor</h5>
                   </div>
                 </div>
                 <div className="col-6">
                   <div className={styles.impactCard}>
-                    <span>&#127811; COMMUNITY</span>
+                    <span className={styles.cardLabel}><IoPeopleOutline /> Community</span>
                     <h5>Reader Friendly</h5>
                   </div>
                 </div>

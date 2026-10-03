@@ -1,7 +1,10 @@
-.content {
-  background-color: #f6f5fb;
+/* ===== Dashboard Content: Monochrome + soft accents ===== */
+
+.dashboard {
+  background-color: #f5f5f5;
   padding: 32px 36px;
-  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #111111;
   flex: 1;
   min-height: 100vh;
   width: 100%;
@@ -13,53 +16,64 @@
 }
 
 .pageTitle {
-  font-size: 28px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 30px;
   font-weight: 700;
-  color: #1f1b2e;
+  color: #111111;
   margin-bottom: 6px;
 }
 
 .pageSubtitle {
   font-size: 14px;
-  color: #8b87a0;
+  color: #8a8a8a;
   margin-bottom: 0;
 }
 
 .createBtn {
-  background-color: #5b3fd9;
+  background-color: #111111;
   color: #ffffff;
-  border: none;
-  border-radius: 10px;
+  border: 1px solid #111111;
+  border-radius: 4px;
   padding: 12px 20px;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .createBtn:hover {
-  background-color: #4c32c2;
+  background-color: #ffffff;
+  color: #111111;
 }
 
 /* Stat cards */
 .statCard {
   background-color: #ffffff;
-  border-radius: 14px;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
   padding: 22px;
   height: 100%;
-  box-shadow: 0 1px 3px rgba(30, 20, 60, 0.05);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.statCard:hover {
+  border-color: #cfcfcf;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
 }
 
 .statIcon {
   width: 42px;
   height: 42px;
-  border-radius: 10px;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  font-size: 17px;
 }
 
-.badge {
+.statBadge {
   font-size: 12px;
   font-weight: 700;
   padding: 5px 10px;
@@ -67,25 +81,28 @@
 }
 
 .badgePositive {
-  background-color: #e6f5ec;
-  color: #2f9e5c;
+  background-color: #e5f6ec;
+  color: #15803d;
 }
 
 .badgeNeutral {
-  background-color: #eeeef2;
-  color: #6b6980;
+  background-color: #f0f0f0;
+  color: #666666;
 }
 
 .statLabel {
-  font-size: 14px;
-  color: #8b87a0;
-  margin-bottom: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8a8a8a;
+  margin-bottom: 6px;
 }
 
 .statValue {
-  font-size: 26px;
+  font-size: 30px;
   font-weight: 700;
-  color: #1f1b2e;
+  color: #111111;
   margin-bottom: 0;
 }
 
@@ -93,64 +110,40 @@
 .panel {
   min-height: 450px;
   background-color: #ffffff;
-  border-radius: 14px;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
   padding: 24px;
   height: 100%;
-  box-shadow: 0 1px 3px rgba(30, 20, 60, 0.05);
 }
 
 .panelTitle {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.5px;
-  color: #1f1b2e;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #111111;
   margin-bottom: 0;
 }
 
 .rangeSelect {
   font-size: 13px;
-  color: #4b4760;
-  background-color: #f6f5fb;
-  border: none;
-  border-radius: 8px;
+  color: #333333;
+  background-color: #f5f5f5;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
   padding: 7px 12px;
+  outline: none;
 }
 
-/* Chart */
+.rangeSelect:focus {
+  border-color: #111111;
+}
+
+/* Chart (Chart.js container) */
 .chart {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  height: 260px;
-  gap: 16px;
-  padding-top: 10px;
-}
-
-.chartCol {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-  justify-content: flex-end;
-}
-
-.chartBar {
+  position: relative;
   width: 100%;
-  max-width: 56px;
-  background-color: #e6e3f5;
-  border-radius: 8px 8px 0 0;
-  transition: height 0.3s ease;
-}
-
-.chartBarActive {
-  background-color: #5b3fd9;
-}
-
-.chartLabel {
-  margin-top: 12px;
-  font-size: 13px;
-  color: #8b87a0;
+  height: 380px;
 }
 
 /* Recent comments */
@@ -159,7 +152,7 @@
   gap: 12px;
   padding-bottom: 18px;
   margin-bottom: 18px;
-  border-bottom: 1px solid #f0eef7;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .commentRow:last-child {
@@ -169,16 +162,25 @@
 }
 
 .avatar {
-  min-width: 38px;
-  width: 38px;
-  height: 38px;
+  min-width: 36px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
+  background-color: #111111;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   color: #ffffff;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .commentBody {
@@ -189,58 +191,58 @@
 .commentName {
   font-size: 14px;
   font-weight: 700;
-  color: #1f1b2e;
+  color: #111111;
   margin-bottom: 2px;
 }
 
 .commentText {
   font-size: 13px;
-  color: #8b87a0;
-  margin-bottom: 6px;
+  color: #8a8a8a;
+  margin-bottom: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.commentActions {
-  display: flex;
-  gap: 14px;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.approveLink {
-  color: #5b3fd9;
-  text-decoration: none;
-}
-
-.rejectLink {
-  color: #d94f4f;
-  text-decoration: none;
-}
-
 .viewAllBtn {
   width: 100%;
-  background-color: #f6f5fb;
-  border: none;
-  border-radius: 10px;
+  background-color: #ffffff;
+  border: 1px solid #dcdcdc;
+  border-radius: 4px;
   padding: 11px;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
-  color: #1f1b2e;
-  margin-top: 18px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #111111;
+  margin-top: 20px;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 .viewAllBtn:hover {
-  background-color: #ece9fb;
+  background-color: #111111;
+  border-color: #111111;
+  color: #ffffff;
 }
 
 /* Recent posts table */
 .seeFullList {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
-  color: #5b3fd9;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #2563eb;
   text-decoration: none;
+}
+
+.seeFullList:hover {
+  color: #111111;
+}
+
+.tableCard {
+  border: 1px solid #ececec;
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 .postsTable {
@@ -248,207 +250,126 @@
 }
 
 .postsTable thead th {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.4px;
-  color: #8b87a0;
-  background-color: #f6f5fb;
+  letter-spacing: 0.14em;
+  color: #8a8a8a;
+  background-color: #fafafa;
   border: none;
-  padding: 12px 14px;
+  border-bottom: 1px solid #ececec;
+  padding: 14px 20px;
 }
 
 .postsTable tbody td {
   font-size: 14px;
-  color: #1f1b2e;
+  color: #111111;
   vertical-align: middle;
-  padding: 16px 14px;
-  border-bottom: 1px solid #f0eef7;
-}
-
-.postTitleCell {
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.postThumb {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  background-color: #ece7db;
-  flex-shrink: 0;
-}
-
-.statusBadge {
-  font-size: 11px;
-  font-weight: 700;
-  padding: 5px 10px;
-  border-radius: 999px;
-  letter-spacing: 0.3px;
-}
-
-.statusPublished {
-  background-color: #ece9fb;
-  color: #5b3fd9;
-}
-
-.statusDraft {
-  background-color: #fdf3e0;
-  color: #d99a1a;
-}
-
-.actionsDots {
-  font-size: 18px;
-  color: #8b87a0;
-  cursor: pointer;
-}
-
-.postsTable thead th {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.4px;
-  color: #8b87a0;
-  background-color: #f6f5fb;
-  border: none;
   padding: 16px 20px;
-}
-
-.postsTable tbody td {
-  padding: 18px 20px;
-  vertical-align: middle;
-  border-bottom: 1px solid #f0eef7;
+  border-bottom: 1px solid #f2f2f2;
 }
 
 .postsTable tbody tr:last-child td {
   border-bottom: none;
 }
 
-.checkbox {
-  width: 16px;
-  height: 16px;
-  accent-color: #5b3fd9;
-  cursor: pointer;
+.postsTable tbody tr:hover td {
+  background-color: #fafafa;
 }
 
 .postTitle {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
-  color: #1f1b2e;
+  color: #111111;
   margin-bottom: 2px;
 }
 
 .postUrl {
-  font-size: 13px;
-  color: #8b87a0;
+  font-size: 12px;
+  color: #8a8a8a;
   margin-bottom: 0;
 }
 
 .categoryBadge {
-  font-size: 12px;
-  font-weight: 700;
-  color: #4b3a10;
-  padding: 6px 14px;
-  border-radius: 999px;
   display: inline-block;
-}
-
-.avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: 700;
-  color: #ffffff;
-  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #333333;
+  background-color: #f0f0f0;
+  padding: 5px 12px;
+  border-radius: 2px;
 }
 
 .authorName {
   font-size: 14px;
   font-weight: 600;
-  color: #1f1b2e;
+  color: #111111;
 }
 
+/* Status: dot + label (sirf rang par depend nahi) */
 .statusBadge {
   font-size: 13px;
   font-weight: 600;
-  gap: 6px;
+  gap: 7px;
   width: fit-content;
 }
 
 .statusDot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
 }
 
 .statusPublished {
-  color: #2f9e5c;
+  color: #15803d;
 }
 
 .statusPublished .statusDot {
-  background-color: #2f9e5c;
+  background-color: #16a34a;
 }
 
 .statusDraft {
-  color: #8b87a0;
+  color: #b45309;
 }
 
 .statusDraft .statusDot {
-  background-color: #8b87a0;
+  background-color: #d97706;
 }
 
 .dateCell {
   font-size: 14px;
-  color: #4b4760;
+  color: #555555;
 }
 
 .actionIcon {
-  font-size: 15px;
-  color: #8b87a0;
-  cursor: pointer;
+  font-size: 16px;
+  color: #8a8a8a;
+  transition: color 0.2s ease;
 }
 
 .actionIcon:hover {
-  color: #5b3fd9;
+  color: #111111;
 }
-
-.deleteIcon:hover {
-  color: #d94f4f;
-}
-
-/* Pagination */
-.paginationRow {
-  padding: 20px;
-}
-
-.showingText {
-  font-size: 14px;
-  color: #8b87a0;
-}
-
 
 /* ===== Responsive ===== */
 
 @media (max-width: 992px) {
-  .content {
+  .dashboard {
     padding: 24px 20px;
   }
 
   .pageTitle {
-    font-size: 24px;
+    font-size: 26px;
   }
 
   .chart {
-    height: 200px;
+    height: 300px;
   }
 }
 
 @media (max-width: 768px) {
-  .content {
+  .dashboard {
     padding: 20px 16px;
   }
 
@@ -456,12 +377,12 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
+    gap: 14px;
   }
 
   .createBtn {
     width: 100%;
-    text-align: center;
+    justify-content: center;
   }
 
   .panel {
@@ -478,24 +399,19 @@
 }
 
 @media (max-width: 480px) {
-  .content {
+  .dashboard {
     padding: 16px 12px;
   }
 
   .pageTitle {
-    font-size: 20px;
-  }
-
-  .statValue {
     font-size: 22px;
   }
 
-  .chart {
-    height: 160px;
-    gap: 8px;
+  .statValue {
+    font-size: 24px;
   }
 
-  .postThumb {
-    display: none;
+  .chart {
+    height: 240px;
   }
 }
