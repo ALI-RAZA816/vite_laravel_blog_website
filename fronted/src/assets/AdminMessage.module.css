@@ -24,114 +24,6 @@
   cursor: pointer;
 }
 
-/* ---------- top bar ---------- */
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 16px 36px;
-  background: var(--card);
-  border-bottom: 1px solid var(--border);
-}
-
-.search {
-  position: relative;
-  flex: 0 1 588px;
-}
-
-.search input {
-  width: 100%;
-  height: 42px;
-  border: 0;
-  border-radius: 10px;
-  background: var(--lilac);
-  padding: 0 16px 0 46px;
-  font-size: 15px;
-  color: var(--text);
-  outline: none;
-  font-family: inherit;
-}
-
-.search input:focus {
-  box-shadow: 0 0 0 2px var(--primary-soft);
-}
-
-.search input::placeholder {
-  color: #8b88a0;
-}
-
-.searchIcon {
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #9b98ad;
-  display: flex;
-}
-
-.topbarRight {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
-
-.bell {
-  position: relative;
-  border: 0;
-  background: none;
-  color: #4a475a;
-  display: flex;
-  padding: 4px;
-}
-
-.bellDot {
-  position: absolute;
-  top: 1px;
-  right: 2px;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--primary);
-  border: 2px solid #fff;
-}
-
-.topDivider {
-  width: 1px;
-  height: 36px;
-  background: var(--border);
-}
-
-.admin {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.adminText {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  line-height: 1.3;
-}
-
-.adminText strong {
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.adminText span {
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  color: var(--muted);
-}
-
-.adminAvatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  object-fit: cover;
-}
 
 /* ---------- main ---------- */
 .main {
@@ -327,6 +219,7 @@
   border-top: 1px solid var(--border);
   border-left: 4px solid transparent;
   cursor: pointer;
+  word-break: break-word;
   transition: background 0.15s;
 }
 
@@ -434,6 +327,7 @@
 
 /* detail */
 .detail {
+  min-width:300px;
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -594,6 +488,7 @@
 }
 
 .body {
+  min-height: 200px;
   padding: 28px 28px 24px;
 }
 
@@ -680,19 +575,6 @@
 .replyingTo {
   font-size: 14px;
   color: var(--muted);
-}
-
-.composer textarea {
-  width: 100%;
-  min-height: 92px;
-  border: 0;
-  outline: none;
-  resize: vertical;
-  padding: 14px 4px;
-  font-family: inherit;
-  font-size: 16px;
-  color: var(--text);
-  background: transparent;
 }
 
 .composer textarea::placeholder {

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminMessageController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CommentController;
@@ -44,6 +45,10 @@ Route::middleware('auth:sanctum')->group(function(){
         Route::post('settings', [SettingController::class, 'update']);
         Route::delete('logo', [SettingController::class, 'destroy']);
         Route::apiResource('users', UserController::class)->except(['index']);
+        Route::apiResource('messages', AdminMessageController::class);
+        Route::put('mark-as-read/{id}', [AdminMessageController::class, 'markAsRead']);
+        Route::put('mark-as-unread/{id}', [AdminMessageController::class, 'markAsUnread']);
+        Route::post('reply-message', [AdminMessageController::class, 'sendReply']);
     });
         
     Route::middleware('role:admin,editor')->group(function(){

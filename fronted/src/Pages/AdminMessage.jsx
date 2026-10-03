@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from "react";
 import styles from "../assets/AdminMessage.module.css";
 import JoditEditor from "jodit-react";
+import { useContact } from "../Context/ContactContext";
 
 /* ---------- tiny inline icons (no extra dependency needed) ---------- */
 const Icon = ({ children, size = 20, ...rest }) => (
@@ -69,32 +70,7 @@ const DeviceIcon = () => (
     <rect x="14" y="9" width="8" height="12" rx="1.5" />
   </Icon>
 );
-const BoldIcon = () => (
-  <Icon size={16} strokeWidth="2.4">
-    <path d="M7 5h6a3.5 3.5 0 0 1 0 7H7zM7 12h7a3.5 3.5 0 0 1 0 7H7z" />
-  </Icon>
-);
-const ItalicIcon = () => (
-  <Icon size={16}>
-    <path d="M19 4h-9M14 20H5M15 4 9 20" />
-  </Icon>
-);
-const LinkIcon = () => (
-  <Icon size={16}>
-    <path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1" />
-    <path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1" />
-  </Icon>
-);
-const ListIcon = () => (
-  <Icon size={16}>
-    <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
-  </Icon>
-);
-const PaperclipIcon = () => (
-  <Icon size={16}>
-    <path d="m21 11-9.5 9.5a5.5 5.5 0 0 1-7.8-7.8L13 3.4a3.7 3.7 0 0 1 5.2 5.2L9 17.8a1.8 1.8 0 0 1-2.6-2.6L15 6.6" />
-  </Icon>
-);
+
 const SendIcon = () => (
   <Icon size={16}>
     <path d="M22 2 11 13" />
@@ -102,89 +78,42 @@ const SendIcon = () => (
   </Icon>
 );
 
-/* ---------- data ---------- */
-const stats = [
-  { id: 1, label: "Total Inquiries", value: "28", icon: <InboxIcon /> },
-  { id: 2, label: "Unread Messages", value: "4", badge: "New", icon: <MailIcon />, accent: true },
-  { id: 3, label: "Avg Response Time", value: "2.4 hrs", icon: <ClockIcon /> },
-];
-
-const tabs = [
-  { key: "all", label: "All", count: 28 },
-  { key: "unread", label: "Unread", count: 4 },
-];
-
-const messages = [
-  {
-    id: 1,
-    name: "Evelyn Thorne",
-    time: "10:45 AM",
-    subject: "Collaboration on mindful interior essay",
-    preview:
-      "Whether you have a question about our slow-living practices, want to collaborate, or just want to share a quiet moment of...",
-    tag: "Website Inquiry",
-    tagType: "inquiry",
-    email: "evelyn@slowliving.com",
-    unread: true,
-  },
-  {
-    id: 2,
-    name: "Marcus Vance",
-    time: "Yesterday",
-    subject: "Photography feature permission & inquiry",
-    preview:
-      "Hello editorial team, I loved your recent photo essay on morning rituals and natural light. We would love to offer full permissions...",
-    tag: "Partnership",
-    email: "m.vance@studio-nordic.dk",
-  },
-  {
-    id: 3,
-    name: "Sarah Jenkins",
-    time: "Oct 23",
-    subject: "Press inquiry regarding slow living publication",
-    preview:
-      "We would love to feature the founder in our upcoming winter quarterly editorial highlighting conscious digital creators...",
-    tag: "Press",
-    email: "s.jenkins@journalpress.com",
-  },
-  {
-    id: 4,
-    name: "Dr. Julian Reed",
-    time: "Oct 21",
-    subject: "Citation & guest contribution for neuroscience of focus",
-    preview:
-      "I appreciate your thoughtful curation and would love to submit a guest reflection bridging intentional pacing with cognitive well-...",
-    tag: "Academic",
-    email: "j.reed@university.edu",
-  },
-  {
-    id: 5,
-    name: "Clara Oswald",
-    time: "Oct 19",
-    subject: "Feedback regarding the Kyoto meditation article",
-    preview:
-      "Thank you for writing such a soothing piece. One small question about the tea house referenced in section two...",
-  },
-];
-
 const detail = {
   from: "Evelyn Thorne",
   email: "evelyn@slowliving.com",
-  role: "Founder & Spatial Designer at",
-  company: "Atelier Minimal",
-  date: "October 24, 2024 · 10:45 AM (EST)",
   via: "Sent via slowlivingblog.com/contact",
   subject: "Collaboration on mindful interior essay",
 };
 
-const avatarEvelyn =
-  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&crop=faces";
-const avatarAdmin =
-  "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&h=120&fit=crop&crop=faces";
+
 
 /* ---------- component ---------- */
 export default function ContactMessages({placeholder}) {
 
+  const {
+    messages,
+    deleteMessage,
+    markAsRead,
+    selectedId,
+    setSelectedId,
+    markAsUnread,
+    sendReply,
+    content,
+    totalMessages,
+    setContent,
+    fetchSingleMessage,singleMessage
+  } = useContact();
+  const unreadCount = totalMessages.filter(item => item.status === 'unread');
+  const stats = [
+    { id: 1, label: "Total Inquiries", value: totalMessages.length <= 1000 ? `${totalMessages.length}` : `${(totalMessages.length/1000).toFixed(1)}k`, icon: <InboxIcon /> },
+    { id: 2, label: "Unread Messages", value: unreadCount.length <= 1000 ? `${unreadCount.length}` : `${(unreadCount.length/1000).toFixed(1)}k`, badge: "New", icon: <MailIcon />, accent: true },
+    { id: 3, label: "Avg Response Time", value: "2.4 hrs", icon: <ClockIcon /> },
+  ];
+
+  const tabs = [
+    { key: "all", label: "All", count: messages.length },
+    { key: "unread", label: "Unread", count: unreadCount.length },
+  ];
   const config = useMemo(
     () => ({
       readonly: false,
@@ -206,12 +135,9 @@ export default function ContactMessages({placeholder}) {
   );
 
   const [activeTab, setActiveTab] = useState("all");
-  const [selectedId, setSelectedId] = useState(1);
-  const [reply, setReply] = useState("");
-  const [content, setContent] = useState('');
   const editor = useRef(null);
 
-  const visible = activeTab === "unread" ? messages.filter((m) => m.unread) : messages;
+  const visible = activeTab === "unread" ? messages.filter((m) => m.status === 'unread') : messages;
 
   return (
     <div className={styles.page}>
@@ -262,32 +188,43 @@ export default function ContactMessages({placeholder}) {
                 <li
                   key={m.id}
                   className={`${styles.item} ${selectedId === m.id ? styles.itemActive : ""}`}
-                  onClick={() => setSelectedId(m.id)}
+                  onClick={() => {setSelectedId(m.id), fetchSingleMessage(m.id)}}
                 >
                   <div className={styles.itemActions}>
-                    <button type="button" aria-label={m.unread ? "Mark as read" : "Mark as unread"}>
-                      {m.unread ? <MailOpenIcon /> : <MailIcon />}
-                    </button>
-                    <button type="button" aria-label="Delete message">
+                    {/* <button > */}
+                      {m.status !== 'unread' ? <button  onClick={(event)=> {
+                        event.stopPropagation();
+                        markAsUnread(m.id);
+                      }} ><MailOpenIcon  /></button>  : <button onClick={(event)=> {
+                        event.stopPropagation();
+                        markAsRead(m.id);
+                      }}><MailIcon/></button> }
+                    {/* </button> */}
+                    <button type="button" aria-label="Delete message" onClick={(event) => {
+                      event.stopPropagation();
+                      deleteMessage(m.id);
+                    }}>
                       <TrashIcon />
                     </button>
                   </div>
                   <div className={styles.itemTop}>
                     <span className={styles.itemName}>
-                      {m.unread && <i className={styles.unreadDot} />}
+                      {m.status === 'unread' && <i className={styles.unreadDot} />}
                       {m.name}
-                      {m.unread && <span className="badge bg-primary">Unread</span>}
+                      {m.status === 'unread' && <span className="badge bg-primary">Unread</span>}
                     </span>
-                    <span className={styles.itemTime}>{m.time}</span>
+                    <span className={styles.itemTime}>{m.date}</span>
                   </div>
-                  <h4>{m.subject}</h4>
-                  <p>{m.preview}</p>
-                  {m.tag && (
+                  <h4>{m.subject.length >= 20 ? `${m.subject.substring(0, 20)}...` : m.subject}</h4>
+                  <p>{m.message.length >= 100 ? `${m.message.substring(0, 40)}...` : m.message}</p>
+                  {m.email && (
                     <div className={styles.itemMeta}>
                       <span className={`${styles.chip} ${m.tagType === "inquiry" ? styles.chipInquiry : ""}`}>
-                        {m.tag}
+                        {m.email}
                       </span>
-                      <span className={styles.itemEmail}>{m.email}</span>
+                      <span className={`${styles.chip} ${m.tagType === "inquiry" ? styles.chipInquiry : ""}`}>
+                        {m.reply === 'replied' ? "Replied" : "Not Replied"}
+                      </span>
                     </div>
                   )}
                 </li>
@@ -298,12 +235,13 @@ export default function ContactMessages({placeholder}) {
           </aside>
 
           {/* detail */}
-          <article className={styles.detail}>
-            <div className={styles.detailBar}>
-              <div className={styles.pills}>
-                <span className={`${styles.pill} ${styles.pillNew}`}>
-                  <i /> New Inquiry
-                </span>
+          {selectedId && (
+            <article className={styles.detail}>
+              <div className={styles.detailBar}>
+                <div className={styles.pills}>
+                  <span className={`${styles.pill} ${styles.pillNew}`}>
+                    <i /> New Inquiry
+                  </span>
                 <span className={styles.pill}>Contact Form</span>
               </div>
               <div className={styles.detailActions}>
@@ -316,78 +254,20 @@ export default function ContactMessages({placeholder}) {
             </div>
 
             <div className={styles.sender}>
-              <img src={avatarEvelyn} alt={detail.from} className={styles.senderAvatar} />
               <div className={styles.senderInfo}>
                 <div className={styles.senderName}>
-                  <strong>{detail.from}</strong>
-                  <span>&lt;{detail.email}&gt;</span>
+                  <strong>{singleMessage.name}</strong>
+                  <span>&lt;{singleMessage.email}&gt;</span>
                 </div>
-                <p className={styles.senderRole}>
-                  {detail.role} <b>{detail.company}</b>
-                </p>
                 <div className={styles.senderMeta}>
-                  <span><CalendarIcon /> {detail.date}</span>
-                  <span className={styles.metaDot} />
-                  <span><DeviceIcon /> {detail.via}</span>
+                  <span><DeviceIcon /> {detail.via}</span><br/>
+                  <strong>Subject: {singleMessage.subject}</strong>
                 </div>
               </div>
             </div>
 
             <div className={styles.body}>
-              <h2>{detail.subject}</h2>
-              <hr />
-              <p>Hello SlowLiving Editorial Team,</p>
-              <p>
-                I hope this quiet morning finds you well. I've been a dedicated reader of the SlowLiving Journal for
-                over two years, and your recent essay on <em>"The Architecture of Silence"</em> deeply resonated with our
-                studio's philosophy.
-              </p>
-              <p>
-                We are currently curating an architectural retrospective on mindful Scandinavian living spaces, natural
-                acoustics, and slow interior design. We would be honored to explore a collaborative guest feature or
-                co-curated photo essay for your upcoming winter edition.
-              </p>
-              <p>
-                Could we arrange a brief call or email exchange next week to discuss potential themes, photography
-                assets, and editorial guidelines?
-              </p>
-              <hr />
-              <p className={styles.regards}>Warm regards,</p>
-              <p className={styles.signature}>
-                Evelyn Thorne
-                <small>Founder &amp; Spatial Designer, Atelier Minimal</small>
-                <small>Studio: The Quiet Corner, 42 Mindfulness Way, Portland</small>
-              </p>
-            </div>
-
-            <div className={styles.composerWrap}>
-              <div className={styles.composer}>
-                <div className={styles.composerTop}>
-                  <div className={styles.format}>
-                    <button type="button" aria-label="Bold"><BoldIcon /></button>
-                    <button type="button" aria-label="Italic"><ItalicIcon /></button>
-                    <button type="button" aria-label="Link"><LinkIcon /></button>
-                    <button type="button" aria-label="List"><ListIcon /></button>
-                  </div>
-                  <span className={styles.replyingTo}>Replying to: {detail.email}</span>
-                </div>
-                <textarea
-                  value={reply}
-                  onChange={(e) => setReply(e.target.value)}
-                  placeholder="Type your response to Evelyn..."
-                />
-                <div className={styles.composerBottom}>
-                  <button type="button" className={styles.attach}>
-                    <PaperclipIcon /> Attach Files
-                  </button>
-                  <div className={styles.sendGroup}>
-                    <button type="button" className={styles.draft}>Save Draft</button>
-                    <button type="button" className={styles.sendBtn}>
-                      Send Reply <SendIcon />
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <p>{singleMessage.message}</p>
             </div>
             <div className={styles.composerWrap}>
               <div className={`${styles.composer} ${styles.editorWrap}`}>
@@ -402,14 +282,14 @@ export default function ContactMessages({placeholder}) {
                   <button type="button" className={styles.attach}>
                   </button>
                   <div className={styles.sendGroup}>
-                    <button type="button" className={styles.sendBtn}>
+                    <button onClick={sendReply} type="button" className={styles.sendBtn}>
                       Send Reply <SendIcon />
                     </button>
                   </div>
                 </div>
               </div>
             </div>
-          </article>
+          </article>)}
         </section>
       </main>
 

@@ -78,7 +78,7 @@ export const apiGet = async (path)=>{
         headers:{
             'Content-type':'application/json',
             'Accept':'application/json',
-            ...(path !== 'post-comments' || path !== 'public-posts' || path !== 'public-category' ? {'Authorization':`Bearer ${token}`} : {})
+            ...(path !== 'post-comments' && path !== 'public-posts' && path !== 'public-category' ? {'Authorization':`Bearer ${token}`} : {})
         }
     });
     const data = await response.json();
@@ -92,7 +92,7 @@ export const apiSend = async (path, method = 'POST', body = null)=>{
         headers:{
             'Content-type':'application/json',
             'Accept':'application/json',
-             ...(path !== 'account' || path !== 'message' ? {'Authorization':`Bearer ${token}`} : {})
+             ...(path !== 'account' && path !== 'message' ? {'Authorization':`Bearer ${token}`} : {})
         },
         body: body ? JSON.stringify(body) : null
     });
