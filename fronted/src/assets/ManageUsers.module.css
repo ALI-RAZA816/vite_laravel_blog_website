@@ -1,7 +1,10 @@
-.content {
-  background-color: #f6f5fb;
+/* ===== Manage Users: Monochrome + soft accents ===== */
+
+.usersPage {
+  background-color: #f5f5f5;
   padding: 32px 36px;
-  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #111111;
   min-height: 100vh;
 }
 
@@ -11,310 +14,395 @@
 }
 
 .pageTitle {
-  font-size: 28px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 30px;
   font-weight: 700;
-  color: #1f1b2e;
+  color: #111111;
   margin-bottom: 6px;
 }
 
 .pageSubtitle {
   font-size: 14px;
-  color: #8b87a0;
+  color: #8a8a8a;
   margin-bottom: 0;
 }
 
-.exportBtn {
-  background-color: #ffffff;
-  color: #1f1b2e;
-  border: 1px solid #e0dcef;
-  border-radius: 10px;
-  padding: 12px 20px;
-  font-size: 14px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.exportBtn:hover {
-  background-color: #f6f5fb;
-}
-
 .addBtn {
-  background-color: #5b3fd9;
+  background-color: #111111;
   color: #ffffff;
-  border: none;
-  border-radius: 10px;
+  border: 1px solid #111111;
+  border-radius: 4px;
   padding: 12px 20px;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .addBtn:hover {
-  background-color: #4c32c2;
+  background-color: #ffffff;
+  color: #111111;
 }
 
 /* Stat cards */
 .statCard {
   background-color: #ffffff;
-  border-radius: 14px;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
   padding: 20px;
   height: 100%;
-  box-shadow: 0 1px 3px rgba(30, 20, 60, 0.05);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.statCard:hover {
+  border-color: #cfcfcf;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
 }
 
 .statIcon {
   width: 46px;
   height: 46px;
-  border-radius: 10px;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 19px;
+  font-size: 18px;
   flex-shrink: 0;
 }
 
 .statLabel {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.4px;
-  color: #8b87a0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #8a8a8a;
   margin-bottom: 4px;
 }
 
 .statValue {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 700;
-  color: #1f1b2e;
+  color: #111111;
   margin-bottom: 0;
 }
 
 /* Table card */
 .tableCard {
   background-color: #ffffff;
-  border-radius: 14px;
-  box-shadow: 0 1px 3px rgba(30, 20, 60, 0.05);
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
   overflow: hidden;
 }
 
 .tableHeader {
-  padding: 20px 24px;
-  background-color: #f2effa;
+  padding: 18px 24px;
+  background-color: #fafafa;
+  border-bottom: 1px solid #ececec;
 }
 
 .tableTitle {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.5px;
-  color: #1f1b2e;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #111111;
   margin-bottom: 0;
 }
 
-.headerIcon {
-  font-size: 16px;
-  color: #6b6980;
+.searchInput,
+.filterSelect {
+  height: 40px;
+  border: 1px solid #dcdcdc;
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: #111111;
+  font-family: inherit;
+  font-size: 13px;
+  padding: 0 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.searchInput {
+  width: 220px;
+}
+
+.searchInput::placeholder {
+  color: #a5a5a5;
+}
+
+.searchInput:focus,
+.filterSelect:focus {
+  border-color: #111111;
+}
+
+.filterSelect {
+  padding-right: 32px;
   cursor: pointer;
 }
 
+/* Users table */
 .usersTable thead th {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.4px;
-  color: #8b87a0;
+  letter-spacing: 0.14em;
+  color: #8a8a8a;
   background-color: #ffffff;
-  border-bottom: 1px solid #f0eef7;
+  border-bottom: 1px solid #ececec;
   padding: 14px 24px;
 }
 
 .usersTable tbody td {
   padding: 16px 24px;
   vertical-align: middle;
-  border-bottom: 1px solid #f0eef7;
+  border-bottom: 1px solid #f2f2f2;
+  font-size: 14px;
+  color: #111111;
 }
 
 .usersTable tbody tr:last-child td {
   border-bottom: none;
 }
 
-.rowHighlight {
-  background-color: #fdf3f2;
+.usersTable tbody tr:hover td {
+  background-color: #fafafa;
+}
+
+.rowHighlight td {
+  background-color: #fff7f8;
 }
 
 .avatar {
   width: 42px;
   height: 42px;
   border-radius: 50%;
+  background-color: #111111;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 13px;
   font-weight: 700;
-  color: #1f1b2e;
+  color: #ffffff;
+  overflow: hidden;
   flex-shrink: 0;
 }
 
-.userName {
-  font-size: 15px;
-  font-weight: 700;
-  color: #1f1b2e;
-  margin-bottom: 2px;
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.userHandle {
-  font-size: 13px;
-  color: #8b87a0;
-  margin-bottom: 0;
+.memberName {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111111;
+  margin: 0;
 }
 
 .emailCell {
   font-size: 14px;
-  color: #4b4760;
+  color: #555555;
 }
 
+/* Role badges */
 .roleBadge {
+  display: inline-block;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.3px;
-  color: #4b4760;
-  background-color: #ece9f0;
-  padding: 6px 14px;
-  border-radius: 999px;
-  display: inline-block;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 2px;
+}
+
+.roleAdmin {
+  background-color: #111111;
+  color: #ffffff;
+}
+
+.roleEditor {
+  background-color: #eaf1ff;
+  color: #1d4ed8;
+}
+
+.roleAuthor {
+  background-color: #fef3dc;
+  color: #b45309;
+}
+
+.roleUser {
+  background-color: #f0f0f0;
+  color: #555555;
 }
 
 .dateCell {
   font-size: 14px;
-  color: #4b4760;
+  color: #555555;
 }
 
+/* Status: dot + label */
 .statusText {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  gap: 6px;
+  gap: 7px;
   width: fit-content;
 }
 
 .statusDot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
 }
 
 .statusActive {
-  color: #c98a1a;
+  color: #15803d;
 }
 
 .statusActive .statusDot {
-  background-color: #c98a1a;
+  background-color: #16a34a;
 }
 
 .statusBlocked {
-  color: #d94f4f;
+  color: #be123c;
 }
 
 .statusBlocked .statusDot {
-  background-color: #d94f4f;
+  background-color: #e11d48;
 }
 
-.editpencil,
-.deleteIcon {
+.statusInactive {
+  color: #8a8a8a;
+}
+
+.statusInactive .statusDot {
+  background-color: #b5b5b5;
+}
+
+/* Action icons */
+.actionIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-size: 18px;
-  color: #8b87a0;
+  color: #8a8a8a;
+  background: none;
+  border: none;
+  padding: 0;
+  outline: none;
   cursor: pointer;
+  transition: color 0.2s ease;
 }
 
-.editpencil{
-  margin-right: .5rem;
+.actionIcon:hover {
+  color: #111111;
 }
 
-.editpencil:hover {
-  color: #5b3fd9;
+.deleteBtn:hover:not(:disabled) {
+  color: #e11d48;
 }
 
-.deleteIcon:hover {
-  color: #d94f4f;
+.deleteBtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
 }
 
 /* Pagination */
 .paginationRow {
-  padding: 20px 24px;
+  padding: 18px 24px;
+  border-top: 1px solid #f0f0f0;
 }
 
 .showingText {
-  font-size: 14px;
-  color: #8b87a0;
+  font-size: 13px;
+  color: #8a8a8a;
 }
 
 .pageBtn {
   min-width: 36px;
   height: 36px;
-  border-radius: 8px;
-  border: 1px solid #e6e3f0;
+  border-radius: 3px;
+  border: 1px solid #dcdcdc;
   background-color: #ffffff;
-  color: #4b4760;
-  font-size: 14px;
+  color: #333333;
+  font-size: 13px;
   font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
-.pageBtn:hover {
-  background-color: #f6f5fb;
+.pageBtn:hover:not(:disabled) {
+  background-color: #f0f0f0;
+  border-color: #111111;
+}
+
+.pageBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .pageBtnActive {
-  background-color: #5b3fd9;
-  border-color: #5b3fd9;
+  background-color: #111111;
+  border-color: #111111;
+  color: #ffffff;
+}
+
+.pageBtnActive:hover:not(:disabled) {
+  background-color: #111111;
   color: #ffffff;
 }
 
 .pageDots {
-  color: #8b87a0;
+  color: #8a8a8a;
   padding: 0 4px;
 }
 
-/* Footer */
-.footer {
+/* Page footer */
+.pageFooter {
   margin-top: 60px;
   padding-top: 24px;
-  border-top: 1px solid #e6e3f0;
+  border-top: 1px solid #e3e3e3;
 }
 
 .footerCopy {
   font-size: 13px;
-  color: #4b4760;
+  color: #8a8a8a;
   margin-bottom: 0;
 }
 
 .footerLinks {
   display: flex;
   gap: 24px;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 12px;
 }
 
 .footerLinks a {
-  color: #4b4760;
+  color: #555555;
   text-decoration: none;
+  transition: color 0.2s ease;
 }
 
 .footerLinks a:hover {
-  color: #5b3fd9;
+  color: #111111;
 }
+
 /* ===== Responsive ===== */
 
 @media (max-width: 992px) {
-  .content {
+  .usersPage {
     padding: 24px 20px;
   }
 
   .pageTitle {
-    font-size: 24px;
+    font-size: 26px;
   }
 }
 
 @media (max-width: 768px) {
-  .content {
+  .usersPage {
     padding: 20px 16px;
   }
 
@@ -324,7 +412,6 @@
     gap: 12px;
   }
 
-  .exportBtn,
   .addBtn {
     width: 100%;
     justify-content: center;
@@ -332,8 +419,20 @@
 
   .tableHeader {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    align-items: flex-start !important;
+    gap: 12px;
+  }
+
+  .filters {
+    width: 100%;
+  }
+
+  .searchInput {
+    width: 100%;
+  }
+
+  .filterSelect {
+    flex: 1 1 140px;
   }
 
   .paginationRow {
@@ -349,11 +448,16 @@
 }
 
 @media (max-width: 480px) {
-  .content {
+  .usersPage {
     padding: 16px 12px;
   }
 
   .pageTitle {
-    font-size: 20px;
+    font-size: 22px;
+  }
+
+  .usersTable thead th,
+  .usersTable tbody td {
+    padding: 12px 14px;
   }
 }

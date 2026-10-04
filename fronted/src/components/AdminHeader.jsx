@@ -5,11 +5,16 @@ import { Outlet, useLocation } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";
 import { useUser } from "../Context/UserContext";
 import { baseUrl } from "../Http/Http";
+import { Link } from "react-router-dom";
+import { useContact } from "../Context/ContactContext";
 
 const AdminHeader = () => {
   const { toggleSidebar } = useContext(AppContext);
   const location = useLocation();
   const { loggedUser } = useUser();
+  const {
+    totalMessages
+  } = useContact();
   const lastSegment = location.pathname.split('/');
 
   // Naam se initials (single word naam par bhi crash nahi karega)
@@ -44,10 +49,12 @@ const AdminHeader = () => {
 
               {/* Right side */}
               <div className={`d-flex align-items-center ${styles.rightSection}`}>
-                <div className={styles.bellWrapper}>
-                  <BsBell className={styles.bellIcon} />
-                  <span className={styles.notificationDot}></span>
-                </div>
+                <Link to={`/admin-panel/messages`}>
+                  <div className={styles.bellWrapper}>
+                    <BsBell className={styles.bellIcon} />
+                      <span className={styles.notificationDot}>{totalMessages.length}</span>
+                  </div>
+                </Link>
 
                 <div className={`d-flex align-items-center ${styles.userSection}`}>
                   <div className={styles.userInfo}>

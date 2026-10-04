@@ -1,15 +1,18 @@
 /* PageLoader - website ka pehla dfa open hone wala splash screen.
-   Brand colors: purple #5b3fd9, lavender background #f7f2fb,
-   Georgia serif font - site ke baaki hisso se match karta hai. */
+   Brand colors: black #111111, off-white/gray background,
+   Inter font - site ke baaki hisso se match karta hai. */
 
 .overlay {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at 50% 35%, #f7f2fb 0%, #ece3f7 100%);
+  background: radial-gradient(circle at 50% 35%, #fafafa 0%, #e8e8e8 100%);
   opacity: 1;
   transition: opacity 500ms ease;
 }
@@ -39,9 +42,12 @@
 
 .ring {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   border-radius: 50%;
-  border: 1.5px solid rgba(91, 63, 217, 0.35);
+  border: 1.5px solid rgba(17, 17, 17, 0.3);
   animation: pulseRing 2.2s ease-out infinite;
 }
 
@@ -68,8 +74,8 @@
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  background: #ffffff;
-  box-shadow: 0 8px 24px rgba(91, 63, 217, 0.25);
+  background-color: #111111;
+  box-shadow: 0px 10px 28px rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -93,19 +99,19 @@
 }
 
 .leafIcon {
-  font-size: 34px;
-  color: #5b3fd9;
+  font-size: 32px;
+  color: #ffffff;
 }
 
-/* ===== Title ===== */
+/* ===== Title (kept for compatibility, unused by current JSX) ===== */
 
 .title {
   margin: 0;
-  font-family: "Georgia", "Times New Roman", serif;
+  font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.3px;
-  color: #2a1f45;
+  color: #111111;
   text-align: center;
   animation: fadeUp 700ms ease both;
   animation-delay: 150ms;
@@ -133,7 +139,7 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background-color: #5b3fd9;
+  background-color: #111111;
   opacity: 0.35;
   animation: dotBounce 1.2s ease-in-out infinite;
 }

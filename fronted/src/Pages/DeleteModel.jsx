@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import styles from "../assets/DeleteModel.module.css";
 import { AppContext } from "../Context/AppContext";
 import { apiSend, showToast } from "../services/apiClient.js";
@@ -41,7 +41,7 @@ const DeleteModel = () => {
       className={`${styles.overlay} d-flex align-items-center justify-content-center`}
     >
       <div
-        className={`${styles.modal} bg-white rounded-3 shadow p-4`}
+        className={styles.modal}
         role="dialog"
         aria-modal="true"
         aria-labelledby="deleteUserModalTitle"
@@ -51,8 +51,8 @@ const DeleteModel = () => {
         <div className={`${styles.iconWrapper} d-flex align-items-center justify-content-center mx-auto mb-3`}>
           <svg
             className={styles.icon}
-            width="28"
-            height="28"
+            width="26"
+            height="26"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -74,7 +74,7 @@ const DeleteModel = () => {
 
         {/* Description */}
         <p id="deleteUserModalDesc" className={`${styles.description} text-center mb-4`}>
-          Are you sure you want to delete. This action
+          Are you sure you want to delete this user? This action
           cannot be undone and will permanently remove all associated data.
         </p>
 

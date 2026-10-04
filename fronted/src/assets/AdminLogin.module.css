@@ -2,14 +2,14 @@
   position: relative;
   min-height: 100vh;
   width: 100%;
-  background-color: #211d2e;
+  background-color: #111111;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px;
+  padding: 50px 20px;
   overflow: hidden;
-  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
 }
 
 /* faint vertical watermark labels on the left */
@@ -25,7 +25,7 @@
 }
 
 .watermarks span {
-  color: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.055);
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 3px;
@@ -41,44 +41,44 @@
 }
 
 .iconWrapper {
-  width: 80px;
-  height: 80px;
+  width: 76px;
+  height: 76px;
   border-radius: 18px;
-  background-color: #5b3fd9;
+  background-color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 20px auto;
-  box-shadow: 0 10px 25px rgba(91, 63, 217, 0.35);
+  box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.45);
 }
 
 .shieldIcon {
-  color: #ffffff;
-  font-size: 34px;
+  color: #111111;
+  font-size: 30px;
 }
 
 .title {
   color: #ffffff;
-  font-size: 28px;
+  font-size: 27px;
   font-weight: 700;
   margin: 0 0 8px 0;
 }
 
 .subtitle {
-  color: #a8a4bd;
-  font-size: 15px;
+  color: #9a948d;
+  font-size: 14.5px;
   margin: 0;
 }
 
 .card {
   position: relative;
   z-index: 1;
-  background-color: #f5f4f8;
+  background-color: #ffffff;
   border-radius: 16px;
   width: 100%;
-  max-width: 490px;
+  max-width: 480px;
   padding: 40px;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+  box-shadow: 0px 25px 60px rgba(0, 0, 0, 0.5);
 }
 
 .field {
@@ -87,9 +87,9 @@
 
 .label {
   display: block;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 600;
-  color: #2c2740;
+  color: #1a1a1a;
   margin-bottom: 8px;
 }
 
@@ -105,9 +105,9 @@
 }
 
 .forgotLink {
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 600;
-  color: #5b3fd9;
+  color: #111111;
   text-decoration: none;
 }
 
@@ -118,14 +118,14 @@
 .inputWrapper {
   display: flex;
   align-items: center;
-  background-color: #eeeaf6;
-  border: 1px solid #e0dced;
+  background-color: #f7f7f7;
+  border: 1px solid #e8e8e8;
   border-radius: 10px;
   padding: 0 14px;
 }
 
 .inputIcon {
-  color: #8b87a0;
+  color: #9a948d;
   font-size: 16px;
   flex-shrink: 0;
 }
@@ -136,19 +136,19 @@
   background: transparent;
   outline: none;
   padding: 14px 12px;
-  font-size: 15px;
-  color: #2c2740;
+  font-size: 14.5px;
+  color: #1a1a1a;
   min-width: 0;
 }
 
 .input::placeholder {
-  color: #9b97ae;
+  color: #a9a4a0;
 }
 
 .eyeButton {
   background: transparent;
   border: none;
-  color: #8b87a0;
+  color: #9a948d;
   font-size: 17px;
   cursor: pointer;
   display: flex;
@@ -158,24 +158,7 @@
 }
 
 .eyeButton:hover {
-  color: #5b3fd9;
-}
-
-.checkboxRow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 14px;
-  color: #4a4560;
-  margin-bottom: 24px;
-  cursor: pointer;
-}
-
-.checkbox {
-  width: 17px;
-  height: 17px;
-  accent-color: #5b3fd9;
-  cursor: pointer;
+  color: #111111;
 }
 
 .submitBtn {
@@ -184,19 +167,19 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  background-color: #4c3d94;
+  background-color: #111111;
   color: #ffffff;
   border: none;
   border-radius: 10px;
-  padding: 16px;
-  font-size: 15px;
+  padding: 15px;
+  font-size: 14.5px;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.15s ease;
 }
 
 .submitBtn:hover {
-  background-color: #43357f;
+  background-color: #1a1a1a;
 }
 
 .submitIcon {
@@ -205,7 +188,7 @@
 
 .divider {
   height: 1px;
-  background-color: #e0dced;
+  background-color: #e8e8e8;
   margin: 28px 0 20px 0;
 }
 
@@ -214,28 +197,28 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 600;
   margin-bottom: 16px;
 }
 
 .footerLinks a {
-  color: #2c2740;
+  color: #1a1a1a;
   text-decoration: none;
 }
 
 .footerLinks a:hover {
-  color: #5b3fd9;
+  color: #737373;
 }
 
 .dot {
-  color: #b8b5c9;
+  color: #d4d4d4;
 }
 
 .disclaimer {
   text-align: center;
   font-size: 12px;
-  color: #b8b5c9;
+  color: #9a948d;
   line-height: 1.5;
   margin: 0;
 }
@@ -247,7 +230,7 @@
   }
 
   .title {
-    font-size: 24px;
+    font-size: 23px;
   }
 
   .watermarks {

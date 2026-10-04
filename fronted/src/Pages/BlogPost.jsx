@@ -231,9 +231,9 @@ export default function BlogPost() {
             <div className={styles.authorInfo}>
             {formData.author_image ? <img
                 src={`${baseUrl}/uploads/${formData.author_image}`}
-                alt="Elena Vance"
-                className={styles.authorAvatar}
-              />: <div className="rounded-5 text-center text-white" style={{lineHeight:'40px',height:'40px', width:'40px', backgroundColor: '#5b3fd9', overflow:'hidden'}}>
+                alt={formData.author_name}
+                className={styles.avatarCircle}
+              />: <div className={styles.avatarCircle}>
                       {formData.author_name.split(' ')[0]?.substr(0, 1)}
                       {formData.author_name.split(' ')[1]?.substr(0, 1)}
                   </div>
@@ -257,15 +257,14 @@ export default function BlogPost() {
             {/* Add a comment */}
             {/* {localStorage.getItem('token') &&  */}
             <div className={`d-flex align-items-start ${styles.addCommentRow}`}>
-              <div className="rounded-5 text-center overflow-hidden text-white" style={{lineHeight:'40px',height:'40px', width:'40px'}}>
+              <div className={styles.avatarCircleSm}>
                 {loggedUser?.image ? <img
                     src={`${baseUrl}/uploads/${loggedUser.image}`}
                     alt=""
-                    className={styles.authorAvatar}
-                  />: <div className="rounded-5 text-center text-white" style={{lineHeight:'40px',height:'40px', width:'40px', backgroundColor: '#5b3fd9', overflow:'hidden'}}>
+                  />: <>
                           {loggedUser?.name?.split(' ')[0].substr(0, 1)}
                           {loggedUser?.name?.split(' ')[1].substr(0, 1)}
-                      </div>
+                      </>
                   }
               </div>
                 <div className={`${styles.addCommentBox} d-flex flex-column`}>
@@ -289,15 +288,15 @@ export default function BlogPost() {
               {postComment?.map((comment, index)=>{
                 return <div key={index} className={`${styles.commentItem} d-flex justify-content-between mb-3`}>
                           <div className="d-flex w-100">
-                            <div className={`${styles.avatarInitials} ${styles.avatarPurple} me-2 overflow-hidden`}>
+                            <div className={`${styles.avatarInitials} ${styles.avatarPurple} me-2`}>
                               {comment.user.image ? <img
                                 src={`${baseUrl}/uploads/${comment.user.image}`}
-                                alt="Elena Vance"
-                                className={styles.authorAvatar}
-                              />: <div className="rounded-5 text-center text-white" style={{lineHeight:'40px',height:'40px', width:'40px', backgroundColor: '#5b3fd9', overflow:'hidden'}}>
+                                alt={comment.user.name}
+                                className={styles.avatarCircleSm}
+                              />: <>
                                       {comment?.user.name?.split(' ')[0].substr(0, 1)}
                                       {comment?.user.name?.split(' ')[1].substr(0, 1)}
-                                  </div>
+                                  </>
                               }
                             </div>
                             <div className={`${styles.commentBody} w-100`}>
@@ -321,8 +320,8 @@ export default function BlogPost() {
                             </div>
                           </div>
                           {comment.user_id === userInfo?.id && (<div className="position-relative">
-                            <IoEllipsisVerticalSharp style={{cursor:'pointer'}} onClick={(e)=> {e.stopPropagation(), setActive(index)}} />
-                            {active === index && (<div className={`${styles.commentAction} d-flex flex-column bg-white shadow-sm px-3 py-2 rounded-2`}>
+                            <IoEllipsisVerticalSharp className={styles.commentDots} onClick={(e)=> {e.stopPropagation(), setActive(index)}} />
+                            {active === index && (<div className={`${styles.commentAction} d-flex flex-column bg-white px-3 py-2 rounded-2`}>
                               <span onClick={(e)=> {e.stopPropagation(), fetchComment(comment.id), setActive(null), setActiveEdit(index)}}  style={{cursor:'pointer',fontSize:'13px'}} className="d-flex mb-1"><MdOutlineEdit className="fs-5 me-2" />Edit</span>
                               <span onClick={()=>deleteComment(comment.id)}  style={{cursor:'pointer',fontSize:'13px'}} className="d-flex">
                                 <RiDeleteBinLine className="fs-5 me-2" />

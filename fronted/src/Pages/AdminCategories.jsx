@@ -18,130 +18,166 @@ import EditAdminCategory from '../Pages/EditAdminCategory';
 import NoCategories from "../components/NoCategories";
 import LoadingSpinner from "../components/LoadingSpinner";
 
+// Category ke icon name se icon (pehle lambi ternary chain thi)
+const categoryIcons = {
+  leaf: <BsFlower1 />,
+  sprout: <span className={styles.emojiIcon}>&#127807;</span>,
+  book: <BsBook />,
+  home: <BsHouseDoor />,
+  palette: <LuPalette />,
+  globe: <IoGlobeSharp />,
+};
+
 const AdminCategories = () => {
 
-    const {
-        categories,
-        catPagination,
-        currentCatPage,
-        setCurrentCatPage,
-        viewCategory,
-        CategoryModelHandler,
-        EditCategoryModelHandler,
-        deleteCategory,
-        spinnerLoader
-    } = useCategory();
+  const {
+    categories,
+    catPagination,
+    currentCatPage,
+    setCurrentCatPage,
+    viewCategory,
+    CategoryModelHandler,
+    EditCategoryModelHandler,
+    deleteCategory,
+    spinnerLoader
+  } = useCategory();
 
-    const pages = [];
-    const start = Math.max(1, catPagination.currentPage - 2);
-    const end = Math.min(catPagination.lastPage, catPagination.currentPage + 2);
-    if(start > 1){
-        pages.push(1);
-        if(start > 2) pages.push('...');
-    }
+  const pages = [];
+  const start = Math.max(1, catPagination.currentPage - 2);
+  const end = Math.min(catPagination.lastPage, catPagination.currentPage + 2);
+  if (start > 1) {
+    pages.push(1);
+    if (start > 2) pages.push('...');
+  }
 
-    for (let i = start; i<=end; i++  ){
-        pages.push(i);
-    }
-    
-    if(end < catPagination.lastPage){
-        if(end < catPagination.lastPage - 1) pages.push("...");
-        pages.push(catPagination.lastPage);
-    }
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
 
+  if (end < catPagination.lastPage) {
+    if (end < catPagination.lastPage - 1) pages.push("...");
+    pages.push(catPagination.lastPage);
+  }
 
   return (
     <>
-        
-        <div className={styles.content}>
+      <div className={styles.categoriesPage}>
         {/* Heading */}
-        <div className="d-flex justify-content-between align-items-start mb-4">
-            <div>
+        <div className={`d-flex justify-content-between align-items-start ${styles.headingRow}`}>
+          <div>
             <h2 className={styles.pageTitle}>Manage Categories</h2>
-            <div className={styles.breadcrumb}>
-                <span>Dashboard</span>
-                <span className={styles.crumbSep}>/</span>
-                <span className={styles.crumbActive}>Categories</span>
+            <div className={styles.crumbs}>
+              <span>Dashboard</span>
+              <span className={styles.crumbSep}>/</span>
+              <span className={styles.crumbActive}>Categories</span>
             </div>
-            </div>
-            <button onClick={CategoryModelHandler}  className={`d-flex align-items-center ${styles.addBtn}`}>
-            <BsPlusLg className="me-2" />Add Category</button>
+          </div>
+          <button onClick={CategoryModelHandler} className={`d-flex align-items-center ${styles.addBtn}`}>
+            <BsPlusLg className="me-2" />Add Category
+          </button>
         </div>
 
         {/* Table */}
         <div className={styles.tableCard}>
-            <div className="table-responsive">
-                {spinnerLoader ? (
-                              <div style={{height:'480px'}} className="d-flex justify-content-center align-items-center"><LoadingSpinner /></div>
-                          ) : categories.length === 0 ? <div className="p-3"><NoCategories/></div>:<table className={`table mb-0 ${styles.categoriesTable}`}>
-                    <thead>
-                    <tr>
-                        <th>NAME</th>
-                        <th>SLUG</th>
-                        <th>POST COUNT</th>
-                        <th className="text-end">ACTIONS</th>
+          <div className="table-responsive">
+            {spinnerLoader ? (
+              <div style={{ height: '480px' }} className="d-flex justify-content-center align-items-center"><LoadingSpinner /></div>
+            ) : categories.length === 0 ? (
+              <div className="p-3"><NoCategories /></div>
+            ) : (
+              <table className={`table mb-0 ${styles.categoriesTable}`}>
+                <thead>
+                  <tr>
+                    <th>NAME</th>
+                    <th>SLUG</th>
+                    <th>POST COUNT</th>
+                    <th className="text-end">ACTIONS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {categories.map((cat, index) => (
+                    <tr key={cat.id ?? index}>
+                      <td>
+                        <div className="d-flex align-items-center gap-3">
+                          <div className={styles.catIcon}>
+                            {categoryIcons[cat.icon] ?? null}
+                          </div>
+                          <span className={styles.catName}>{cat.name}</span>
+                        </div>
+                      </td>
+                      <td className={styles.slugCell}>{cat.slug}</td>
+                      <td>
+                        <span className={styles.postCountBadge}>{cat.post_count}</span>
+                      </td>
+                      <td>
+                        <div className="d-flex align-items-center justify-content-end gap-3">
+                          <BsPencilFill
+                            onClick={() => { EditCategoryModelHandler(); viewCategory(cat.id); }}
+                            className={styles.actionIcon}
+                          />
+                          <BsTrashFill
+                            onClick={() => deleteCategory(cat.id)}
+                            className={`${styles.actionIcon} ${styles.deleteIcon}`}
+                          />
+                        </div>
+                      </td>
                     </tr>
-                    </thead>
-                    <tbody>
-                    {categories.map((cat, index) => (
-                        <tr key={index}>
-                            <td>
-                                <div className="d-flex align-items-center gap-3">
-                                <div
-                                    className={styles.catIcon}
-                                    style={{ backgroundColor: cat.iconBg, color: cat.iconColor }}
-                                >
-                                    {cat.icon === 'leaf' ? <BsFlower1 /> : '' || cat.icon === 'sprout' ? <span style={{ fontSize: "14px" }}>&#127807;</span> : '' || cat.icon === 'book' ?  <BsBook />  : '' || cat.icon === 'home' ?  <BsHouseDoor /> : '' || cat.icon === 'palette' ?  <LuPalette /> : '' || cat.icon === 'globe' ?  <IoGlobeSharp /> : ''}
-                                </div>
-                                <span className={styles.catName}>{cat.name}</span>
-                                </div>
-                            </td>
-                            <td className={styles.slugCell}>{cat.slug}</td>
-                            <td>
-                                <span className={styles.postCountBadge}>{cat.post_count}</span>
-                            </td>
-                            <td>
-                                <div className="d-flex align-items-center justify-content-end gap-3">
-                                    <BsPencilFill onClick={()=>{EditCategoryModelHandler(); viewCategory(cat.id)}} className={styles.actionIcon} />
-                                    <BsTrashFill onClick={()=> deleteCategory(cat.id)} className={`${styles.actionIcon} ${styles.deleteIcon}`} />
-                                </div>
-                            </td>
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>}
-            </div>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
 
-            {/* Pagination */}
-            {categories.length !== 0 && <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
-                <span className={styles.showingText}>Showing {catPagination.from} to {catPagination.to} of {catPagination.total} categories</span>
-                <div className="d-flex align-items-center gap-2">
-                    <button disabled={catPagination.currentPage === 1} onClick={()=> setCurrentCatPage(catPagination.currentPage - 1)} className={styles.pageBtn}>
-                    <BsChevronLeft />
+          {/* Pagination */}
+          {categories.length !== 0 && (
+            <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
+              <span className={styles.showingText}>
+                Showing {catPagination.from} to {catPagination.to} of {catPagination.total} categories
+              </span>
+              <div className="d-flex align-items-center gap-2">
+                <button
+                  disabled={catPagination.currentPage === 1}
+                  onClick={() => setCurrentCatPage(catPagination.currentPage - 1)}
+                  className={styles.pageBtn}
+                >
+                  <BsChevronLeft />
+                </button>
+                {pages.map((page, index) => (
+                  page === '...' ? (
+                    <span key={`dots-${index}`} className={styles.pageDots}>...</span>
+                  ) : (
+                    <button
+                      key={`page-${page}`}
+                      onClick={() => setCurrentCatPage(page)}
+                      className={`${styles.pageBtn} ${currentCatPage === page ? styles.pageBtnActive : ''}`}
+                    >
+                      {page}
                     </button>
-                    {pages.map((page, index)=>{
-                    return page === '...' ?(
-                        <span key={index} className={styles.pageDots}>...</span>
-                    ):(<button key={index} onClick={()=> setCurrentCatPage(page)} className={`${styles.pageBtn} ${currentCatPage === page ? `${styles.pageBtnActive}`: ''}`}>{page}</button>)
-                    })}
-                    <button onClick={()=> setCurrentCatPage(catPagination.currentPage + 1)} disabled={catPagination.currentPage === catPagination.lastPage} className={styles.pageBtn}>
-                    <BsChevronRight />
-                    </button>
-                </div>
-            </div>}
+                  )
+                ))}
+                <button
+                  onClick={() => setCurrentCatPage(catPagination.currentPage + 1)}
+                  disabled={catPagination.currentPage === catPagination.lastPage}
+                  className={styles.pageBtn}
+                >
+                  <BsChevronRight />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Footer */}
-        <div className={styles.footer}>
-            <p className={styles.footerText}>© 2024 SlowLiving Blog. All rights reserved.</p>
-            <div className={styles.footerLinks}>
+        <div className={styles.pageFooter}>
+          <p className={styles.footerText}>© {new Date().getFullYear()} SlowLiving Blog. All rights reserved.</p>
+          <div className={styles.footerLinks}>
             <a href="#">Terms of Service</a>
             <a href="#">Privacy Policy</a>
-            </div>
+          </div>
         </div>
-        </div>
-        <AdminAddCategoryModel/>
-        <EditAdminCategory/>
+      </div>
+      <AdminAddCategoryModel />
+      <EditAdminCategory />
     </>
   );
 };

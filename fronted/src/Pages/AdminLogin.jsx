@@ -109,7 +109,6 @@ const AdminLogin = () => {
                 value={formData.password}
                 type={showToken ? "text" : "password"}
                 placeholder="Token"
-                defaultValue=""
                 className={styles.input}
               />
               <button

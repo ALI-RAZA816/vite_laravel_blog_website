@@ -1,48 +1,56 @@
-.content {
-  background-color: #f6f5fb;
+/* ===== Admin Posts: Monochrome + soft accents ===== */
+
+.postsPage {
+  background-color: #f5f5f5;
   padding: 32px 36px;
-  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #111111;
   min-height: 100vh;
 }
 
 /* Heading */
 .pageTitle {
-  font-size: 28px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 30px;
   font-weight: 700;
-  color: #1f1b2e;
+  color: #111111;
   margin-bottom: 8px;
 }
 
-.breadcrumb {
-  font-size: 14px;
-  color: #8b87a0;
+.crumbs {
+  font-size: 13px;
+  color: #8a8a8a;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
 .crumbSep {
-  color: #c3c0d4;
+  color: #c4c4c4;
 }
 
 .crumbActive {
-  color: #5b3fd9;
+  color: #111111;
   font-weight: 600;
 }
 
 .addBtn {
-  background-color: #5b3fd9;
+  background-color: #111111;
   color: #ffffff;
-  border: none;
-  border-radius: 10px;
+  border: 1px solid #111111;
+  border-radius: 4px;
   padding: 12px 20px;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .addBtn:hover {
-  background-color: #4c32c2;
+  background-color: #ffffff;
+  color: #111111;
 }
 
 /* Filter bar */
@@ -52,272 +60,284 @@
 
 .selectBox {
   background-color: #ffffff;
-  border: 1px solid #e6e3f0;
-  border-radius: 10px;
-  padding: 5px 10px;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+  padding: 4px 8px;
   font-size: 14px;
-  color: #4b4760;
+  color: #333333;
   font-weight: 500;
-  gap: 24px;
   justify-content: space-between;
-  cursor: pointer;
+  min-width: 220px;
+  transition: border-color 0.2s ease;
 }
 
-.selectIcon {
-  color: #8b87a0;
-  font-size: 13px;
-}
-
-.applyBtn {
-  background-color: #eeecf5;
-  border: none;
-  border-radius: 10px;
-  padding: 11px 22px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #4b4760;
-}
-
-.applyBtn:hover {
-  background-color: #e2dff0;
+.selectBox:focus-within {
+  border-color: #111111;
 }
 
 .statusTabs {
   display: flex;
   align-items: center;
   background-color: #ffffff;
-  border: 1px solid #e6e3f0;
-  border-radius: 10px;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
   padding: 4px;
   gap: 4px;
 }
 
 .statusTab {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
-  color: #8b87a0;
-  padding: 7px 16px;
-  border-radius: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8a8a8a;
+  padding: 8px 16px;
+  border-radius: 3px;
   cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.statusTab:hover {
+  color: #111111;
 }
 
 .statusTabActive {
-  background-color: #ece9fb;
-  color: #5b3fd9;
+  background-color: #111111;
+  color: #ffffff;
+}
+
+.statusTabActive:hover {
+  color: #ffffff;
 }
 
 /* Table card */
 .tableCard {
   background-color: #ffffff;
-  border-radius: 14px;
-  box-shadow: 0 1px 3px rgba(30, 20, 60, 0.05);
-  padding: 4px 0 0 0;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
   overflow: hidden;
 }
 
 .postsTable thead th {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.4px;
-  color: #8b87a0;
-  background-color: #f6f5fb;
+  letter-spacing: 0.14em;
+  color: #8a8a8a;
+  background-color: #fafafa;
   border: none;
-  padding: 16px 20px;
+  border-bottom: 1px solid #ececec;
+  padding: 14px 20px;
 }
 
 .postsTable tbody td {
-  padding: 18px 20px;
+  padding: 16px 20px;
   vertical-align: middle;
-  border-bottom: 1px solid #f0eef7;
+  border-bottom: 1px solid #f2f2f2;
 }
 
 .postsTable tbody tr:last-child td {
   border-bottom: none;
 }
 
+.postsTable tbody tr:hover td {
+  background-color: #fafafa;
+}
+
 .checkbox {
   width: 16px;
   height: 16px;
-  accent-color: #5b3fd9;
+  accent-color: #111111;
   cursor: pointer;
 }
 
 .postTitle {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
-  color: #1f1b2e;
+  color: #111111;
   margin-bottom: 2px;
 }
 
 .postUrl {
-  font-size: 13px;
-  color: #8b87a0;
+  font-size: 12px;
+  color: #8a8a8a;
   margin-bottom: 0;
 }
 
 .categoryBadge {
-  font-size: 12px;
-  font-weight: 700;
-  color: #4b3a10;
-  padding: 6px 14px;
-  border-radius: 999px;
   display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #333333;
+  background-color: #f0f0f0;
+  padding: 5px 12px;
+  border-radius: 2px;
 }
 
 .avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
+  background-color: #111111;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 12px;
   font-weight: 700;
   color: #ffffff;
+  overflow: hidden;
   flex-shrink: 0;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .authorName {
   font-size: 14px;
   font-weight: 600;
-  color: #1f1b2e;
+  color: #111111;
 }
 
+/* Status: dot + label (sirf rang par depend nahi) */
 .statusBadge {
   font-size: 13px;
   font-weight: 600;
-  gap: 6px;
+  gap: 7px;
   width: fit-content;
 }
 
 .statusDot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
 }
 
 .statusPublished {
-  color: #2f9e5c;
+  color: #15803d;
 }
 
 .statusPublished .statusDot {
-  background-color: #2f9e5c;
+  background-color: #16a34a;
 }
 
 .statusDraft {
-  color: #8b87a0;
+  color: #b45309;
 }
 
 .statusDraft .statusDot {
-  background-color: #8b87a0;
+  background-color: #d97706;
 }
 
 .dateCell {
   font-size: 14px;
-  color: #4b4760;
+  color: #555555;
 }
 
 .actionIcon {
   font-size: 15px;
-  color: #8b87a0;
+  color: #8a8a8a;
   cursor: pointer;
+  transition: color 0.2s ease;
 }
 
 .actionIcon:hover {
-  color: #5b3fd9;
+  color: #111111;
 }
 
 .deleteIcon:hover {
-  color: #d94f4f;
+  color: #e11d48;
 }
 
 /* Pagination */
 .paginationRow {
   padding: 20px;
+  border-top: 1px solid #f0f0f0;
 }
 
 .showingText {
-  font-size: 14px;
-  color: #8b87a0;
+  font-size: 13px;
+  color: #8a8a8a;
 }
 
 .pageBtn {
   min-width: 36px;
   height: 36px;
-  border-radius: 8px;
-  border: 1px solid #e6e3f0;
+  border-radius: 3px;
+  border: 1px solid #dcdcdc;
   background-color: #ffffff;
-  color: #4b4760;
-  font-size: 14px;
+  color: #333333;
+  font-size: 13px;
   font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
-.pageBtn:hover {
-  background-color: #f6f5fb;
+.pageBtn:hover:not(:disabled) {
+  background-color: #f0f0f0;
+  border-color: #111111;
+}
+
+.pageBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .pageBtnActive {
-  background-color: #5b3fd9;
-  border-color: #5b3fd9;
+  background-color: #111111;
+  border-color: #111111;
+  color: #ffffff;
+}
+
+.pageBtnActive:hover:not(:disabled) {
+  background-color: #111111;
   color: #ffffff;
 }
 
 .pageDots {
-  color: #8b87a0;
+  color: #8a8a8a;
   padding: 0 4px;
 }
 
 /* Content velocity */
 .velocityCard {
   background-color: #ffffff;
-  border-radius: 14px;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
   padding: 24px;
   height: 100%;
-  box-shadow: 0 1px 3px rgba(30, 20, 60, 0.05);
-}
-.velocityChart{
-  width: 100%;
 }
 
 .velocityTitle {
-  font-size: 18px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 20px;
   font-weight: 700;
-  color: #1f1b2e;
+  color: #111111;
   margin-bottom: 6px;
 }
 
 .velocitySubtitle {
   font-size: 14px;
-  color: #8b87a0;
+  color: #8a8a8a;
   margin-bottom: 24px;
 }
 
+/* Chart.js container: explicit height zaroori hai */
 .velocityChart {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  height: 160px;
-  gap: 14px;
+  position: relative;
+  width: 100%;
+  height: 260px;
 }
 
-.velocityBar {
-  flex: 1;
-  max-width: 48px;
-  background-color: #ece9fb;
-  border-radius: 8px 8px 0 0;
-  transition: height 0.3s ease;
-}
-
-.velocityBarActive {
-  background-color: #5b3fd9;
-}
-
+/* AI card */
 .aiCard {
-  background: linear-gradient(160deg, #6d4fe0 0%, #5136c4 100%);
-  border-radius: 14px;
+  background: linear-gradient(160deg, #1f1f1f 0%, #0a0a0a 100%);
+  border-radius: 4px;
   padding: 32px 28px;
   height: 100%;
   text-align: center;
@@ -328,13 +348,21 @@
 }
 
 .aiIcon {
-  font-size: 26px;
-  color: #ffffff;
-  margin-bottom: 14px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(251, 191, 36, 0.12);
+  color: #fbbf24;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
 }
 
 .aiTitle {
-  font-size: 20px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 22px;
   font-weight: 700;
   color: #ffffff;
   margin-bottom: 10px;
@@ -342,38 +370,44 @@
 
 .aiText {
   font-size: 14px;
-  color: #d9d3f7;
-  margin-bottom: 22px;
-  max-width: 260px;
+  line-height: 1.7;
+  color: #a3a3a3;
+  margin-bottom: 24px;
+  max-width: 270px;
 }
 
 .aiBtn {
   background-color: #ffffff;
-  color: #5b3fd9;
-  border: none;
-  border-radius: 10px;
-  padding: 11px 24px;
-  font-size: 14px;
+  color: #111111;
+  border: 1px solid #ffffff;
+  border-radius: 4px;
+  padding: 12px 26px;
+  font-size: 12px;
   font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .aiBtn:hover {
-  background-color: #ece9fb;
+  background-color: transparent;
+  color: #ffffff;
 }
+
 /* ===== Responsive ===== */
 
 @media (max-width: 992px) {
-  .content {
+  .postsPage {
     padding: 24px 20px;
   }
 
   .pageTitle {
-    font-size: 24px;
+    font-size: 26px;
   }
 }
 
 @media (max-width: 768px) {
-  .content {
+  .postsPage {
     padding: 20px 16px;
   }
 
@@ -382,12 +416,17 @@
     gap: 10px;
   }
 
+  .selectBox {
+    width: 100%;
+  }
+
   .statusTabs {
     flex-wrap: wrap;
   }
 
   .addBtn {
     width: 100%;
+    justify-content: center;
   }
 
   .paginationRow {
@@ -402,21 +441,20 @@
 }
 
 @media (max-width: 480px) {
-  .content {
+  .postsPage {
     padding: 16px 12px;
   }
 
   .pageTitle {
-    font-size: 20px;
+    font-size: 22px;
   }
 
   .statusTab {
     padding: 6px 10px;
-    font-size: 13px;
+    font-size: 11px;
   }
 
   .velocityChart {
-    height: 120px;
-    gap: 8px;
+    height: 200px;
   }
 }

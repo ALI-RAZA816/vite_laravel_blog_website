@@ -1,49 +1,33 @@
+/* ===== Color system (monochrome) =====
+   --black:   #111111
+   --gray-900:#1a1a1a
+   --gray-700:#4b4b4b
+   --gray-500:#737373
+   --gray-400:#9a948d
+   --gray-300:#d4d4d4
+   --gray-200:#e8e8e8
+   --gray-100:#f3f3f3
+   --gray-50: #f7f7f7
+   --white:   #ffffff
+*/
+
 .page {
-  background: #f7f2fb;
+  background: #f7f7f7;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-.bgText {
-  position: absolute;
-  left: 40px;
-  top: 0;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 60px;
-  color: rgba(255,255,255,0.06);
-  font-size: 14px;
-  letter-spacing: 2px;
-  font-weight: 700;
+.topBar {
+  padding: 26px 0 0;
+  text-align: center;
 }
-
-.iconBox {
-  width: 64px;
-  height: 64px;
-  background: #5b3fa0;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 26px;
-  margin-bottom: 20px;
-}
-.title {
-  color: #fff;
-  font-size: 26px;
+.brandLogo {
+  font-family: 'Playfair Display', Georgia, serif;
   font-weight: 800;
-  margin-bottom: 6px;
+  font-size: 22px;
+  color: #111111;
 }
-.subtitle {
-  color: #a8a3b5;
-  font-size: 14px;
-  margin-bottom: 30px;
-}
-
 
 .center {
   flex: 1;
@@ -52,138 +36,157 @@
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
-
-}
-
-.tabSwitch {
-  background: #efe6f7;
-  border-radius: 10px;
-  display: flex;
-  padding: 5px;
-  margin-bottom: 30px;
-}
-.tab {
-  background: transparent;
-  border: none;
-  padding: 10px 30px;
-  border-radius: 8px;
-  font-weight: 600;
-  color: #555;
-}
-.tabActive {
-  background: #5b3fa0;
-  color: #fff;
-  border: none;
-  padding: 10px 30px;
-  border-radius: 8px;
-  font-weight: 600;
 }
 
 .card {
-  background: #fff;
+  background: #ffffff;
+  border: 1px solid #e8e8e8;
   border-radius: 14px;
-  padding: 40px;
+  padding: 44px;
   width: 100%;
-  max-width: 460px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+  max-width: 440px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
 }
+
+.iconBadge {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: #111111;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin: 0 auto 20px;
+}
+
 .cardTitle {
   text-align: center;
-  font-size: 26px;
-  font-weight: 800;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 27px;
+  font-weight: 700;
+  color: #111111;
   margin-bottom: 6px;
 }
 .cardSubtitle {
   text-align: center;
-  color: #777;
+  color: #737373;
   font-size: 14px;
-  margin-bottom: 26px;
+  margin-bottom: 30px;
 }
+
 .card label {
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 600;
-  margin-bottom: 6px;
+  color: #1a1a1a;
+  margin-bottom: 7px;
   display: block;
   margin-top: 18px;
 }
 .card input {
   width: 100%;
-  border: 1px solid #e2dbec;
-  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+  background: #f7f7f7;
+  border-radius: 9px;
   padding: 12px 14px;
   font-size: 14px;
   outline: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
 }
+.card input:focus {
+  border-color: #111111;
+  background: #ffffff;
+}
+.card input:disabled {
+  opacity: 0.6;
+}
+
 .passwordRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+.passwordRow label {
+  margin-top: 18px;
+}
 .forgot {
-  color: #5b3fa0;
+  color: #4b4b4b;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
 }
+.forgot:hover {
+  color: #111111;
+}
+
+/* password field with show/hide eye icon */
+.passwordWrap {
+  position: relative;
+}
+.passwordWrap input {
+  padding-right: 42px;
+}
+.eyeBtn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #737373;
+  font-size: 16px;
+  cursor: pointer;
+}
+.eyeBtn:hover {
+  color: #111111;
+}
+
 .loginBtn {
   width: 100%;
-  background: #5b3fa0;
-  color: #fff;
+  background: #111111;
+  color: #ffffff;
   border: none;
-  border-radius: 8px;
+  border-radius: 9px;
   padding: 13px;
   font-weight: 700;
   font-size: 15px;
-  margin-top: 6px;
+  margin-top: 26px;
 }
-.divider {
-  text-align: center;
-  color: #aaa;
-  font-size: 11px;
-  letter-spacing: 1px;
-  margin: 26px 0;
-  position: relative;
+.loginBtn:hover {
+  background: #1a1a1a;
 }
-.divider::before,
-.divider::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  width: 35%;
-  height: 1px;
-  background: #eee;
+.loginBtn:disabled {
+  opacity: 0.65;
 }
-.divider::before { left: 0; }
-.divider::after { right: 0; }
 
-.socialBtns {
-  display: flex;
-  gap: 14px;
-}
-.socialBtn {
-  flex: 1;
-  border: 1px solid #e2dbec;
-  border-radius: 8px;
-  padding: 12px;
-  background: #fff;
-  font-weight: 600;
+.signupLine {
+  margin-top: 22px;
+  text-align: center;
   font-size: 14px;
+  color: #4b4b4b;
 }
-.google {
-  color: #4285F4;
-  font-weight: 800;
-  margin-right: 6px;
+.signupLine a {
+  color: #111111;
+  font-weight: 700;
+}
+.signupLine a:hover {
+  text-decoration: underline;
 }
 
 .terms {
   font-size: 13px;
-  color: #555;
-  margin-top: 24px;
+  color: #737373;
+  margin-top: 26px;
   text-align: center;
+  max-width: 380px;
 }
 .terms a {
-  color: #5b3fa0;
+  color: #111111;
   font-weight: 600;
+}
+.terms a:hover {
+  text-decoration: underline;
 }
 
 /* ===== Responsive ===== */
@@ -194,20 +197,10 @@
   }
 
   .card {
-    padding: 24px 20px;
+    padding: 28px 22px;
   }
 
   .cardTitle {
     font-size: 22px;
-  }
-
-  .tab,
-  .tabActive {
-    padding: 10px 18px;
-    font-size: 14px;
-  }
-
-  .socialBtns {
-    flex-direction: column;
   }
 }

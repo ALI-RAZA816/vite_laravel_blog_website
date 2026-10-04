@@ -7,9 +7,7 @@ import { FaChevronRight } from "react-icons/fa";
 import LoadingSpinner from "../components/LoadingSpinner";
 import NoMessage from "../components/NoMessage";
 
-
-
-/* ---------- tiny inline icons (no extra dependency needed) ---------- */
+/* ---------- tiny inline icons ---------- */
 const Icon = ({ children, size = 20, ...rest }) => (
   <svg
     width={size}
@@ -64,19 +62,12 @@ const ReplyIcon = () => (
     <path d="M4 9h10a6 6 0 0 1 6 6v3" />
   </Icon>
 );
-const CalendarIcon = () => (
-  <Icon size={16}>
-    <rect x="3" y="5" width="18" height="16" rx="2" />
-    <path d="M16 3v4M8 3v4M3 11h18" />
-  </Icon>
-);
 const DeviceIcon = () => (
   <Icon size={16}>
     <rect x="2" y="5" width="14" height="11" rx="1.5" />
     <rect x="14" y="9" width="8" height="12" rx="1.5" />
   </Icon>
 );
-
 const SendIcon = () => (
   <Icon size={16}>
     <path d="M22 2 11 13" />
@@ -84,18 +75,12 @@ const SendIcon = () => (
   </Icon>
 );
 
-const detail = {
-  from: "Evelyn Thorne",
-  email: "evelyn@slowliving.com",
-  via: "Sent via slowlivingblog.com/contact",
-  subject: "Collaboration on mindful interior essay",
-};
-
-
+const formatCount = (n) => (n <= 1000 ? `${n}` : `${(n / 1000).toFixed(1)}k`);
+const initials = (name = "") =>
+  name.split(" ").filter(Boolean).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
 
 /* ---------- component ---------- */
-export default function ContactMessages({placeholder}) {
-
+export default function ContactMessages({ placeholder }) {
   const {
     messages,
     deleteMessage,
@@ -111,53 +96,54 @@ export default function ContactMessages({placeholder}) {
     setContent,
     responseAvg,
     spinnerLoader,
-    fetchSingleMessage,singleMessage
+    fetchSingleMessage,
+    singleMessage,
   } = useContact();
-  const unreadCount = totalMessages.filter(item => item.status === 'unread');
+
+  const [activeTab, setActiveTab] = useState("all");
+  const editor = useRef(null);
+
+  const unreadCount = totalMessages.filter((item) => item.status === "unread");
+
   const stats = [
-    { id: 1, label: "Total Inquiries", value: totalMessages.length <= 1000 ? `${totalMessages.length}` : `${(totalMessages.length/1000).toFixed(1)}k`, icon: <InboxIcon /> },
-    { id: 2, label: "Unread Messages", value: unreadCount.length <= 1000 ? `${unreadCount.length}` : `${(unreadCount.length/1000).toFixed(1)}k`, badge: "New", icon: <MailIcon />, accent: true },
-    { id: 3, label: "Avg Response Time", value: responseAvg ? `${responseAvg.toFixed(1)} hrs` : "N/A", icon: <ClockIcon /> },
+    { id: 1, label: "Total inquiries", value: formatCount(totalMessages.length), icon: <InboxIcon /> },
+    { id: 2, label: "Unread", value: formatCount(unreadCount.length), badge: "New", icon: <MailIcon /> },
+    { id: 3, label: "Average response time", value: responseAvg ? `${responseAvg.toFixed(1)} hrs` : "N/A", icon: <ClockIcon /> },
   ];
 
   const tabs = [
     { key: "all", label: "All", count: messages.length },
     { key: "unread", label: "Unread", count: unreadCount.length },
   ];
+
   const config = useMemo(
     () => ({
       readonly: false,
-      height:500,
+      height: 220,
       statusbar: false,
-      placeholder: placeholder || 'Type your response......',
-      buttons: [
-        "bold",
-        "italic",
-        "underline",
-        "|",
-        "fontsize",
-        "|",
-        "ul",
-        "source"
-    ],
+      placeholder: placeholder || "Write your reply",
+      buttons: ["bold", "italic", "underline", "|", "fontsize", "|", "ul", "source"],
     }),
     [placeholder]
   );
 
-  const [activeTab, setActiveTab] = useState("all");
-  const editor = useRef(null);
+  const visible =
+    activeTab === "unread" ? messages.filter((m) => m.status === "unread") : messages;
 
-  const visible = activeTab === "unread" ? messages.filter((m) => m.status === 'unread') : messages;
+  const selected = singleMessage || {};
+
+  const openMessage = (id) => {
+    setSelectedId(id);
+    fetchSingleMessage(id);
+  };
 
   return (
     <div className={styles.page}>
       <main className={styles.main}>
         {/* heading */}
         <div className={styles.heading}>
-          <div>
-            <h1>Contact Messages</h1>
-            <p>Review, manage, and respond to incoming reader inquiries submitted from the Contact page.</p>
-          </div>
+          <h1>Contact messages</h1>
+          <p>Read and reply to inquiries sent from your Contact page.</p>
         </div>
 
         {/* stat cards */}
@@ -171,7 +157,7 @@ export default function ContactMessages({placeholder}) {
                   {s.badge && <span className={styles.statBadge}>{s.badge}</span>}
                 </div>
               </div>
-              <span className={`${styles.statIcon} ${s.accent ? styles.statIconAccent : ""}`}>{s.icon}</span>
+              <span className={styles.statIcon}>{s.icon}</span>
             </div>
           ))}
         </section>
@@ -194,69 +180,91 @@ export default function ContactMessages({placeholder}) {
             </div>
 
             {spinnerLoader ? (
-                  <div style={{height:'480px'}} className="d-flex justify-content-center align-items-center"><LoadingSpinner /></div>
-              ) :visible.length === 0 ? (<div className="p-3"><NoMessage/></div>) :<ul className={styles.items}>
-              {visible.map((m) => (
-                <li
-                  key={m.id}
-                  className={`${styles.item} ${selectedId === m.id ? styles.itemActive : ""}`}
-                  onClick={() => {setSelectedId(m.id), fetchSingleMessage(m.id)}}
-                >
-                  <div className={styles.itemActions}>
-                    {/* <button > */}
-                      {m.status !== 'unread' ? <button  onClick={(event)=> {
-                        event.stopPropagation();
-                        markAsUnread(m.id);
-                      }} ><MailOpenIcon  /></button>  : <button onClick={(event)=> {
-                        event.stopPropagation();
-                        markAsRead(m.id);
-                      }}><MailIcon/></button> }
-                    {/* </button> */}
-                    <button type="button" aria-label="Delete message" onClick={(event) => {
-                      event.stopPropagation();
-                      deleteMessage(m.id);
-                    }}>
-                      <TrashIcon />
-                    </button>
-                  </div>
-                  <div className={styles.itemTop}>
-                    <span className={styles.itemName}>
-                      {m.status === 'unread' && <i className={styles.unreadDot} />}
-                      {m.name}
-                      {m.status === 'unread' && <span className="badge bg-primary">Unread</span>}
-                    </span>
-                    <span className={styles.itemTime}>{m.date}</span>
-                  </div>
-                  <h4>{m.subject.length >= 20 ? `${m.subject.substring(0, 20)}...` : m.subject}</h4>
-                  <p>{m.message.length >= 100 ? `${m.message.substring(0, 40)}...` : m.message}</p>
-                  {m.email && (
-                    <div className={styles.itemMeta}>
-                      <span className={`${styles.chip} ${m.tagType === "inquiry" ? styles.chipInquiry : ""}`}>
-                        {m.email}
-                      </span>
-                      <span className={`${styles.chip} ${m.tagType === "inquiry" ? styles.chipInquiry : ""}`}>
-                        {m.reply === 'replied' ? "Replied" : "Not Replied"}
-                      </span>
-                    </div>
-                  )}
-                </li>
-              ))}
-            </ul>}
+              <div style={{ height: "480px" }} className="d-flex justify-content-center align-items-center">
+                <LoadingSpinner />
+              </div>
+            ) : visible.length === 0 ? (
+              <div className="p-3">
+                <NoMessage />
+              </div>
+            ) : (
+              <ul className={styles.items}>
+                {visible.map((m) => {
+                  const isUnread = m.status === "unread";
+                  return (
+                    <li
+                      key={m.id}
+                      className={`${styles.item} ${isUnread ? styles.itemUnread : ""} ${
+                        selectedId === m.id ? styles.itemActive : ""
+                      }`}
+                      onClick={() => openMessage(m.id)}
+                    >
+                      <div className={styles.itemActions}>
+                        <button
+                          type="button"
+                          aria-label={isUnread ? "Mark as read" : "Mark as unread"}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            isUnread ? markAsRead(m.id) : markAsUnread(m.id);
+                          }}
+                        >
+                          {isUnread ? <MailIcon /> : <MailOpenIcon />}
+                        </button>
+                        <button
+                          type="button"
+                          aria-label="Delete message"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            deleteMessage(m.id);
+                          }}
+                        >
+                          <TrashIcon />
+                        </button>
+                      </div>
+
+                      <div className={styles.itemTop}>
+                        <span className={styles.itemName}>
+                          {m.name}
+                          {isUnread && <span className={styles.unreadBadge}>Unread</span>}
+                        </span>
+                        <span className={styles.itemTime}>{m.date}</span>
+                      </div>
+                      <h4>{m.subject}</h4>
+                      <p>{m.message}</p>
+                      {m.email && (
+                        <div className={styles.itemMeta}>
+                          {m.email} &nbsp;•&nbsp;{" "}
+                          <span className={m.reply === "replied" ? styles.replied : ""}>
+                            {m.reply === "replied" ? "Replied" : "Not replied"}
+                          </span>
+                        </div>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
 
             <div className={styles.showingRow}>
               <button
                 type="button"
-                onClick={()=> setPage(messagesPagination.currentPage - 1)} disabled={messagesPagination.currentPage <= 1}
+                aria-label="Previous page"
+                onClick={() => setPage(messagesPagination.currentPage - 1)}
+                disabled={messagesPagination.currentPage <= 1}
                 className={styles.chevronBtn}
               >
                 <FaAngleLeft />
               </button>
 
-              <div className={styles.showing}>Showing {messagesPagination.from} to {messagesPagination.to} of {messagesPagination.total} total inquiries</div>
+              <div className={styles.showing}>
+                {messagesPagination.from} to {messagesPagination.to} of {messagesPagination.total} inquiries
+              </div>
 
               <button
                 type="button"
-                onClick={()=> setPage(messagesPagination.currentPage + 1)} disabled={messagesPagination.currentPage === messagesPagination.lastPage}
+                aria-label="Next page"
+                onClick={() => setPage(messagesPagination.currentPage + 1)}
+                disabled={messagesPagination.currentPage === messagesPagination.lastPage}
                 className={styles.chevronBtn}
               >
                 <FaChevronRight />
@@ -265,61 +273,68 @@ export default function ContactMessages({placeholder}) {
           </aside>
 
           {/* detail */}
-          {selectedId && (
-            <article className={styles.detail}>
-              <div className={styles.detailBar}>
-                <div className={styles.pills}>
-                  <span className={`${styles.pill} ${styles.pillNew}`}>
-                    <i /> New Inquiry
-                  </span>
-                <span className={styles.pill}>Contact Form</span>
-              </div>
-              <div className={styles.detailActions}>
-                <button type="button" aria-label="Mark as read"><MailOpenIcon /></button>
-                <span className={styles.barDivider} />
-                <button type="button" className={styles.replyBtn}>
-                  <ReplyIcon /> Reply
-                </button>
-              </div>
-            </div>
-
-            <div className={styles.sender}>
-              <div className={styles.senderInfo}>
-                <div className={styles.senderName}>
-                  <strong>{singleMessage.name}</strong>
-                  <span>&lt;{singleMessage.email}&gt;</span>
-                </div>
-                <div className={styles.senderMeta}>
-                  <span><DeviceIcon /> {detail.via}</span><br/>
-                  <strong>Subject: {singleMessage.subject}</strong>
-                </div>
-              </div>
-            </div>
-
-            <div className={styles.body}>
-              <p>{singleMessage.message}</p>
-            </div>
-            <div className={styles.composerWrap}>
-              <div className={`${styles.composer} ${styles.editorWrap}`}>
-                 <JoditEditor
-                  ref={editor}
-                  value={content}
-                  config={config}
-                  name="description"
-                  onChange={newContent => setContent(newContent)}
-              />
-                <div className={styles.composerBottom}>
-                  <button type="button" className={styles.attach}>
-                  </button>
-                  <div className={styles.sendGroup}>
-                    <button onClick={sendReply} type="button" className={styles.sendBtn}>
-                      Send Reply <SendIcon />
+          <article className={styles.detail}>
+            {!selectedId ? (
+              <div className={styles.placeholder}>Select a message to read it</div>
+            ) : (
+              <>
+                <div className={styles.detailBar}>
+                  <span className={styles.detailTag}>Contact form</span>
+                  <div className={styles.detailActions}>
+                    <button
+                      type="button"
+                      className={styles.iconBtn}
+                      aria-label="Mark as unread"
+                      onClick={() => markAsUnread(selectedId)}
+                    >
+                      <MailOpenIcon />
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.btnInk}
+                      onClick={() => editor.current?.editor?.selection?.focus()}
+                    >
+                      <ReplyIcon /> Reply
                     </button>
                   </div>
                 </div>
-              </div>
-            </div>
-          </article>)}
+
+                <div className={styles.sender}>
+                  <div className={styles.avatar}>{initials(selected.name)}</div>
+                  <div className={styles.senderInfo}>
+                    <strong>{selected.name}</strong>
+                    <span>{selected.email}</span>
+                  </div>
+                </div>
+
+                <h2 className={styles.subject}>{selected.subject}</h2>
+                <div className={styles.via}>
+                  <DeviceIcon /> Sent via slowlivingblog.com/contact
+                </div>
+
+                <div className={styles.body}>
+                  <p>{selected.message}</p>
+                </div>
+
+                <div className={styles.composerWrap}>
+                  <div className={`${styles.composer} ${styles.editorWrap}`}>
+                    <JoditEditor
+                      ref={editor}
+                      value={content}
+                      config={config}
+                      name="description"
+                      onChange={(newContent) => setContent(newContent)}
+                    />
+                    <div className={styles.composerBottom}>
+                      <button onClick={sendReply} type="button" className={styles.btnInk}>
+                        <SendIcon /> Send reply
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+          </article>
         </section>
       </main>
 
@@ -327,12 +342,12 @@ export default function ContactMessages({placeholder}) {
       <footer className={styles.footer}>
         <div className={styles.footerLeft}>
           <span className={styles.brand}>SlowLiving Blog</span>
-          <span>• Version 2.4.0 Management Portal</span>
+          <span>Version 2.4.0 Management Portal</span>
         </div>
         <div className={styles.footerRight}>
           <a href="/terms">Terms of Service</a>
           <a href="/privacy">Privacy Policy</a>
-          <span>© 2024 Admin Workspace. All rights reserved.</span>
+          <span>© 2026 Admin Workspace</span>
         </div>
       </footer>
     </div>

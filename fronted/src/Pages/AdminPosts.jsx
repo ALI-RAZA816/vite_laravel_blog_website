@@ -8,7 +8,7 @@ import {
   BsStars,
 } from "react-icons/bs";
 import { FaEye } from "react-icons/fa";
-import {apiGet} from '../services/apiClient';
+import { apiGet } from '../services/apiClient';
 import { Bar } from "react-chartjs-2";
 import { usePost } from "../Context/PostContext";
 import styles from "../assets/AdminPosts.module.css";
@@ -36,6 +36,16 @@ ChartJS.register(
   Legend
 );
 
+// Naam se initials (single word naam par bhi crash nahi karega)
+const getInitials = (name = '') =>
+  name
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0])
+    .join('')
+    .toUpperCase();
+
 const AdminPosts = () => {
 
   const {
@@ -50,13 +60,13 @@ const AdminPosts = () => {
     spinnerLoader,
     setSpinnerLoader
   } = usePost();
-  const {allCat} = useContext(AppContext);
+  const { allCat } = useContext(AppContext);
 
-  const [chartData2, setChartData2] =useState([]);
+  const [chartData2, setChartData2] = useState([]);
   const monthReportHandler = async () => {
     setSpinnerLoader(true);
     try {
-      const {ok, data} = await apiGet('month-report');
+      const { data } = await apiGet('month-report');
 
       const formattedData = data?.total?.map((item) => {
         const date = new Date(item.year, item.month - 1);
@@ -69,23 +79,28 @@ const AdminPosts = () => {
         };
       }) || [];
 
-      const latest = formattedData.slice(-12)
+      const latest = formattedData.slice(-12);
       setChartData2(latest);
       setSpinnerLoader(false);
     } catch (error) {
       console.log(error);
+      setSpinnerLoader(false);
     }
   };
-  
+
+  // Purane mahine halke blue, latest mahina gehra blue
   const chartData = {
-    labels:chartData2.map(item => item.month),
+    labels: chartData2.map(item => item.month),
     datasets: [
       {
         label: "Posts",
         data: chartData2.map(item => item.total),
-        backgroundColor: "#6366F1",
-        borderColor: "#4F46E5",
-        borderWidth: 1,
+        backgroundColor: chartData2.map((_, i) =>
+          i === chartData2.length - 1 ? '#2563eb' : '#c7d7fb'
+        ),
+        hoverBackgroundColor: '#2563eb',
+        borderRadius: 3,
+        maxBarThickness: 32,
       },
     ],
   };
@@ -94,114 +109,131 @@ const AdminPosts = () => {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: {
-        display: false,
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#111111',
+        titleColor: '#ffffff',
+        bodyColor: '#e5e5e5',
+        padding: 12,
+        cornerRadius: 4,
+        displayColors: false,
       },
     },
     scales: {
+      x: {
+        grid: { display: false },
+        border: { display: false },
+        ticks: { color: '#8a8a8a', font: { size: 11 } },
+      },
       y: {
         beginAtZero: true,
+        grid: { color: '#f0f0f0' },
+        border: { display: false },
+        ticks: { color: '#8a8a8a', font: { size: 12 }, precision: 0 },
       },
     },
   };
 
   const [active, setActive] = useState('active');
-  const activeFilter = (name)=>{
+  const activeFilter = (name) => {
     setActive(name);
-  }
+  };
 
   const searchTimeout = useRef(null);
 
+  const getValue = (event) => {
+    const searchTerm = event.target.value;
+    clearTimeout(searchTimeout.current);
+    searchTimeout.current = setTimeout(() => {
+      setSearchTerm(searchTerm);
+    }, 600);
+  };
 
-  const getValue = (event)=>{
+  const getCategory = (event) => {
     const searchTerm = event.target.value;
     clearTimeout(searchTimeout.current);
-    searchTimeout.current =  setTimeout(()=>{
+    searchTimeout.current = setTimeout(() => {
       setSearchTerm(searchTerm);
-    },600);
-  }
-  
-  const getCategory= (event)=>{
-    const searchTerm = event.target.value;
-    clearTimeout(searchTimeout.current);
-    searchTimeout.current =  setTimeout(()=>{
-      setSearchTerm(searchTerm);
-    },600);
-  }
-  
-  const statusFilter = (searchTerm)=>{
+    }, 600);
+  };
+
+  const statusFilter = (searchTerm) => {
     setSearchTerm(searchTerm);
-  }
-
+  };
 
   const [checkDeleted, setCheckDeleted] = useState([]);
-  const DeletedChecked = (event, id)=>{
+  const DeletedChecked = (event, id) => {
     const checked = event.target;
-    if(checked.checked){
-      setCheckDeleted([...checkDeleted,id]);
-    }else{
+    if (checked.checked) {
+      setCheckDeleted([...checkDeleted, id]);
+    } else {
       setCheckDeleted(checkDeleted.filter(item => item !== id));
     }
-  }
-
+  };
 
   const [checkedall, setCheckedAll] = useState(false);
-  const checkedAll = (event)=>{
+  const checkedAll = (event) => {
     const checked = event.target;
-    if(checked.checked){
+    if (checked.checked) {
       setCheckedAll(true);
       setCheckDeleted(posts.map(post => post.id));
-    }else{
+    } else {
       setCheckDeleted([]);
       setCheckedAll(false);
     }
-
-  }
-
+  };
 
   const multiDeleteHandler = async (event) => {
     const ok = await multiDeletePost(event, checkDeleted);
     if (ok) setCheckDeleted([]);
-  }
+  };
 
   const pages = [];
   const start = Math.max(1, postPagination.currentPage - 2);
   const end = Math.min(postPagination.lastPage, postPagination.currentPage + 2);
-  if(start > 1){
+  if (start > 1) {
     pages.push(1);
-    if(start > 2) pages.push('...');
+    if (start > 2) pages.push('...');
   }
 
-  for (let i = start; i<=end; i++  ){
+  for (let i = start; i <= end; i++) {
     pages.push(i);
   }
- 
-  if(end < postPagination.lastPage){
-    if(end < postPagination.lastPage - 1) pages.push("...");
+
+  if (end < postPagination.lastPage) {
+    if (end < postPagination.lastPage - 1) pages.push("...");
     pages.push(postPagination.lastPage);
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     monthReportHandler();
     setActive('all');
-  },[]);
+  }, []);
+
+  const statusTabs = [
+    { key: 'all', label: 'All' },
+    { key: 'published', label: 'Published' },
+    { key: 'draft', label: 'Draft' },
+  ];
 
   return (
-    <div className={styles.content}>
+    <div className={styles.postsPage}>
       {/* Heading */}
       <div className="d-flex justify-content-between align-items-start mb-4">
         <div>
           <h2 className={styles.pageTitle}>Manage Posts</h2>
-          <div className={styles.breadcrumb}>
+          <div className={styles.crumbs}>
             <span>Dashboard</span>
             <span className={styles.crumbSep}>›</span>
             <span className={styles.crumbActive}>Posts</span>
           </div>
         </div>
-        <Link to="/admin-panel/posts/add-post"><button className={`d-flex align-items-center ${styles.addBtn}`}>
-          <BsPlusLg className="me-2" />
-          Add New Post
-        </button></Link>
+        <Link to="/admin-panel/posts/add-post">
+          <button className={`d-flex align-items-center ${styles.addBtn}`}>
+            <BsPlusLg className="me-2" />
+            Add New Post
+          </button>
+        </Link>
       </div>
 
       {/* Filters */}
@@ -211,16 +243,22 @@ const AdminPosts = () => {
         </div>
         <div className={`d-flex align-items-center ${styles.selectBox}`}>
           <select name="categories" onChange={getCategory} className="form-select border-0 shadow-none">
-          <option value="all">All Categories</option>
-            {allCat.map((category, index)=>{
-              return <option index={index} value={category.id}>{category.name}</option>
-            })}
+            <option value="all">All Categories</option>
+            {allCat.map((category) => (
+              <option key={category.id} value={category.id}>{category.name}</option>
+            ))}
           </select>
         </div>
         <div className={styles.statusTabs}>
-          <span onClick={()=>{activeFilter('all'), statusFilter('all')}} className={`${styles.statusTab} ${active === 'all' ? `${styles.statusTabActive}` : ''}`}>All</span>
-          <span onClick={()=>{activeFilter('published'), statusFilter('published')}} className={`${styles.statusTab} ${active === 'published' ? `${styles.statusTabActive}` : ''}`}>Published</span>
-          <span onClick={()=>{activeFilter('draft'), statusFilter('draft')}} className={`${styles.statusTab} ${active === 'draft' ? `${styles.statusTabActive}` : ''}`}>Draft</span>
+          {statusTabs.map((tab) => (
+            <span
+              key={tab.key}
+              onClick={() => { activeFilter(tab.key); statusFilter(tab.key); }}
+              className={`${styles.statusTab} ${active === tab.key ? styles.statusTabActive : ''}`}
+            >
+              {tab.label}
+            </span>
+          ))}
         </div>
       </div>
 
@@ -228,100 +266,124 @@ const AdminPosts = () => {
       <div className={styles.tableCard}>
         <div className="table-responsive">
           {spinnerLoader ? (
-                        <div style={{height:'480px'}} className="d-flex justify-content-center align-items-center"><LoadingSpinner /></div>
-                    ) :posts.length === 0 ? (<div className="p-3"><RecentPost/></div>) :<table className={`table mb-0 ${styles.postsTable}`}>
-            <thead>
-              <tr>
-                <th style={{ width: "40px" }}>
-                  <input disabled={posts.length === 0 && 'disabled' }  onChange={checkedAll} type="checkbox" className={styles.checkbox} />
-                </th>
-                {checkDeleted.length >=1 ? <th><span onClick={multiDeleteHandler} className="text-danger" style={{cursor:'pointer'}}>Delete</span></th>:<th>POST TITLE</th>}
-                <th>CATEGORY</th>
-                <th>AUTHOR</th>
-                <th>STATUS</th>
-                <th>DATE</th>
-                <th>ACTIONS</th>
-              </tr>
-            </thead>
-            <tbody>
-              {posts?.map((post, index) => (
-                <tr key={index}>
-                  <td>
-                    <input onChange={(event)=>DeletedChecked(event, post.id)} type="checkbox" checked={checkDeleted.includes(post.id)}  className={styles.checkbox} />
-                  </td>
-                  <td>
-                    <p className={styles.postTitle}>{post.title.length > 40 ? `${post.title.substr(0, 40)}...`: post.title}</p>
-                    <p className={styles.postUrl}>{post.category.slug}</p>
-                  </td>
-                  <td>
-                    <span
-                      className={styles.categoryBadge}
-                      style={{ backgroundColor: '#f7d774'}}
-                    >
-                      {post.category.name}
-                    </span>
-                  </td>
-                  <td>
-                    <div className="d-flex align-items-center gap-2">
-                      <div
-                        className={styles.avatar}
-                        style={{ backgroundColor: '#5b3fd9', overflow:'hidden'}}
-                      >
-                        {post.author.image ? <img src={`${baseUrl}/uploads/${post.author.image}`} alt="" />:
-                          <>
-                              {post.author.name.split(' ')[0].substr(0, 1)}
-                              {post.author.name.split(' ')[1]?.substr(0, 1)}
-                          </>
-                        }
-                      </div>
-                      <span className={styles.authorName}>{post.author.name}</span>
-                    </div>
-                  </td>
-                  <td>
-                    <span
-                      className={`d-flex align-items-center ${styles.statusBadge} ${
-                        post.published === "published"
-                          ? styles.statusPublished
-                          : styles.statusDraft
-                      }`}
-                    >
-                      <span className={`${styles.statusDot}`}></span>
-                      <span className='text-capitalize'>{post.published}</span>
-                      
-                    </span>
-                  </td>
-                  <td className={styles.dateCell}>{post.date}</td>
-                  <td>
-                    <div className="d-flex align-items-center gap-3">
-                      <Link to={`/admin-panel/posts/post-preview/${post.id}`}><FaEye /></Link>
-                      <Link to={`/admin-panel/posts/edit-post/${post.id}`}><BsPencilFill className={styles.actionIcon} /></Link>
-                      <BsTrashFill onClick={(event)=> deletePost(event, post.id)} className={`${styles.actionIcon} ${styles.deleteIcon}`} />
-                    </div>
-                  </td>
+            <div style={{ height: '480px' }} className="d-flex justify-content-center align-items-center"><LoadingSpinner /></div>
+          ) : posts.length === 0 ? (
+            <div className="p-3"><RecentPost /></div>
+          ) : (
+            <table className={`table mb-0 ${styles.postsTable}`}>
+              <thead>
+                <tr>
+                  <th style={{ width: "40px" }}>
+                    <input disabled={posts.length === 0} onChange={checkedAll} type="checkbox" className={styles.checkbox} />
+                  </th>
+                  {checkDeleted.length >= 1 ? (
+                    <th><span onClick={multiDeleteHandler} className="text-danger" style={{ cursor: 'pointer' }}>Delete</span></th>
+                  ) : (
+                    <th>POST TITLE</th>
+                  )}
+                  <th>CATEGORY</th>
+                  <th>AUTHOR</th>
+                  <th>STATUS</th>
+                  <th>DATE</th>
+                  <th>ACTIONS</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>}
+              </thead>
+              <tbody>
+                {posts?.map((post, index) => (
+                  <tr key={post.id ?? index}>
+                    <td>
+                      <input
+                        onChange={(event) => DeletedChecked(event, post.id)}
+                        type="checkbox"
+                        checked={checkDeleted.includes(post.id)}
+                        className={styles.checkbox}
+                      />
+                    </td>
+                    <td>
+                      <p className={styles.postTitle}>{post.title.length > 40 ? `${post.title.substr(0, 40)}...` : post.title}</p>
+                      <p className={styles.postUrl}>{post.category.slug}</p>
+                    </td>
+                    <td>
+                      <span className={styles.categoryBadge}>
+                        {post.category.name}
+                      </span>
+                    </td>
+                    <td>
+                      <div className="d-flex align-items-center gap-2">
+                        <div className={styles.avatar}>
+                          {post.author.image ? (
+                            <img src={`${baseUrl}/uploads/${post.author.image}`} alt="" />
+                          ) : (
+                            getInitials(post.author.name)
+                          )}
+                        </div>
+                        <span className={styles.authorName}>{post.author.name}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <span
+                        className={`d-flex align-items-center ${styles.statusBadge} ${
+                          post.published === "published"
+                            ? styles.statusPublished
+                            : styles.statusDraft
+                        }`}
+                      >
+                        <span className={styles.statusDot}></span>
+                        <span className='text-capitalize'>{post.published}</span>
+                      </span>
+                    </td>
+                    <td className={styles.dateCell}>{post.date}</td>
+                    <td>
+                      <div className="d-flex align-items-center gap-3">
+                        <Link to={`/admin-panel/posts/post-preview/${post.id}`} className={styles.actionIcon}><FaEye /></Link>
+                        <Link to={`/admin-panel/posts/edit-post/${post.id}`}><BsPencilFill className={styles.actionIcon} /></Link>
+                        <BsTrashFill onClick={(event) => deletePost(event, post.id)} className={`${styles.actionIcon} ${styles.deleteIcon}`} />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
 
-     
         {/* Pagination */}
-        {posts.length !== 0 && <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
-          <span className={styles.showingText}>Showing {postPagination.from} to {postPagination.to} of {postPagination.total} posts</span>
-          <div className="d-flex align-items-center gap-2">
-            <button disabled={postPagination.currentPage === 1} onClick={()=> setCurrentPostPage(postPagination.currentPage - 1)} className={styles.pageBtn}>
-              <BsChevronLeft />
-            </button>
-            {pages.map((page, index)=>{
-              return page === '...' ?(
-                <span className={styles.pageDots}>...</span>
-              ):(<button onClick={()=> setCurrentPostPage(page)} className={`${styles.pageBtn} ${currentPostPage === page ? `${styles.pageBtnActive}`: ''}`}>{page}</button>)
-            })}
-            <button onClick={()=> setCurrentPostPage(postPagination.currentPage + 1)} disabled={postPagination.currentPage === postPagination.lastPage} className={styles.pageBtn}>
-              <BsChevronRight />
-            </button>
+        {posts.length !== 0 && (
+          <div className={`d-flex justify-content-between align-items-center ${styles.paginationRow}`}>
+            <span className={styles.showingText}>
+              Showing {postPagination.from} to {postPagination.to} of {postPagination.total} posts
+            </span>
+            <div className="d-flex align-items-center gap-2">
+              <button
+                disabled={postPagination.currentPage === 1}
+                onClick={() => setCurrentPostPage(postPagination.currentPage - 1)}
+                className={styles.pageBtn}
+              >
+                <BsChevronLeft />
+              </button>
+              {pages.map((page, index) => (
+                page === '...' ? (
+                  <span key={`dots-${index}`} className={styles.pageDots}>...</span>
+                ) : (
+                  <button
+                    key={`page-${page}`}
+                    onClick={() => setCurrentPostPage(page)}
+                    className={`${styles.pageBtn} ${currentPostPage === page ? styles.pageBtnActive : ''}`}
+                  >
+                    {page}
+                  </button>
+                )
+              ))}
+              <button
+                onClick={() => setCurrentPostPage(postPagination.currentPage + 1)}
+                disabled={postPagination.currentPage === postPagination.lastPage}
+                className={styles.pageBtn}
+              >
+                <BsChevronRight />
+              </button>
+            </div>
           </div>
-        </div>}
+        )}
       </div>
 
       {/* Bottom panels */}
@@ -332,9 +394,13 @@ const AdminPosts = () => {
             <p className={styles.velocitySubtitle}>
               Your publishing frequency is up {velocity}% this month.
             </p>
-          <div className={styles.velocityChart}>
-            {spinnerLoader ? <div  className="d-flex justify-content-center align-items-center"><LoadingSpinner /></div>:<Bar data={chartData} options={chartOptions} />}
-          </div>
+            <div className={styles.velocityChart}>
+              {spinnerLoader ? (
+                <div className="d-flex justify-content-center align-items-center"><LoadingSpinner /></div>
+              ) : (
+                <Bar data={chartData} options={chartOptions} />
+              )}
+            </div>
           </div>
         </div>
 

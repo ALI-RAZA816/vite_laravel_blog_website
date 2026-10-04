@@ -234,7 +234,7 @@ const DashboardContent = () => {
               <RecentComments />
             ) : (
               <div>
-                <div className="flex-grow-1">
+                <div className="flex-grow-1" style={{ height: '350px', overflowY: 'auto' }}>
                   {recentComments.map((comment, index) => (
                     <div className={styles.commentRow} key={index}>
                       <div className={styles.avatar}>

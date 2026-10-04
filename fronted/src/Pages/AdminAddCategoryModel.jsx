@@ -10,16 +10,15 @@ import { IoGlobeSharp } from "react-icons/io5";
 import { useCategory } from "../Context/CategoryContext";
 
 const icons = [
-  { id: "leaf", symbol: <BiLeaf />},
-  { id: "sprout", symbol: <GiChestnutLeaf />},
-  { id: "book", symbol: <MdOutlineMenuBook /> },
-  { id: "home", symbol: <FaHouse />},
-  { id: "palette", symbol:<LuPalette />},
-  { id: "globe", symbol: <IoGlobeSharp />},
+  { id: "leaf", label: "Leaf", symbol: <BiLeaf /> },
+  { id: "sprout", label: "Sprout", symbol: <GiChestnutLeaf /> },
+  { id: "book", label: "Book", symbol: <MdOutlineMenuBook /> },
+  { id: "home", label: "Home", symbol: <FaHouse /> },
+  { id: "palette", label: "Palette", symbol: <LuPalette /> },
+  { id: "globe", label: "Globe", symbol: <IoGlobeSharp /> },
 ];
 
 const AdminAddCategoryModel = () => {
-
   const {
     showCategoryModel,
     CategoryModelHandler,
@@ -31,34 +30,43 @@ const AdminAddCategoryModel = () => {
   } = useCategory();
 
   return (
-    <div  className={`${styles.panel} ${showCategoryModel && `${styles.hide}`}`}>
+    <div className={`${styles.panel} ${showCategoryModel ? styles.hide : ""}`}>
       {/* Header */}
       <div className={`d-flex align-items-center justify-content-between ${styles.header}`}>
-        <h4 className={styles.title}>Add New Category</h4>
-        <BsXLg className={styles.closeIcon} onClick={CategoryModelHandler} />
+        <h4 className={styles.title}>Add category</h4>
+        <button
+          type="button"
+          className={styles.closeBtn}
+          aria-label="Close"
+          onClick={CategoryModelHandler}
+        >
+          <BsXLg />
+        </button>
       </div>
 
       {/* Body */}
       <form onSubmit={addCategory} className={styles.body}>
-        {/* Category Name */}
+        {/* Category name */}
         <div className={styles.field}>
-          <label className={styles.label}>Category Name</label>
+          <label htmlFor="cat_name" className={styles.label}>Category name</label>
           <input
+            id="cat_name"
             type="text"
             onChange={newCatFormHandler}
             value={newCatData.cat_name}
             name="cat_name"
             className={styles.input}
-            placeholder="e.g., Sustainable Living"
+            placeholder="e.g. Sustainable living"
           />
         </div>
 
         {/* Slug */}
         <div className={styles.field}>
-          <label className={styles.label}>Slug (URL)</label>
+          <label htmlFor="cat_slug" className={styles.label}>Slug</label>
           <div className={styles.slugGroup}>
             <span className={styles.slugPrefix}>blog.com/</span>
             <input
+              id="cat_slug"
               type="text"
               onChange={newCatFormHandler}
               value={newCatData.slug}
@@ -71,28 +79,29 @@ const AdminAddCategoryModel = () => {
 
         {/* Description */}
         <div className={styles.field}>
-          <label className={styles.label}>Description</label>
+          <label htmlFor="cat_desc" className={styles.label}>Description</label>
           <textarea
-          onChange={newCatFormHandler}
+            id="cat_desc"
+            onChange={newCatFormHandler}
             value={newCatData.description}
             name="description"
             className={styles.textarea}
             rows={4}
-            placeholder="Brief overview of this category..."
+            placeholder="A short overview of this category"
           />
         </div>
 
-        {/* Select Icon */}
+        {/* Icon */}
         <div className={styles.field}>
-          <label className={styles.label}>Select Icon</label>
+          <span className={styles.label}>Icon</span>
           <div className={styles.iconGrid}>
             {icons.map((icon) => (
               <button
                 key={icon.id}
                 type="button"
-                className={`${styles.iconBtn} ${
-                  newIcon === icon.id ? styles.iconBtnActive : ""
-                }`}
+                aria-label={icon.label}
+                aria-pressed={newIcon === icon.id}
+                className={`${styles.iconBtn} ${newIcon === icon.id ? styles.iconBtnActive : ""}`}
                 onClick={() => setNewIcon(icon.id)}
               >
                 {icon.symbol}
@@ -101,7 +110,13 @@ const AdminAddCategoryModel = () => {
             <input type="hidden" value={newIcon} name="icon_name" />
           </div>
         </div>
-        <button type="submit" className={styles.createBtn}>Create Category</button>
+
+        <div className={styles.actions}>
+          <button type="button" className={styles.cancelBtn} onClick={CategoryModelHandler}>
+            Cancel
+          </button>
+          <button type="submit" className={styles.createBtn}>Create category</button>
+        </div>
       </form>
     </div>
   );
