@@ -13,22 +13,25 @@ A full-stack news/blog publishing platform built with **Laravel** (REST API) and
 
 | Dashboard | Post Management |
 |:---:|:---:|
-| ![Dashboard](https://raw.githubusercontent.com/ALI-RAZA816/vite_laravel_blog_website/6673e96e1892f39862758e2810275a36a2615961/Dashboard.png) | ![Post Management](https://raw.githubusercontent.com/ALI-RAZA816/vite_laravel_blog_website/6673e96e1892f39862758e2810275a36a2615961/Posts.png) | 
+| ![Dashboard](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/5f9a9a62b0a94836e7c812c922d6ab3ac1c3c6cd/dashboard_screenshot.png) | ![Post](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/5f9a9a62b0a94836e7c812c922d6ab3ac1c3c6cd/posts_screenshot.png) | 
 | Category Management | Comments Management |
 |:---:|:---:|
-| ![Category Management](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/9737042114c7538c38fea49436311ffa6f8f0bbb/Categories.png) | ![Comments Management](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/9737042114c7538c38fea49436311ffa6f8f0bbb/Comments.png) | 
+| ![Category](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/5f9a9a62b0a94836e7c812c922d6ab3ac1c3c6cd/category_screenshot.png) | ![Comments](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/5f9a9a62b0a94836e7c812c922d6ab3ac1c3c6cd/comments_screenshot.png) | 
 | User | Setting Management |
 |:---:|:---:|
-| ![User Management](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/9737042114c7538c38fea49436311ffa6f8f0bbb/Users.png) | ![Setting Management](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/9737042114c7538c38fea49436311ffa6f8f0bbb/Setting.png) | 
+| ![User](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/5f9a9a62b0a94836e7c812c922d6ab3ac1c3c6cd/users_screenshot.png) | ![Message](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/5f9a9a62b0a94836e7c812c922d6ab3ac1c3c6cd/messages_screenshot.png) | 
+| User | Setting Management |
+|:---:|:---:|
+| ![User](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/5f9a9a62b0a94836e7c812c922d6ab3ac1c3c6cd/users_screenshot.png) | ![Setting](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/5f9a9a62b0a94836e7c812c922d6ab3ac1c3c6cd/setting_screenshot.png) | 
 
 <h3 align="center">Pulic Pages</h3>
 
 | Register Page | Login Page |
 |:---:|:---:|
-| ![Register Page](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/cf71225a7e552e6a0960c7411c5d32c0d95a5dac/Regiser%20Page.png) | ![Login Page](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/d3e2603098f1c9121517665b219180869e529ded/LoginPage.png) | 
+| ![Register Page](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/5f9a9a62b0a94836e7c812c922d6ab3ac1c3c6cd/register_screenshot.png) | ![Login Page](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/5f9a9a62b0a94836e7c812c922d6ab3ac1c3c6cd/login_screenshot.png) | 
 | Home Page | Contact Page |
 |:---:|:---:|
-| ![Home Page](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/cf71225a7e552e6a0960c7411c5d32c0d95a5dac/HomePage.png) | ![Contact Page](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/cf71225a7e552e6a0960c7411c5d32c0d95a5dac/Contact.png) | 
+| ![Home Page](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/5f9a9a62b0a94836e7c812c922d6ab3ac1c3c6cd/home_page_screenshot.png) | ![Contact Page](https://github.com/ALI-RAZA816/vite_laravel_blog_website/blob/5f9a9a62b0a94836e7c812c922d6ab3ac1c3c6cd/contact_page_screenshot.png) | 
 
 
 
