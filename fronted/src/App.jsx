@@ -2,6 +2,8 @@ import {Route,Routes} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { lazy, useContext , Suspense} from "react";
 import {AppContext} from "./Context/AppContext";
+import ProtectVerifyOtpRoute from "./Auth/ProtectVerifyOtpRoute";
+import ProtectResetPasswordRoute from "./Auth/ProtectResetPasswordRoute";
 
 const Header = lazy(() => import("./components/Header"));
 const Home = lazy(() => import("./Pages/Home"));
@@ -56,8 +58,12 @@ function App() {
               <Route path='/register' element={<Register/>}/>
               <Route path='/admin-login' element={<AdminLogin/>}/>
               <Route path='/forgot-password' element={<ForgotPassword/>}/>
-              <Route path='/verify-otp' element={<VerifyOtp/>}/>
-              <Route path='/reset-password' element={<ResetPassword/>}/>
+              <Route element={<ProtectVerifyOtpRoute/>}>
+                <Route path='/verify-otp' element={<VerifyOtp/>}/>
+                <Route element={<ProtectResetPasswordRoute/>}>
+                  <Route path='/reset-password' element={<ResetPassword/>}/>
+                </Route>
+              </Route>
                 
               <Route element={<AuthDashboard/>}>
                 <Route path="/admin-panel" element={<Sidebar/>}>

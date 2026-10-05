@@ -1,6 +1,7 @@
 import styles from "../assets/VerifyOtp.module.css";
 import { BsLockFill, BsArrowRight } from "react-icons/bs";
 import { useResetPassword } from "../Context/ResetPasswordContext.jsx";
+import { useEffect } from "react";
 
 
 const VerifyOtp = () => {
@@ -10,10 +11,20 @@ const VerifyOtp = () => {
     formatTime,
     secondsLeft,
     submitting,
+    ResendCode,
     navigate,
-    token
+    digits,
+    inputsRef,
+    handleChange,
+    handleKeyDown,
+    handlePaste
 
   } = useResetPassword();
+
+  useEffect(() => {
+    inputsRef.current[0]?.focus();
+  }, []);
+
   
   return (
     <div className={styles.page}>
@@ -36,13 +47,24 @@ const VerifyOtp = () => {
 
         <form onSubmit={verifyCode}>
           <div className={styles.otpRow}>
+            {/* verifyCode isi se pura code read karta hy */}
+
+            {digits.map((digit, index) => (
               <input
-                name="token"
-                ref={token}
+                key={index}
+                ref={(el) => (inputsRef.current[index] = el)}
                 className={styles.otpBox}
                 type="text"
                 inputMode="numeric"
+                autoComplete={index === 0 ? "one-time-code" : "off"}
+                value={digit}
+                onChange={(event) => handleChange(event, index)}
+                onKeyDown={(event) => handleKeyDown(event, index)}
+                onPaste={handlePaste}
+                onFocus={(event) => event.target.select()}
+                aria-label={`Digit ${index + 1}`}
               />
+            ))}
           </div>
 
           <div className={styles.resendRow}>
@@ -51,6 +73,7 @@ const VerifyOtp = () => {
             </span>
             <button
               type="button"
+              onClick={ResendCode}
               className={styles.resendBtn}
               disabled={secondsLeft > 0}
             >

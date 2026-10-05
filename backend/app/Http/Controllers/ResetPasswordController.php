@@ -8,11 +8,30 @@ use App\Http\Requests\OtpRequest;
 use App\Models\ResetPassword;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class ResetPasswordController extends Controller
 {
+    public function fetchRecord(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return response()->json(['message' => 'Not found'], 404);
+        }
+        $otp = ResetPassword::where('user_id',$user->id)->first();
+        if(!$otp){
+            return response()->json([
+                'message'=>"Not found"
+            ],404);
+        };
+        return response()->json([
+            'user'=>$otp
+        ]);
+    }
+
+
     public function getResetLink(EmailRequest $request){
 
         $user = User::where('email', $request->email)->first();
@@ -53,7 +72,7 @@ class ResetPasswordController extends Controller
     public function verifyOtp(OtpRequest $request)
     {
         $user = User::where('email', $request->email)->first();
-        $otp = ResetPassword::where('user_id',$user->id)->first();
+        $otp = ResetPassword::select('otp_verified','send_link')->where('user_id',$user->id)->first();
         if(!$otp){
             return response()->json([
                 'message'=>"OTP not found. Please request a new OTP"
@@ -61,6 +80,7 @@ class ResetPasswordController extends Controller
         };
 
         if (now()->greaterThan($otp->expires_at)) {
+            // $otp->update(['token'=>null]);
             return response()->json([
                 'message' => 'OTP code expired'
             ], 410);

@@ -68,68 +68,78 @@ export default function Home() {
               <h2 className={styles.sectionTitle}>Latest Stories</h2>
             </div>
 
-            <div className="row">
-              {spinnerLoader ? (
-                <div className="d-flex min-vh-100 justify-content-center align-items-center"><LoadingSpinner /></div>
-              ) : totalPosts.map((post, i) => (
-                <div className="col-md-6" key={post.id ?? i}>
-                  <Link to={`blog-post/${post.id}`} className={styles.cardLink}>
-                    <article className={styles.postCard}>
-                      <div className={styles.cardImgWrap}>
-                        <img src={`${baseUrl}/posts-images/${post.image}`} alt={post.title} className={styles.cardImg} />
-                      </div>
-                      <div className={styles.cardMeta}>
-                        <span className={styles.cardCategory}>{post.category.name}</span>
-                        <span className={styles.cardDot}>•</span>
-                        <span>{post.date}</span>
-                      </div>
-                      <h3 className={styles.cardTitle}>
-                        {post.title.length > 40 ? `${post.title.substr(0, 40)}...` : post.title}
-                      </h3>
-                    </article>
-                  </Link>
-                </div>
-              ))}
-            </div>
-
-            {/* Pagination */}
-            {totalPosts.length === 0 ? (
-              <div className="d-flex fs-2 text-secondary justify-content-center align-items-center vh-100">Not found</div>
-            ) : (
-              <div className={`d-flex justify-content-between align-items-center flex-wrap gap-3 ${styles.paginationRow}`}>
-                <span className={styles.showingText}>
-                  Showing {pagination.from} to {pagination.to} of {pagination.total} posts
-                </span>
-                <div className="d-flex align-items-center gap-2">
-                  <button
-                    disabled={pagination.currentPage === 1}
-                    onClick={() => setCurrentPostPage(pagination.currentPage - 1)}
-                    className={styles.pageBtn}
-                  >
-                    <BsChevronLeft />
-                  </button>
-                  {pages.map((page, index) => (
-                    page === '...' ? (
-                      <span key={`dots-${index}`} className={styles.pageDots}>...</span>
-                    ) : (
-                      <button
-                        key={`page-${page}`}
-                        onClick={() => setCurrentPostPage(page)}
-                        className={`${styles.pageBtn} ${currentPostPage === page ? styles.pageBtnActive : ''}`}
-                      >
-                        {page}
-                      </button>
-                    )
-                  ))}
-                  <button
-                    onClick={() => setCurrentPostPage(pagination.currentPage + 1)}
-                    disabled={pagination.currentPage === pagination.lastPage}
-                    className={styles.pageBtn}
-                  >
-                    <BsChevronRight />
-                  </button>
-                </div>
+            {spinnerLoader ? (
+              <div className="d-flex min-vh-100 justify-content-center align-items-center">
+                <LoadingSpinner />
               </div>
+            ) : totalPosts.length === 0 ? (
+              <div className="d-flex fs-2 text-secondary justify-content-center align-items-center vh-100">
+                Not found
+              </div>
+            ) : (
+              <>
+                <div className="row">
+                  {totalPosts.map((post, i) => (
+                    <div className="col-md-6" key={post.id ?? i}>
+                      <Link to={`blog-post/${post.id}`} className={styles.cardLink}>
+                        <article className={styles.postCard}>
+                          <div className={styles.cardImgWrap}>
+                            <img
+                              src={`${baseUrl}/posts-images/${post.image}`}
+                              alt={post.title}
+                              className={styles.cardImg}
+                            />
+                          </div>
+                          <div className={styles.cardMeta}>
+                            <span className={styles.cardCategory}>{post.category.name}</span>
+                            <span className={styles.cardDot}>•</span>
+                            <span>{post.date}</span>
+                          </div>
+                          <h3 className={styles.cardTitle}>
+                            {post.title.length > 40 ? `${post.title.substr(0, 40)}...` : post.title}
+                          </h3>
+                        </article>
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Pagination */}
+                <div className={`d-flex justify-content-between align-items-center flex-wrap gap-3 ${styles.paginationRow}`}>
+                  <span className={styles.showingText}>
+                    Showing {pagination.from} to {pagination.to} of {pagination.total} posts
+                  </span>
+                  <div className="d-flex align-items-center gap-2">
+                    <button
+                      disabled={pagination.currentPage === 1}
+                      onClick={() => setCurrentPostPage(pagination.currentPage - 1)}
+                      className={styles.pageBtn}
+                    >
+                      <BsChevronLeft />
+                    </button>
+                    {pages.map((page, index) =>
+                      page === '...' ? (
+                        <span key={`dots-${index}`} className={styles.pageDots}>...</span>
+                      ) : (
+                        <button
+                          key={`page-${page}`}
+                          onClick={() => setCurrentPostPage(page)}
+                          className={`${styles.pageBtn} ${currentPostPage === page ? styles.pageBtnActive : ''}`}
+                        >
+                          {page}
+                        </button>
+                      )
+                    )}
+                    <button
+                      onClick={() => setCurrentPostPage(pagination.currentPage + 1)}
+                      disabled={pagination.currentPage === pagination.lastPage}
+                      className={styles.pageBtn}
+                    >
+                      <BsChevronRight />
+                    </button>
+                  </div>
+                </div>
+              </>
             )}
           </div>
 

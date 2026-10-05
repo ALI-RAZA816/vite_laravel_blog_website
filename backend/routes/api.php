@@ -33,7 +33,9 @@ Route::get('post-view/{id}',[PublicPostController::class, 'singleView']);
 Route::get('show-setting', [PublicSettingController::class, 'publicSetting']);
 Route::post('message', [MessageController::class, 'sendMessage']);
 Route::post('forgot-password', [ResetPasswordController::class, 'getResetLink']);
+Route::post('verify-otp', [ResetPasswordController::class, 'verifyOtp']);
 Route::post('reset-password', [ResetPasswordController::class, 'changePassword']);
+Route::post('indexs', [ResetPasswordController::class, 'fetchRecord']);
 
 Route::middleware('auth:sanctum')->group(function(){
     Route::post('logout',[AuthController::class,'logoutAccount']);
