@@ -22,7 +22,7 @@ class UpdateSettingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'site_title'=>'required|string|max:5',
+            'site_title'=>'required|string|max:50',
             'site_desc'=>'required|string|max:300',
             'site_copyright'=>'required|max:200',
             'f_url' => 'nullable|url|max:255',

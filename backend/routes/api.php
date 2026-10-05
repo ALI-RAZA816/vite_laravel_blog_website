@@ -15,6 +15,7 @@ use App\Http\Controllers\PublicCategryController;
 use App\Http\Controllers\PublicCommentController;
 use App\Http\Controllers\PublicPostController;
 use App\Http\Controllers\PublicSettingController;
+use App\Http\Controllers\ResetPasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +32,8 @@ Route::get('post-comments/{id}',[CommentController::class, 'fetchPostComments'])
 Route::get('post-view/{id}',[PublicPostController::class, 'singleView']);
 Route::get('show-setting', [PublicSettingController::class, 'publicSetting']);
 Route::post('message', [MessageController::class, 'sendMessage']);
+Route::post('forgot-password', [ResetPasswordController::class, 'getResetLink']);
+Route::post('reset-password', [ResetPasswordController::class, 'changePassword']);
 
 Route::middleware('auth:sanctum')->group(function(){
     Route::post('logout',[AuthController::class,'logoutAccount']);

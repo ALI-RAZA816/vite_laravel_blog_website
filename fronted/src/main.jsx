@@ -19,6 +19,7 @@ import DashboardContextProvider from "./Context/DashboardContext.jsx";
 import PublicSettingContext from "./Context/PublicSettingContext.jsx";
 import NewsLetterContextProvide from "./Context/NewsLetter.jsx";
 import ContactContextProvider from './Context/ContactContext.jsx';
+import ResetPasswordContextProvider from "./Context/ResetPasswordContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -37,7 +38,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                             <PublicSettingContext>
                               <NewsLetterContextProvide>
                                 <ContactContextProvider>
-                                  <App />
+                                  <ResetPasswordContextProvider>
+                                    <App />
+                                  </ResetPasswordContextProvider>
                                 </ContactContextProvider>
                               </NewsLetterContextProvide>
                             </PublicSettingContext>

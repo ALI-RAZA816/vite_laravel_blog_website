@@ -45,7 +45,7 @@ export default function Login() {
 
             <div className={`${styles.passwordRow} d-flex align-items-center`}>
               <label className="mb-0">Password</label>
-              <span className={styles.forgot}>Forgot Password?</span>
+              <Link to="/forgot-password"><span className={styles.forgot}>Forgot Password?</span></Link>
             </div>
             <div className={styles.passwordWrap}>
               <input

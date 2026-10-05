@@ -9,7 +9,7 @@ export const showToast = (message, msgType, type)=>{
         toastContainer.id = 'toast-container';
         toastContainer.style.cssText = `
             position: fixed;
-            top: 100px;
+            top: 20px;
             right: 20px;
             z-index: 999;
             display: flex;
@@ -92,7 +92,7 @@ export const apiSend = async (path, method = 'POST', body = null)=>{
         headers:{
             'Content-type':'application/json',
             'Accept':'application/json',
-             ...(path !== 'account' && path !== 'message' ? {'Authorization':`Bearer ${token}`} : {})
+             ...(path !== 'account' && path !== 'message' && path !== 'forgot-password' ? {'Authorization':`Bearer ${token}`} : {})
         },
         body: body ? JSON.stringify(body) : null
     });

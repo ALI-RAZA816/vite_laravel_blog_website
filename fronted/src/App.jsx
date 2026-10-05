@@ -32,6 +32,9 @@ const NotFound = lazy(() => import("./components/NotFound"));
 const Unauthorized = lazy(() => import("./components/Unauthorized"));
 const RouteProtected = lazy(() => import("./Auth/RouteProtected"));
 const AdminMessage = lazy(() => import("./Pages/AdminMessage"));
+const ForgotPassword = lazy(() => import("./Pages/ForgotPassword"));
+const VerifyOtp = lazy(() => import("./Pages/VerifyOtp"));
+const ResetPassword = lazy(() => import("./Pages/ResetPassword"));
 
 
 function App() {
@@ -52,6 +55,9 @@ function App() {
               <Route path='/login' element={<Login/>}/>
               <Route path='/register' element={<Register/>}/>
               <Route path='/admin-login' element={<AdminLogin/>}/>
+              <Route path='/forgot-password' element={<ForgotPassword/>}/>
+              <Route path='/verify-otp' element={<VerifyOtp/>}/>
+              <Route path='/reset-password' element={<ResetPassword/>}/>
                 
               <Route element={<AuthDashboard/>}>
                 <Route path="/admin-panel" element={<Sidebar/>}>
