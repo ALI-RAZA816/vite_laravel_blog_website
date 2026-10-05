@@ -4,6 +4,9 @@ import { IoMdSearch } from "react-icons/io";
 import { usePublicCategory } from "../Context/PublicCategoryContext";
 import { usePublicPost } from "../Context/PublicPostContext";
 import { baseUrl } from "../Http/Http";
+import { SlCalender } from "react-icons/sl";
+import { LuClock12 } from "react-icons/lu";
+
 
 import {
   BsChevronLeft,
@@ -11,6 +14,7 @@ import {
 } from "react-icons/bs";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { useNewsLetter } from "../Context/NewsLetter";
+import { timeAgo } from "../services/apiClient";
 
 export default function Home() {
 
@@ -45,7 +49,6 @@ export default function Home() {
 
   return (
     <div className={styles.page}>
-
       <div className="container overflow-hidden">
 
         {/* Hero */}
@@ -92,7 +95,9 @@ export default function Home() {
                           </div>
                           <div className={styles.cardMeta}>
                             <span className={styles.cardCategory}>{post.category.name}</span>
-                            <span className={styles.cardDot}>•</span>
+                            <span className={styles.cardDot}><LuClock12 /></span>
+                            <span>{timeAgo(post.created_at)}</span>
+                            <span className={styles.cardDot}><SlCalender /></span>
                             <span>{post.date}</span>
                           </div>
                           <h3 className={styles.cardTitle}>
