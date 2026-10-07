@@ -1,28 +1,29 @@
-import React from 'react'
-import { useResetPassword } from '../Context/ResetPasswordContext';
-import { Navigate,Outlet } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
+import { apiSend } from '../services/apiClient';
+import Loader from '../components/Loader';
 
 export default function ProtectResetPasswordRoute() {
+  const email = localStorage.getItem('reset_email');
+  const [allowed, setAllowed] = useState(null);
 
-    const {isVerifiedOtp} = useResetPassword();
-    // const email = localStorage.getItem('reset_email');
+  useEffect(() => {
+    if (!email) {
+      setAllowed(false);
+      return;
+    }
+    const check = async () => {
+      try {
+        const { ok, data } = await apiSend('indexs', 'POST', { email });
+        setAllowed(ok && Number(data.user?.otp_verified) === 1);
+      } catch (error) {
+        console.log(error);
+        setAllowed(false);
+      }
+    };
+    check();
+  }, [email]);
 
-    //     useEffect(()=>{
-    //         if(!email) return;
-    //         const fetching = async ()=>{
-    //             try{
-    //                 const {ok, data} = await apiSend('indexs','POST',{email});
-    //                 if(ok){
-    //                     data.otp_verified === 1 ? setisGetLink(true) : setisGetLink(false);
-    //                 }
-    //             }catch(error){
-    //                 console.log(error);
-    //             }
-    //         }
-    
-    //         fetching();
-    //     },[email]);
-
-    return isVerifiedOtp ? <Outlet/> : <Navigate to='/verify-otp' replace/>
-
+  if (allowed === null) return <Loader/>;
+  return allowed ? <Outlet /> : <Navigate to="/verify-otp" replace />;
 }
