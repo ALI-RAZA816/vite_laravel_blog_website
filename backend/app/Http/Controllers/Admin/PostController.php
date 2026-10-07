@@ -45,11 +45,15 @@ class PostController extends Controller
         }else{
             
             if($search_term !== 'all' && !empty($search_term)){
-                $posts = Post::with(['category','author'])->where('author_id',$user->id)->where(function($query) use ($search_term){
-                    $query->where('title', 'LIKE', '%' . $search_term . '%')
-                        ->orWhere('category_id', $search_term)
-                        ->orWhere('published', $search_term);
-                })->latest()->paginate(10);
+               if($search_term && $fieldName === 'search'){
+                    $posts = Post::with(['category','author'])->where('author_id',$user->id)->where('title', 'LIKE', '%' . $search_term . '%')->latest()->paginate(10);
+                }
+                else if($search_term && $fieldName === 'category'){
+                    $posts = Post::with(['category','author'])->where('author_id',$user->id)->where('category_id', $search_term)->latest()->paginate(10);
+                }
+                else if($search_term && $fieldName === 'status'){
+                    $posts = Post::with(['category','author'])->where('author_id',$user->id)->where('published', $search_term)->latest()->paginate(10);
+                }
             }else{
                 $posts = Post::with(['category','author'])->where('author_id',$user->id)->latest()->paginate(10);
             }
