@@ -12,10 +12,10 @@ class PublicPostController extends Controller
 {
     public function publicPosts(Request $request){
         $search_term = $request->query('query');
-        $publicPost = Post::with(['category','author'])->where(function($query) use ($search_term){
+        $publicPost = Post::with(['category','author'])->where('published','published')->where(function($query) use ($search_term){
                     $query->where('title', 'LIKE', '%' . $search_term . '%');
                 })->latest()->paginate(10);
-        $popularPost = Post::with(['category','author'])->orderBy('views_counter','desc')->limit(5)->get();
+        $popularPost = Post::with(['category','author'])->where('published','published')->orderBy('views_counter','desc')->limit(5)->get();
         return response()->json([
             'allPost'=>$publicPost,
             'popularPost'=>$popularPost,
@@ -23,7 +23,7 @@ class PublicPostController extends Controller
     }
 
     public function singleView(Request $request, int $id){
-        $post = Post::with('category')->with('author')->where('id',$id)->first();
+        $post = Post::with('category')->with('author')->where('published','published')->where('id',$id)->first();
         if(!$post){
             return response()->json([
                 'messate'=>'Not found'

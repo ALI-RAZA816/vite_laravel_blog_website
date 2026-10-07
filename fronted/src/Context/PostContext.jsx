@@ -17,7 +17,10 @@ const PostContextProvider = ({ children }) => {
   const [velocity, setVelocity] = useState(0);
   const [lastMonthViews, setLastMonthViews] = useState([]);
 
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState({
+    searchTerm:'',
+    fieldName:''
+  });
   const [currentPostPage, setCurrentPostPage] = useState(1);
   const [postPagination, setPostPagination] = useState(emptyPagination);
 
@@ -25,10 +28,10 @@ const PostContextProvider = ({ children }) => {
     setSpinnerLoader(true);
     try {
       let response ;
-      if(!searchTerm && searchTerm == null){
+      if(!searchTerm.searchTerm && searchTerm.searchTerm == null){
         response = await apiGet(`posts?page=${currentPostPage}`);
       }else{
-        response = await apiGet(`posts??query=${searchTerm}&page=${currentPostPage}`);
+        response = await apiGet(`posts?field=${searchTerm.fieldName}&query=${searchTerm.searchTerm}&page=${currentPostPage}`);
       }
       const {ok, data} = response;
       if (ok) {

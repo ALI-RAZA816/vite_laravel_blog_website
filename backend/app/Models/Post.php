@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Category;
+use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    protected $guarded = [];
+    protected $fillable = ['id','title','description','image','category_id','author_id','views_counter','date','tags','published','draft'];
 
     public function category(){
         return $this->belongsTo(Category::class);

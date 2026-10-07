@@ -28,7 +28,7 @@ class AuthController extends Controller
                 'name'=>$request->name,
                 'username'=>$request->username ?? null,
                 'role'=>$request->role ?? 'user',
-                'status'=>$request->status ?? null,
+                'status'=>$request->status ?? 'inactive',
                 'bio'=>$request->bio ?? null,
                 'email'=>$request->emailaddress,
                 'password'=>Hash::make($request->password),
@@ -43,7 +43,7 @@ class AuthController extends Controller
             return response()->json([
                 'status'=>200,
                 'message'=>'You created account successfully'
-            ]);
+            ],200);
 
         }catch(ValidationException $e){
             return response()->json([

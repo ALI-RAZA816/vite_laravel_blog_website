@@ -161,6 +161,9 @@ class UserController extends Controller
             'image'=>$imageName,
         ]);
 
+        if ($request->status === 'blocked') {
+            $user->tokens()->delete(); 
+        }
 
         return response()->json([
             'status'=>200,

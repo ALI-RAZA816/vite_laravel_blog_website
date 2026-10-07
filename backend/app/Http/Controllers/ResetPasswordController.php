@@ -16,11 +16,11 @@ class ResetPasswordController extends Controller
 {
     public function fetchRecord(Request $request)
     {
-        $user = User::where('email', $request->email)->first();
+        $user = User::select('id')->where('email', $request->email)->first();
         if (!$user) {
             return response()->json(['message' => 'Not found'], 404);
         }
-        $otp = ResetPassword::where('user_id',$user->id)->first();
+        $otp = ResetPassword::select('send_link','otp_verified')->where('user_id',$user->id)->first();
         if(!$otp){
             return response()->json([
                 'message'=>"Not found"
@@ -72,7 +72,7 @@ class ResetPasswordController extends Controller
     public function verifyOtp(OtpRequest $request)
     {
         $user = User::where('email', $request->email)->first();
-        $otp = ResetPassword::select('otp_verified','send_link')->where('user_id',$user->id)->first();
+        $otp = ResetPassword::where('user_id',$user->id)->first();
         if(!$otp){
             return response()->json([
                 'message'=>"OTP not found. Please request a new OTP"
@@ -102,12 +102,12 @@ class ResetPasswordController extends Controller
     public function changePassword(ConfirmPasswordRequest $request)
     {
         $user = User::where('email', $request->email)->first();
-        $previous = ResetPassword::where('user_id',$user->id)->first();
         if(!$user){
             return response()->json([
                 'message'=>"We could not find an account with this email"
             ],404);
         };
+        $previous = ResetPassword::where('user_id',$user->id)->first();
 
         $user->update([
             'password'=>Hash::make($request->password)

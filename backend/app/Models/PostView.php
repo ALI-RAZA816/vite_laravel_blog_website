@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class PostView extends Model
 {
-    protected $guarded = [];
+    protected $fillable = ['id','user_id','post_id'];
 }

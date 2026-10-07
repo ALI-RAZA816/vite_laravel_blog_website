@@ -24,7 +24,7 @@ class UpdatePostRequest extends FormRequest
          return [
             'title'=>'required|string|max:255',
             'description'=>'required|string',
-            'image'=> 'nullable|image|mimes:jpg,jpeg,png|max:3072',
+            // 'image'=> 'nullable|image|mimes:jpg,jpeg,png|max:3072',
             'category'=> 'required|exists:categories,id',
             'tags'=>'required|string',
         ];

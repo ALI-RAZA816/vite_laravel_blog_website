@@ -24,15 +24,21 @@ class PostController extends Controller
     {
         $user = $request->user();
         $search_term = $request->query('query');
+        $fieldName = $request->query('field');
         $total = Post::with(['category','author'])->get();
         $views = Post::sum('views_counter');
+        $posts ='';
         if($user->role === 'admin' || $user->role === 'editor'){
             if($search_term !== 'all' && !empty($search_term)){
-                $posts = Post::with(['category','author'])->where(function($query) use ($search_term){
-                    $query->where('title', 'LIKE', '%' . $search_term . '%')
-                      ->orWhere('category_id', $search_term)
-                      ->orWhere('published', $search_term);
-                })->latest()->paginate(10);
+                if($search_term && $fieldName === 'search'){
+                    $posts = Post::with(['category','author'])->where('title', 'LIKE', '%' . $search_term . '%')->latest()->paginate(10);
+                }
+                else if($search_term && $fieldName === 'category'){
+                    $posts = Post::with(['category','author'])->where('category_id', $search_term)->latest()->paginate(10);
+                }
+                else if($search_term && $fieldName === 'status'){
+                    $posts = Post::with(['category','author'])->where('published', $search_term)->latest()->paginate(10);
+                }
             }else{
                 $posts = Post::with(['category','author'])->latest()->paginate(10);
             }
@@ -250,12 +256,12 @@ class PostController extends Controller
         }else{
             $post = Post::with(['category','author'])->where('id',$id)->where('author_id', $user->id)->first();
         }
+        if(!$post){
+            return response()->json([
+                'message'=>'Not found'
+            ],404);
+        }
         $categoryId = $post->category_id;
-         if(!$post){
-                return response()->json([
-                    'message'=>'Not found'
-                ],404);
-            }
 
 
         $path = public_path('posts-images');
@@ -287,7 +293,7 @@ class PostController extends Controller
             $posts = Post::whereIn('id',$request->ids)->where('author_id', $user->id)->get();
         }
 
-        if(!$posts){
+        if($posts->isEmpty()){
             return response()->json([
                 'message'=>'Not found'
             ],404);

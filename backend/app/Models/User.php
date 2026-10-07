@@ -24,7 +24,7 @@ class User extends Authenticatable
      * @return array<string, string>
      */
 
-    protected $guarded = [];
+    protected $fillable = ['id','name','username','email','role','join_date','status','password','image','bio'];
     protected function casts(): array
     {
         return [

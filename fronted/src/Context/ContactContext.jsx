@@ -218,7 +218,6 @@ const ContactContextProvider = ({children})=>{
         if(token && user.role !== 'user'){
             fetchMessages();
         }
-        console.log(responseAvg);
     },[contactRefresh, page]);
 
     return (

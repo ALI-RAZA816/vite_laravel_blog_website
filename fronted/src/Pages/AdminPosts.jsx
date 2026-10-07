@@ -145,7 +145,10 @@ const AdminPosts = () => {
     const searchTerm = event.target.value;
     clearTimeout(searchTimeout.current);
     searchTimeout.current = setTimeout(() => {
-      setSearchTerm(searchTerm);
+      setSearchTerm({
+        searchTerm:searchTerm,
+        fieldName:'search'
+      });
     }, 600);
   };
 
@@ -153,12 +156,18 @@ const AdminPosts = () => {
     const searchTerm = event.target.value;
     clearTimeout(searchTimeout.current);
     searchTimeout.current = setTimeout(() => {
-      setSearchTerm(searchTerm);
+      setSearchTerm({
+        searchTerm:searchTerm,
+        fieldName:'category'
+      });
     }, 600);
   };
 
   const statusFilter = (searchTerm) => {
-    setSearchTerm(searchTerm);
+      setSearchTerm({
+        searchTerm:searchTerm,
+        fieldName:'status'
+      });
   };
 
   const [checkDeleted, setCheckDeleted] = useState([]);
@@ -239,7 +248,7 @@ const AdminPosts = () => {
       {/* Filters */}
       <div className={`d-flex flex-wrap align-items-center gap-3 ${styles.filterBar}`}>
         <div className={`d-flex align-items-center ${styles.selectBox}`}>
-          <input type="text" onChange={getValue} placeholder="Search post" className="form-control border-0 shadow-none" />
+          <input type="text" name="search" onChange={getValue} placeholder="Search post" className="form-control border-0 shadow-none" />
         </div>
         <div className={`d-flex align-items-center ${styles.selectBox}`}>
           <select name="categories" onChange={getCategory} className="form-select border-0 shadow-none">
