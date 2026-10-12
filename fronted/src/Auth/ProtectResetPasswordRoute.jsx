@@ -17,7 +17,6 @@ export default function ProtectResetPasswordRoute() {
         const { ok, data } = await apiSend('indexs', 'POST', { email });
         setAllowed(ok && Number(data.user?.otp_verified) === 1);
       } catch (error) {
-        console.log(error);
         setAllowed(false);
       }
     };

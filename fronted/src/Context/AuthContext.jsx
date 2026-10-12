@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiSend, showToast } from "../services/apiClient.js";
 import { AppContext } from "./AppContext.jsx";
+import { StatusCode } from "../services/apiStatusCode.js";
 
 export const AuthContext = createContext();
 
@@ -61,24 +62,18 @@ const AuthContextProvider = ({ children }) => {
         } else if (data.message) {
           showToast(data.message,'Error','danger');
         }
-        return;
+        navigate(StatusCode(status));
+      }else{
+        setLoginData ({
+          email: "",
+          password: "",
+        });
+        localStorage.setItem("UserInfo", JSON.stringify(data.user));
+        localStorage.setItem("token", data.token);
+        navigate("/");
+        showToast(data.message,'Success','success');
       }
-      
-      if(status){
-        setStatusCode(status);
-        navigate('/aunauthorized');
-      }
-
-      setLoginData ({
-        email: "",
-        password: "",
-      });
-      localStorage.setItem("UserInfo", JSON.stringify(data.user));
-      localStorage.setItem("token", data.token);
-      navigate("/");
-      showToast(data.message,'Success','success');
     } catch (error) {
-      console.log("loginAccount:", error);
     } finally {
       stopRequest();
     }
@@ -130,7 +125,7 @@ const AuthContextProvider = ({ children }) => {
 
     try {
 
-      const {ok, data} = await apiSend('account','POST', registerData);
+      const {ok, status, data} = await apiSend('account','POST', registerData);
       
       if (!ok) {
         const error = data.errors ?? {};
@@ -146,17 +141,18 @@ const AuthContextProvider = ({ children }) => {
         }else if (data.message) {
           showToast(data.message,'Error','danger');
         }
-        return;
+        navigate(StatusCode(status));
+      }else{
+        setRegisterData({
+          name: "",
+          emailaddress: "",
+          password: "",
+          password_confirmation: "",
+        });
+        navigate("/login");
+        showToast(data.message,'Success','success');
       }
 
-      setRegisterData({
-        name: "",
-        emailaddress: "",
-        password: "",
-        password_confirmation: "",
-      });
-      navigate("/login");
-      showToast(data.message,'Success','success');
 
     } catch (error) {
       console.log("registerAccount:", error);
@@ -173,7 +169,18 @@ const AuthContextProvider = ({ children }) => {
 
     try {
       const {ok, status, data} = await apiSend('logout','POST');
+      if (!ok) {
+        const error = data.errors;
+        if (error?.email?.[0]) {
+          showToast(error.email?.[0],'Error','danger');
+        } else if (error?.password?.[0]) {
+          showToast(error.password?.[0],'Error','danger');
+        } else if (data.message) {
+          showToast(data.message,'Error','danger');
+        }
 
+        navigate(StatusCode(status));
+      }
     } catch (error) {
       console.log("logout:", error);
     } finally {

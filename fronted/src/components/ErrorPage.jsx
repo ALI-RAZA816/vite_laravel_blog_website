@@ -1,12 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import styles from "../assets/NotFound.module.css";
 import { BsCompass, BsArrowLeft } from "react-icons/bs";
-import { useContext } from "react";
-import { AppContext } from "../Context/AppContext";
 
-const Unauthorized = () => {
+const ErrorPage = () => {
 
-  const {statuCode} = useContext(AppContext);
+  const {code} = useParams();
 
   return (
     <div className={styles.page}>
@@ -15,8 +13,8 @@ const Unauthorized = () => {
           <BsCompass className={styles.compassIcon} />
         </div>
 
-        <h1 className={styles.code}>{statuCode}</h1>
-        <h2 className={styles.title}>{statuCode === 401 ? 'Unauthorized' : statuCode === 403 ? 'Forbidden' : statuCode === 409 ? 'Conflict' : statuCode === 422 ? 'Unprocessable Entity' : statuCode === 429 ? 'Too Many Requests' : statuCode === 400 ? 'Bad Request' : statuCode === 404 ? 'Not Found': statuCode === 500 ? 'Server Error': 'Something went wrong'}</h2>
+        {Number(code) && <h1 className={styles.code}>{Number(code)}</h1>}
+        <h2 className={styles.title}>{Number(code) === 401 ? 'Unauthorized' : Number(code) === 403 ? 'Forbidden' : Number(code) === 409 ? 'Conflict' : Number(code) === 429 ? 'Too Many Requests' : Number(code) === 400 ? 'Bad Request' : Number(code) === 404 ? 'Not Found': Number(code) === 500 ? 'Server Error': 'Something went wrong'}</h2>
         <p className={styles.subtitle}>
           The story you're looking for doesn't exist, or it may have
           moved somewhere quieter. Let's get you back to familiar ground.
@@ -41,4 +39,4 @@ const Unauthorized = () => {
   );
 };
 
-export default Unauthorized;
+export default ErrorPage;

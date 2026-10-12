@@ -8,6 +8,7 @@ import { AppContext } from '../Context/AppContext';
 import { usePublicSetting } from '../Context/PublicSettingContext';
 import { useUser } from '../Context/UserContext';
 import { showToast } from '../services/apiClient';
+import { StatusCode } from '../services/apiStatusCode';
 
 export default function Header() {
   const location = useLocation();
@@ -44,6 +45,7 @@ export default function Header() {
       if (response.ok) {
         showToast(data?.message, 'Success', 'success');
       } else {
+        navigate(StatusCode(response.status));
         showToast(data?.message, 'Error', 'error');
       }
       if (data.status === true) {

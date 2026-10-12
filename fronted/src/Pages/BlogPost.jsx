@@ -10,6 +10,7 @@ import { useUser } from "../Context/UserContext";
 import { usePublicPost } from "../Context/PublicPostContext";
 import {apiGet, apiSend, showToast, timeAgo} from '../services/apiClient.js';
 import LoadingSpinner from "../components/LoadingSpinner.jsx";
+import { StatusCode } from "../services/apiStatusCode.js";
 export default function BlogPost() {
 
   const {id} = useParams();
@@ -33,8 +34,7 @@ export default function BlogPost() {
       if(ok){
         setEditComment(data.comment.comment);
       }else{
-        setStatusCode(status);
-        navigate('/aunauthorized');
+        navigate(StatusCode(status));
       }
 
     }catch(error){
@@ -52,7 +52,7 @@ export default function BlogPost() {
 
     try{
 
-      const {ok, data} = await apiSend(`public-comments/${id}`, 'PUT', {comment:EditComment});
+      const {ok, status, data} = await apiSend(`public-comments/${id}`, 'PUT', {comment:EditComment});
       console.log(data);
       if(ok){
         setRefresh(prev => prev + 1);
@@ -65,6 +65,7 @@ export default function BlogPost() {
         }else if(data.message){
           showToast(data.message,'Error','danger');
         }
+        navigate(StatusCode(status));
       }
     }catch(error){
       console.log(error);
@@ -79,9 +80,11 @@ export default function BlogPost() {
   const [postComment, setPostComments] = useState([]);
   const postComments = async ()=>{
     try{
-      const {ok, data} = await apiGet (`post-comments/${id}`);
+      const {ok, status, data} = await apiGet (`post-comments/${id}`);
       if(ok){
         setPostComments(data.postComment);
+      }else{
+        navigate(StatusCode(status));
       }
     }catch(error){
       console.log(error);
@@ -118,6 +121,7 @@ export default function BlogPost() {
           showToast(data.message,'Error','danger');
           return;
         }
+        navigate(StatusCode(status));
       }
 
     }catch(error){

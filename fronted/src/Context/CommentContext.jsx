@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { apiGet , apiSend, emptyPagination, showToast, toPagination } from "../services/apiClient.js";
+import { StatusCode } from "../services/apiStatusCode.js";
 
 export const CommentContext = createContext();
 
@@ -27,7 +28,7 @@ const CommentContextProvider = ({ children }) => {
       }else{
         response = await apiGet(`comments?query=${activeFilter}&page=${currentComments}`);
       }
-      const {ok, data} = response;
+      const {ok, status, data} = response;
       
       if (ok) {
         setCommentAvg(data.average);
@@ -35,6 +36,8 @@ const CommentContextProvider = ({ children }) => {
         setComments(data.comments.data);
         setCommentsPagination(toPagination(data.comments));
         setSpinnerLoader(false);
+      }else{
+        navigate(StatusCode(status));
       }
     } catch (error) {
       console.log("fetchcomments:", error);
@@ -59,11 +62,12 @@ const CommentContextProvider = ({ children }) => {
   // =======================
   const commentStatus = async (name, id) => {
     try {
-      const {ok, data} = await apiSend(`comments/${id}`, 'PUT', {status:name});
+      const {ok, status, data} = await apiSend(`comments/${id}`, 'PUT', {status:name});
       if (ok) {
         showToast(data.message,'Success','success');
         triggerCommentRefresh();
       }else{
+        navigate(StatusCode(status));
         showToast(data.message,'Error','danger');
       }
     } catch (error) {
@@ -76,11 +80,12 @@ const CommentContextProvider = ({ children }) => {
   // =======================
   const Deletecomment = async (id) => {
     try {
-      const {ok, data} = await apiSend(`comments/${id}`,'DELETE');
+      const {ok, status, data} = await apiSend(`comments/${id}`,'DELETE');
       if (ok) {
         showToast(data.message, 'Success','success');
         triggerCommentRefresh();
       }else{
+        navigate(StatusCode(status));
         showToast(data.message, 'Error','danger');
       }
     } catch (error) {

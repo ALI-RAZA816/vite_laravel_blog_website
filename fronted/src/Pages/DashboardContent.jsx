@@ -36,7 +36,6 @@ import RecentPost from "../components/RecentPost";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { useDashboard } from "../Context/DashboardContext";
 
-// Naam se initials (single word naam par bhi crash nahi karega)
 const getInitials = (name = '') =>
   name
     .split(' ')
@@ -46,7 +45,6 @@ const getInitials = (name = '') =>
     .join('')
     .toUpperCase();
 
-// 1000 se bade numbers ko 1.2k format mein
 const formatCount = (n) => (n <= 1000 ? `${n}` : `${(n / 1000).toFixed(1)}k`);
 
 const DashboardContent = () => {
@@ -111,7 +109,6 @@ const DashboardContent = () => {
     },
   };
 
-  // Soft accent colors: har card ka apna rang, baqi dashboard monochrome
   const statCards = [
     {
       icon: <BsFileEarmarkTextFill />,

@@ -3,6 +3,7 @@ import styles from "../assets/AddNewUser.module.css";
 import { apiUpload, showToast } from "../services/apiClient.js";
 import { useUser } from "../Context/UserContext";
 import { useNavigate } from "react-router-dom";
+import { StatusCode } from "../services/apiStatusCode.js";
 
 const AddNewUser = () => {
   const navigate = useNavigate();
@@ -71,13 +72,14 @@ const AddNewUser = () => {
     }
 
     try {
-      const { ok, data } = await apiUpload("users", "POST", form);
+      const { ok, status, data } = await apiUpload("users", "POST", form);
       if (!ok) {
         const e = data?.errors;
         const firstError =
           e?.name?.[0] || e?.username?.[0] || e?.emailaddress?.[0] ||
           e?.bio?.[0] || e?.role?.[0] || e?.password?.[0] || e?.image?.[0];
         if (firstError) showToast(firstError, "Error", "danger");
+        navigate(StatusCode(status));
       } else {
         showToast(data.message, "Success", "success");
         triggerUserRefresh();

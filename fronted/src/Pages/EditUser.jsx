@@ -9,6 +9,7 @@ import { LuUserRound } from "react-icons/lu";
 import { baseUrl } from "../Http/Http";
 import { apiGet, apiUpload, showToast } from "../services/apiClient.js";
 import { AppContext } from "../Context/AppContext.jsx";
+import { StatusCode } from "../services/apiStatusCode.js";
 
 const EditUser = () => {
   const { id } = useParams();
@@ -62,8 +63,7 @@ const EditUser = () => {
           setAccountActive(user.status === "active");
         }
       } else {
-        setStatusCode(status);
-        navigate("/aunauthorized");
+        navigate(StatusCode(status));
       }
     } catch (error) {
       console.log(error);
@@ -94,7 +94,7 @@ const EditUser = () => {
     }
 
     try {
-      const { ok, data } = await apiUpload(`users/${formData.id}`, "PUT", form);
+      const { ok, status, data } = await apiUpload(`users/${formData.id}`, "PUT", form);
       if (ok) {
         if (data.status === 200) {
           triggerUserRefresh();
@@ -102,6 +102,7 @@ const EditUser = () => {
           navigate("/admin-panel/users");
         }
       } else {
+        navigate(StatusCode(status));
         const e = data?.errors;
         const firstError =
           e?.name?.[0] || e?.username?.[0] || e?.email?.[0] || e?.role?.[0] || data?.message;

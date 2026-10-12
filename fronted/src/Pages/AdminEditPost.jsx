@@ -8,6 +8,7 @@ import { AppContext } from "../Context/AppContext";
 import { useNavigate, useParams } from "react-router-dom";
 import {apiGet, apiUpload, showToast} from '../services/apiClient';
 import { baseUrl } from "../Http/Http";
+import { StatusCode } from "../services/apiStatusCode";
 const ImageIcon = ({ size = 100, color = "#808080" }) => (
   <svg
     width={size}
@@ -148,8 +149,7 @@ const AdminEditPost = ({placeholder}) => {
         setTags(JSON.parse(data.post.tags));
         setContent(data.post.description);
       }else{
-        setStatusCode(status);
-        navigate('/aunauthorized');
+        navigate(StatusCode(status));
       }
     }catch(error){
       console.log(error);
@@ -219,6 +219,7 @@ const AdminEditPost = ({placeholder}) => {
               showToast(data.message,'Error','danger');
               return false;
             }
+            navigate(StatusCode(status));
           }else{
             setRefresh(prev => prev + 1);
             showToast(data.message,'Success','success');

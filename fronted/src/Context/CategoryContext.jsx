@@ -1,10 +1,12 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext,useContext, useEffect, useState } from "react";
 import { apiGet, showToast } from "../services/apiClient.js";
 import { apiSend, emptyPagination, toPagination } from "../services/apiClient.js";
-
+import { useNavigate } from "react-router-dom";
+import { StatusCode } from "../services/apiStatusCode.js";
 export const CategoryContext = createContext();
 
 const CategoryContextProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [catRefresh, setCatRefresh] = useState(0);
   const [spinnerLoader, setSpinnerLoader] = useState(false);
   const triggerCatRefresh = () => setCatRefresh((prev) => prev + 1);
@@ -20,13 +22,15 @@ const CategoryContextProvider = ({ children }) => {
   const fetchCategory = async () => {
     setSpinnerLoader(true);
     try {
-      const {ok, data} = await apiGet(`categories?page=${currentCatPage}`);
+      const {ok, status, data} = await apiGet(`categories?page=${currentCatPage}`);
       
       if (ok) {
         setAllCat(data.allCat);
         setCategories(data.category.data);
         setCatPagination(toPagination(data.category));
         setSpinnerLoader(false);
+      }else{
+        navigate(StatusCode(status));
       }
     } catch (error) {
       console.log(error);
@@ -78,7 +82,7 @@ const CategoryContextProvider = ({ children }) => {
 
     try {
 
-      const {ok, data} = await apiSend('categories','POST', payload);
+      const {ok, status, data} = await apiSend('categories','POST', payload);
       if (!ok) {
         if(error?.cat_name?.[0]){
           showToast(error?.cat_name?.[0], 'Error','danger');
@@ -88,6 +92,7 @@ const CategoryContextProvider = ({ children }) => {
           showToast(error?.slug?.[0], 'Error','danger');
           return;
         }
+        navigate(StatusCode(status));
         return;
       }
       
@@ -124,7 +129,7 @@ const CategoryContextProvider = ({ children }) => {
 
   const viewCategory = async (cat_id) => {
     try {
-      const {ok, data} = await apiGet(`categories/${cat_id}`);
+      const {ok, status, data} = await apiGet(`categories/${cat_id}`);
 
       if (ok) {
         setEditCategory({
@@ -134,6 +139,8 @@ const CategoryContextProvider = ({ children }) => {
           description: data.category.description,
         });
         setSelectedIcon(data.category.icon);
+      }else{
+        navigate(StatusCode(status));
       }
     } catch (error) {
       console.log(error);
@@ -158,7 +165,7 @@ const CategoryContextProvider = ({ children }) => {
     const payload = { ...editCategory, icon: selectedIcon };
 
     try {
-      const {ok, data} = await apiSend(`categories/${editCategory.id}`, 'PUT', payload);
+      const {ok, status, data} = await apiSend(`categories/${editCategory.id}`, 'PUT', payload);
       
       if (ok) {
         triggerCatRefresh();
@@ -178,6 +185,7 @@ const CategoryContextProvider = ({ children }) => {
           showToast(data.message, 'Error','danger');
           return;
         }
+        navigate(StatusCode(status));
         return;
       }
     } catch (error) {

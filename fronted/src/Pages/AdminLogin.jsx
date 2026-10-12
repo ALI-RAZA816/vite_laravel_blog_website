@@ -5,6 +5,7 @@ import { apiSend } from "../services/apiClient";
 import { AppContext } from "../Context/AppContext";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../Context/UserContext";
+import { StatusCode } from "../services/apiStatusCode";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -43,13 +44,11 @@ const AdminLogin = () => {
         }
         const {ok, status, data} = await apiSend('login', 'POST', formData);
         if(!ok){
-          setStatusCode(status);
-          navigate('/aunauthorized');
+          navigate(StatusCode(status));
           return;
         }
         if(data?.user?.role === 'user'){
-          setStatusCode(403)
-          navigate('/aunauthorized');
+          navigate(StatusCode(403));
           return;
         }
         localStorage.setItem('token', data.token);

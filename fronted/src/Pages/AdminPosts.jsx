@@ -36,7 +36,6 @@ ChartJS.register(
   Legend
 );
 
-// Naam se initials (single word naam par bhi crash nahi karega)
 const getInitials = (name = '') =>
   name
     .split(' ')
@@ -88,7 +87,6 @@ const AdminPosts = () => {
     }
   };
 
-  // Purane mahine halke blue, latest mahina gehra blue
   const chartData = {
     labels: chartData2.map(item => item.month),
     datasets: [

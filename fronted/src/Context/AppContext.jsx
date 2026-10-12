@@ -1,27 +1,27 @@
 import { createContext, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { apiUrl } from "../Http/Http";
-
 export const AppContext = createContext();
 
 const AppContextProvider = ({children})=>{
+
+    const location = useLocation();
     const [authorized, setAuthorized] = useState('checking');
     const [statuCode, setStatusCode] = useState(0);
     const [deletId, setDeleteId] = useState(null);
     const [loader, setLoader] = useState(true);
     const [deleteModel, setDeleteModel] = useState(false);
-
+    
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const toggleSidebar = () => setSidebarOpen((prev) => !prev);
     const closeSidebar = () => setSidebarOpen(false);
-
+    
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const toggleMobileMenu = () => setMobileMenuOpen((prev) => !prev);
     const closeMobileMenu = () => setMobileMenuOpen(false);
 
-    const location = useLocation();
-    const isAdmin = location.pathname === '/register' || location.pathname === '/aunauthorized' || location.pathname === '/login' || location.pathname.startsWith('/admin-panel') || location.pathname.startsWith('/admin-login') || location.pathname.startsWith('/forgot-password') || location.pathname.startsWith('/verify-otp') || location.pathname.startsWith('/reset-password');
-
+    const isAdmin = location.pathname === '/register' || location.pathname.startsWith('/error/') || location.pathname === '/login' || location.pathname.startsWith('/admin-panel') || location.pathname.startsWith('/admin-login') || location.pathname.startsWith('/forgot-password') || location.pathname.startsWith('/verify-otp') || location.pathname.startsWith('/reset-password');
+    
     const DeleteModelHandler = (deleteId)=>{
         setDeleteModel(!deleteModel);
         setDeleteId(deleteId);

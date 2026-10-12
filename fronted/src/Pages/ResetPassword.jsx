@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styles from "../assets/ResetPassword.module.css";
 import { BsUnlockFill, BsEye, BsEyeSlash, BsArrowRight, BsCheckCircleFill, BsCircle, BsCheck2 } from "react-icons/bs";
 import { apiSend, showToast } from "../services/apiClient.js";
+import { StatusCode } from "../services/apiStatusCode.js";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ const ResetPassword = () => {
     setSubmitting(true);
     const email = localStorage.getItem('reset_email');
     try {
-      const { ok, data } = await apiSend("reset-password", "POST", {
+      const { ok, status, data } = await apiSend("reset-password", "POST", {
         email,
         password,
         password_confirmation: confirmPassword,
@@ -55,6 +56,7 @@ const ResetPassword = () => {
         } else if (data.message) {
           showToast(data.message, "Error", "danger");
         }
+        navigate(StatusCode(status));
       }
     } catch (error) {
       console.log(error);

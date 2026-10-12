@@ -6,6 +6,7 @@ import { AppContext } from "../Context/AppContext";
 import { apiUpload, showToast } from "../services/apiClient.js";
 import { useNavigate } from "react-router-dom";
 import { usePost } from "../Context/PostContext.jsx";
+import { StatusCode } from "../services/apiStatusCode.js";
 
 const ImageIcon = ({ size = 56, color = "#7d7d7d" }) => (
   <svg width={size} height={size} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -99,13 +100,14 @@ const AddAdminPost = ({ placeholder }) => {
     form.append("published", isPublished ? "published" : "draft");
 
     try {
-      const { ok, data } = await apiUpload("posts", "POST", form);
+      const { ok, status, data } = await apiUpload("posts", "POST", form);
       if (!ok) {
         const e = data?.errors;
         const firstError =
           e?.title?.[0] || e?.description?.[0] || e?.image?.[0] ||
           e?.image?.[1] || e?.category?.[0] || e?.tags?.[0] || data?.message;
         if (firstError) showToast(firstError, "Error", "danger");
+        navigate(StatusCode(status));
         return false;
       }
       setFormData({ title: "", category: "" });

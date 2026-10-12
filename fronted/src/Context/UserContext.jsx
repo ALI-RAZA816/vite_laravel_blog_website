@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import {apiGet, apiSend, emptyPagination, toPagination} from '../services/apiClient.js'
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "./AppContext.jsx";
+import { StatusCode } from "../services/apiStatusCode.js";
 
 export const UserContext = createContext();
 
@@ -23,7 +24,7 @@ const UserContextProvider = ({ children }) => {
   const [thisWeek, setThisWeek] = useState([]);
   const [allEditors, setAllEditors] = useState([]);
   const {setStatusCode} = useContext(AppContext);
-  const {navigate} = useNavigate();
+  const navigate = useNavigate();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -54,9 +55,8 @@ const UserContextProvider = ({ children }) => {
           setSpinnerLoader(false);
         }
       }else{
-        setStatusCode(status);
+        navigate(StatusCode(status));
         setSpinnerLoader(false);
-        navigate('/aunauthorized');
       }
     } catch (error) {
       console.log("fetchUsers:", error);

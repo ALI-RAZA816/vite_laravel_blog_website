@@ -1,6 +1,7 @@
 import { createContext, useRef, useEffect, useContext, useState} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { apiGet, apiSend, showToast } from "../services/apiClient.js";
+import { StatusCode } from "../services/apiStatusCode.js";
 
 
 export const ResetPasswordContext = createContext();
@@ -31,7 +32,7 @@ const ResetPasswordContextProvider = ({ children }) => {
     setShowLoadingSpinner(true);
 
     try {
-      const { ok, data } = await apiSend("forgot-password", "POST", { email });
+      const { ok, status, data } = await apiSend("forgot-password", "POST", { email });
 
       if (ok) {
         navigate('/verify-otp');
@@ -45,6 +46,7 @@ const ResetPasswordContextProvider = ({ children }) => {
         } else if (data.message) {
           showToast(data.message, "Error", "danger");
         }
+        navigate(StatusCode(status));
       }
     } catch (error) {
       console.log(error);
@@ -163,12 +165,13 @@ const ResetPasswordContextProvider = ({ children }) => {
     setSubmitting(true);
     const email = localStorage.getItem('reset_email');
     try {
-      const { ok, data } = await apiSend("verify-otp", "POST", {code, email});
+      const { ok, status, data } = await apiSend("verify-otp", "POST", {code, email});
       if (ok) {
         setisVerifiedOtp(true);
         showToast(data.message, "Success", "success");
         navigate("/reset-password");
       } else {
+        navigate(StatusCode(status));
         showToast(data.message, "Error", "danger");
       }
     } catch (error) {
@@ -186,7 +189,7 @@ const ResetPasswordContextProvider = ({ children }) => {
       setShowLoadingSpinner(true);
       const email = localStorage.getItem('reset_email');
       try {
-        const { ok, data } = await apiSend("forgot-password", "POST", { email });
+        const { ok, status, data } = await apiSend("forgot-password", "POST", { email });
   
         if (ok) {
           setSecondsLeft(RESEND_SECONDS);
@@ -200,6 +203,7 @@ const ResetPasswordContextProvider = ({ children }) => {
           } else if (data.message) {
             showToast(data.message, "Error", "danger");
           }
+          navigate(StatusCode(status));
         }
       } catch (error) {
         console.log(error);

@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { apiGet, emptyPagination, toPagination } from "../services/apiClient.js";
+import { useNavigate } from "react-router-dom";
+import { StatusCode } from "../services/apiStatusCode.js";
 
 export const PublicPostContext = createContext();
 
@@ -14,7 +16,7 @@ const PublicPostContextProvider = ({ children }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [publicPostPage, setPublicPostPage] = useState(emptyPagination);
 
-
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const fetchPublicPosts = async () => {
     setSpinnerLoader(true);
@@ -26,12 +28,14 @@ const PublicPostContextProvider = ({ children }) => {
         response = await apiGet(`public-posts?query=${searchTerm}&page=${currentPage}`);
         
       }
-      const {ok, data} = response;
+      const {ok, status, data} = response;
       if (ok) {
         setPopularPosts(data.popularPost);
         setPublicPosts(data.allPost.data);
         setPublicPostPage(toPagination(data.allPost));
         setSpinnerLoader(false);
+      }else{
+        navigate(StatusCode(status));
       }
     } catch (error) {
       console.log("fetchPublicPosts:", error);
@@ -67,7 +71,7 @@ const PublicPostContextProvider = ({ children }) => {
   const fetchPostView = async (id) => {
     setSpinnerLoader(true);
     try {
-      const {ok, data} = await apiGet(`post-view/${id}`);
+      const {ok, status, data} = await apiGet(`post-view/${id}`);
       if (ok) {
         setPostView({
           category: data.post.category.name,
@@ -81,6 +85,8 @@ const PublicPostContextProvider = ({ children }) => {
           description: data.post.description
         });
         setSpinnerLoader(false);
+      }else{
+        navigate(StatusCode(status));
       }
     } catch (error) {
       console.log(error);

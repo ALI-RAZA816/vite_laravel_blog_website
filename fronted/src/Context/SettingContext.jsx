@@ -1,8 +1,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import {apiGet, apiUpload, apiSend, showToast} from '../services/apiClient.js';
+import { useNavigate } from "react-router-dom";
+import { StatusCode } from "../services/apiStatusCode.js";
 export const SettingContext = createContext();
 
 const SettingContextProvider = ({ children }) => {
+
+  const navigate = useNavigate();
   const [settingRefresh, setSettingRefresh] = useState(0);
   const [spinnerLoader, setSpinnerLoader] = useState(false);
   const triggerSettingRefresh = () => setSettingRefresh((prev) => prev + 1);
@@ -40,7 +44,7 @@ const SettingContextProvider = ({ children }) => {
   const fetchSetting = async () => {
     setSpinnerLoader(true);
     try {
-      const {ok, data} = await apiGet('settings');
+      const {ok, status, data} = await apiGet('settings');
       if (ok) {
         setSettingData({
           site_title: data?.setting?.site_title,
@@ -53,6 +57,8 @@ const SettingContextProvider = ({ children }) => {
         });
         setLogo(data?.setting?.site_logo);
         setSpinnerLoader(false);
+      }else{
+        navigate(StatusCode(status));
       }
     } catch (error) {
       console.log(error);
@@ -82,7 +88,7 @@ const SettingContextProvider = ({ children }) => {
     }
 
     try {
-      const {ok, data} = await apiUpload('settings','POST',form);
+      const {ok, status, data} = await apiUpload('settings','POST',form);
       if (ok) {
         showToast(data.message, 'Success','success');
         triggerSettingRefresh();
@@ -104,6 +110,7 @@ const SettingContextProvider = ({ children }) => {
           showToast(data.message, 'Error','danger');
           return;
         }
+        navigate(StatusCode(status));
       }
     } catch (error) {
       console.log(error);
@@ -114,11 +121,12 @@ const SettingContextProvider = ({ children }) => {
   const logoHandler = async (event) => {
     event.preventDefault();
     try {
-      const {ok, data} = await apiSend('logo','DELETE');
+      const {ok, status, data} = await apiSend('logo','DELETE');
       if (ok) {
         showToast(data.message,'Success','success');
         triggerSettingRefresh();
       }else{
+        navigate(StatusCode(status));
         showToast(data.message,'Error','danger');
       }
     } catch (error) {

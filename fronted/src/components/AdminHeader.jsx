@@ -17,7 +17,6 @@ const AdminHeader = () => {
   } = useContact();
   const lastSegment = location.pathname.split('/');
 
-  // Naam se initials (single word naam par bhi crash nahi karega)
   const initials = (loggedUser?.name || '')
     .split(' ')
     .filter(Boolean)

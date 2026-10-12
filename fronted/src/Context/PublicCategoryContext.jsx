@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { apiGet } from "../services/apiClient.js";
+import { StatusCode } from "../services/apiStatusCode.js";
+import { useNavigate } from "react-router-dom";
 
 export const PublicCategoryContext = createContext();
 
@@ -7,6 +9,7 @@ const PublicCategoryContextProvider = ({ children }) => {
 
   const [publicCategories, setPublicCategories] = useState([]);
 
+  const navigate = useNavigate();
   const fetchPublicCategories = async () => {
     try {
 
@@ -14,6 +17,8 @@ const PublicCategoryContextProvider = ({ children }) => {
 
       if (ok) {
         setPublicCategories(data.allCategories);
+      }else{
+        navigate(StatusCode(status));
       }
     } catch (error) {
       console.log("fetchPublicCategories:", error);

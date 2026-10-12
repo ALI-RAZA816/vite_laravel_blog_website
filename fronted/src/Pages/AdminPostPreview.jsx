@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { apiGet } from "../services/apiClient";
 import { AppContext } from "../Context/AppContext";
 import { baseUrl } from "../Http/Http";
+import { StatusCode } from "../services/apiStatusCode";
 
 const initials = (name = "") =>
   name.split(" ").filter(Boolean).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
@@ -41,8 +42,7 @@ const AdminPostPreview = () => {
           description: data.post.description,
         });
       } else {
-        setStatusCode(status);
-        navigate("/unauthorized");
+        navigate(StatusCode(status));
       }
     } catch (error) {
       console.log(error);

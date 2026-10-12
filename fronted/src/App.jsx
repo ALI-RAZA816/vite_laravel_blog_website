@@ -31,7 +31,7 @@ const Loader = lazy(() => import("./components/Loader"));
 const AdminPostPreview = lazy(() => import("./Pages/AdminPostPreview"));
 const AuthDashboard = lazy(() => import("./Auth/AuthDashboard"));
 const NotFound = lazy(() => import("./components/NotFound"));
-const Unauthorized = lazy(() => import("./components/Unauthorized"));
+const ErrorPage = lazy(() => import("./components/ErrorPage"));
 const RouteProtected = lazy(() => import("./Auth/RouteProtected"));
 const AdminMessage = lazy(() => import("./Pages/AdminMessage"));
 const ForgotPassword = lazy(() => import("./Pages/ForgotPassword"));
@@ -48,7 +48,6 @@ function App() {
       <Suspense fallback={<Loader/>}>
         {!isAdmin && <Header />}
             <ScrollToTop/>
-            {/* {loader && <Loader/>} */}
             <Routes>
               <Route path='/' element={<Home />} />
               <Route path='/blog-post/:id' element={<BlogPost/>}/>
@@ -116,7 +115,7 @@ function App() {
                   </Route>
                 </Route>
               </Route>
-              <Route path="/aunauthorized" element={<Unauthorized/>}/>
+              <Route path="/error/:code" element={<ErrorPage/>}/>
               <Route path="*" element={<NotFound/>}/>
             </Routes>
         

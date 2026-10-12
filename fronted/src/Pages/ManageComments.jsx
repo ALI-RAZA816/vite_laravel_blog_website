@@ -11,7 +11,6 @@ import RecentComments from "../components/RecentComments";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { useUser } from "../Context/UserContext";
 
-// Naam se initials (single word naam par bhi crash nahi karega)
 const getInitials = (name = '') =>
   name
     .split(' ')
@@ -21,10 +20,8 @@ const getInitials = (name = '') =>
     .join('')
     .toUpperCase();
 
-// 1000 se bade numbers ko 1.2k format mein
 const formatCount = (n) => (n < 1000 ? n : `${(n / 1000).toFixed(1)}k`);
 
-// Status ke hisaab se badge ki class (pehle inline style ki lambi chain thi)
 const statusClass = {
   pending: styles.statusPending,
   approved: styles.statusApproved,
@@ -70,7 +67,6 @@ const ManageComments = () => {
     pages.push(commentsPagination.lastPage);
   }
 
-  // Stat cards: neutral total, baqi teen apne rang mein
   const stats = [
     {
       label: 'Total Comments',

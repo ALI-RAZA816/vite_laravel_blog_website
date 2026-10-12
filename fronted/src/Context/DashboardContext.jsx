@@ -1,11 +1,14 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { apiGet} from "../services/apiClient.js";
 import { UserContext } from "./UserContext.jsx";
+import { StatusCode } from "../services/apiStatusCode.js";
+import { useNavigate } from "react-router-dom";
 
 export const DashboardContext = createContext();
 
 const DashboardContextProvider = ({ children }) => {
 
+    const navigate = useNavigate();
     const token = localStorage.getItem('token');
     const {loggedUser} = useContext(UserContext);
     const [totalPosts, setTotalPosts] = useState([]);
@@ -16,13 +19,15 @@ const DashboardContextProvider = ({ children }) => {
     const fetchDashboardData = async ()=>{
         
         try{
-            const {ok, data} = await apiGet('dashboard');
+            const {ok, status, data} = await apiGet('dashboard');
 
             if(ok){
                 setTotalPosts(data.total);
                 setAllComments(data.allComments);
                 setTotalUsers(data.totalUser);
                 setTotalViews(data.views);
+            }else{
+                navigate(StatusCode(status));
             }
         }catch(error){
             console.log(error);

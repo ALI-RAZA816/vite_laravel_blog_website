@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { apiGet, apiSend, emptyPagination, showToast, toPagination } from "../services/apiClient";
+import { StatusCode } from "../services/apiStatusCode";
 
 export const ContactContext = createContext();
 
@@ -33,12 +34,14 @@ const ContactContextProvider = ({children})=>{
     const fetchMessages = async ()=>{
         setSpinnerLoader(true);
         try{
-            const {ok, data} = await apiGet(`messages?page=${page}`);
+            const {ok, status, data} = await apiGet(`messages?page=${page}`);
             if(ok){
                 setTotalMessages(data.totalMessages);
                 setResponseAvg(data.response_avg);
                 setMessages(data.messages.data);
                 setMessagesPagination(toPagination(data.messages));
+            }else{
+               navigate(StatusCode(status));
             }
         }catch(error){
             console.log(error);
@@ -51,7 +54,7 @@ const ContactContextProvider = ({children})=>{
     const submitMessage = async (event)=>{
         event.preventDefault();
         try{
-            const {ok, data} = await apiSend('message','POST', contactForm);
+            const {ok, status, data} = await apiSend('message','POST', contactForm);
             if(!ok){
                 const error = data?.errors;
                 if(error?.name?.[0]){
@@ -74,6 +77,7 @@ const ContactContextProvider = ({children})=>{
                     showToast(data.message, 'Error','danger');
                     return;
                 }
+                navigate(StatusCode(status));
             }
             triggerContactRefresh();
             showToast(data.message, 'Success','success');
@@ -106,11 +110,12 @@ const ContactContextProvider = ({children})=>{
 
     const markAsRead = async (id)=>{
         try{
-            const {ok, data} = await apiSend(`mark-as-read/${id}`, 'PUT', null);   
+            const {ok, status, data} = await apiSend(`mark-as-read/${id}`, 'PUT', null);   
             if(ok){
                 triggerContactRefresh();
                 showToast(data.message, 'Success','success');
             }else{
+                navigate(StatusCode(status));
                 showToast(data.message, 'Error','danger');
             }
         }catch(error){
@@ -120,11 +125,12 @@ const ContactContextProvider = ({children})=>{
 
     const markAsUnread = async (id)=>{
         try{
-            const {ok, data} = await apiSend(`mark-as-unread/${id}`, 'PUT', null);   
+            const {ok, status, data} = await apiSend(`mark-as-unread/${id}`, 'PUT', null);   
             if(ok){
                 triggerContactRefresh();
                 showToast(data.message, 'Success','success');
             }else{
+                navigate(StatusCode(status));
                 showToast(data.message, 'Error','danger');
             }
         }catch(error){
@@ -136,11 +142,12 @@ const ContactContextProvider = ({children})=>{
     const [singleMessage, setSingleMessage] = useState({});
     const fetchSingleMessage = async (id)=>{
         try{
-            const {ok, data} = await apiGet(`messages/${id}`);
+            const {ok, status, data} = await apiGet(`messages/${id}`);
             if(ok){
                 triggerContactRefresh();
                 setSingleMessage(data.message);
             }else{
+                navigate(StatusCode(status));
                 showToast(data.message, 'Error','danger');
             }
         }catch(error){
@@ -198,12 +205,13 @@ const ContactContextProvider = ({children})=>{
         };
 
         try{
-            const {ok, data} = await apiSend(`reply-message`, 'POST', payload);
+            const {ok, status, data} = await apiSend(`reply-message`, 'POST', payload);
             if(ok){
                 triggerContactRefresh();
                 setContent('');
                 showToast(data.message, 'Success','success');
             }else{
+                navigate(StatusCode(status));
                 showToast(data.message, 'Error','danger');
             }
         }catch(error){

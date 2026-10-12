@@ -1,5 +1,5 @@
 import { useContext, useEffect} from 'react'
-import { Navigate, Outlet, useNavigate} from 'react-router-dom';
+import { Navigate, Outlet, replace, useNavigate} from 'react-router-dom';
 import { apiUrl } from '../Http/Http';
 import { AppContext } from '../Context/AppContext';
 import { useUser } from '../Context/UserContext';
@@ -7,7 +7,6 @@ import { useUser } from '../Context/UserContext';
 export default function AuthDashboard() {
 
     const token = localStorage.getItem('token');
-    const {setStatusCode} = useContext(AppContext);
     const navigate = useNavigate();
     const {authorized, setAuthorized} = useContext(AppContext);
     const {setLoggedUser} = useUser();
@@ -25,8 +24,7 @@ export default function AuthDashboard() {
             if(['admin','editor','author'].includes(user.role)){
                 setAuthorized('authorized');
             }else{
-                setStatusCode(403); 
-                navigate('/aunauthorized');
+                navigate('/error/403');
             }
         }).catch(()=>{
             localStorage.removeItem('token');

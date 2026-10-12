@@ -18,7 +18,6 @@ import { baseUrl } from "../Http/Http";
 import NoUsers from "../components/NoUsers";
 import LoadingSpinner from "../components/LoadingSpinner";
 
-// Naam se initials (single word naam par bhi crash nahi karega)
 const getInitials = (name = '') =>
   name
     .split(' ')
@@ -28,10 +27,8 @@ const getInitials = (name = '') =>
     .join('')
     .toUpperCase();
 
-// 1000 se bade numbers ko 1.2k format mein
 const formatCount = (n) => (n <= 1000 ? `${n}` : `${(n / 1000).toFixed(1)}k`);
 
-// Role aur status ki classes (pehle lambi inline-style chains thin)
 const roleClass = {
   admin: styles.roleAdmin,
   editor: styles.roleEditor,
@@ -63,7 +60,6 @@ const ManageUsers = () => {
   const { DeleteModelHandler } = useContext(AppContext);
   const canManage = loggedUser?.role !== 'editor';
 
-  // Soft accent colors: pehla neutral, baqi teen apne rang mein
   const statCards = [
     {
       icon: <BsPeopleFill />,
@@ -95,7 +91,6 @@ const ManageUsers = () => {
     },
   ];
 
-  // Search, role aur status teeno ek hi debounce use karte hain
   const searchTimeout = useRef(null);
   const debouncedSearch = (event) => {
     const searchTerm = event.target.value;

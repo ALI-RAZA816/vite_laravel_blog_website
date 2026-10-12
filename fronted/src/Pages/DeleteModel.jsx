@@ -4,6 +4,7 @@ import { AppContext } from "../Context/AppContext";
 import { apiSend, showToast } from "../services/apiClient.js";
 import { useUser } from "../Context/UserContext";
 import { useNavigate } from "react-router-dom";
+import { StatusCode } from "../services/apiStatusCode.js";
 
 const DeleteModel = () => {
 
@@ -22,6 +23,7 @@ const DeleteModel = () => {
         setDeleteModel(!deleteModel);
         triggerUserRefresh();
       }else{
+        navigate(StatusCode(status));
         showToast(data.message,'Error','danger');
         setStatusCode(status);
         navigate('/aunauthorized');

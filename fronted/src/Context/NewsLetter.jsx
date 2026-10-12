@@ -1,5 +1,7 @@
 import { createContext, useContext, useRef } from "react";
 import { apiSend, showToast } from "../services/apiClient";
+import { StatusCode } from "../services/apiStatusCode";
+import { useNavigate } from "react-router-dom";
 
 
 export const NewsLetterContext = createContext();
@@ -8,25 +10,29 @@ export const NewsLetterContext = createContext();
 const NewsLetterContextProvide = ({children})=>{
 
     const newsletter = useRef(null);
+    const navigate = useNavigate();
+
     const subscribeNews = async ()=>{
         const email = newsletter.current?.value;
-        const {ok, data} = await apiSend('newsletter', 'POST', {newsletter:email});
+        const {ok, status, data} = await apiSend('newsletter', 'POST', {newsletter:email});
         try{
             if(ok){
                 showToast(data.message,'Success','success');
                 newsletter.current.value = '';
                 return;
+            }else{
+                const error = data?.errors;
+                if(error?.newsletter?.[0]){
+                    showToast(error?.newsletter?.[0],'Error','danger');
+                    return;
+                }
+                if(data.message){
+                    showToast(data.message,'Error','danger');
+                    return;
+                }
+                navigate(StatusCode(status));
             }
 
-            const error = data?.errors;
-            if(error?.newsletter?.[0]){
-                showToast(error?.newsletter?.[0],'Error','danger');
-                return;
-            }
-            if(data.message){
-                showToast(data.message,'Error','danger');
-                return;
-            }
 
         }catch(error){
             console.log(error);

@@ -17,7 +17,6 @@ export default function ProtectVerifyOtpRoute() {
         const { ok, data } = await apiSend('indexs', 'POST', { email });
         setAllowed(ok && Number(data.user?.send_link) === 1);
       } catch (error) {
-        console.log(error);
         setAllowed(false);
       }
     };

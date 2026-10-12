@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { apiGet, apiSend, emptyPagination, showToast, toPagination } from "../services/apiClient.js";
+import { StatusCode } from "../services/apiStatusCode.js";
+import { useNavigate } from "react-router-dom";
 
 export const PostContext = createContext();
 
@@ -10,6 +12,7 @@ const PostContextProvider = ({ children }) => {
   // =======================
   //     LIST + STATS
   // =======================
+  const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [spinnerLoader, setSpinnerLoader] = useState(false);
   const [totalViews, setTotalViews] = useState(0);
@@ -33,7 +36,7 @@ const PostContextProvider = ({ children }) => {
       }else{
         response = await apiGet(`posts?field=${searchTerm.fieldName}&query=${searchTerm.searchTerm}&page=${currentPostPage}`);
       }
-      const {ok, data} = response;
+      const {ok, status, data} = response;
       if (ok) {
         setAvgViews(data.averageViews);
         setTotalViews(data.views);
@@ -50,6 +53,8 @@ const PostContextProvider = ({ children }) => {
         });
         setLastMonthViews(formatted);
         setSpinnerLoader(false);
+      }else{
+        navigate(StatusCode(status));
       }
     } catch (error) {
       console.log("fetchPosts:", error);
