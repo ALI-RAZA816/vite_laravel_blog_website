@@ -121,7 +121,8 @@ const PostContextProvider = ({ children }) => {
       spinnerLoader,
       deletePost,
       multiDeletePost,
-      setSearchTerm
+      setSearchTerm,
+      triggerPostRefresh
     }}>
       {children}
     </PostContext.Provider>

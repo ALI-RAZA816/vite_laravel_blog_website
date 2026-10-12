@@ -21,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
             StartSession::class,
+            // $middleware->throttleApi(),
         ]);
         
         $middleware->api(prepend: [

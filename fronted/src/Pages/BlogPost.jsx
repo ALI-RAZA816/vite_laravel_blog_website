@@ -76,55 +76,6 @@ export default function BlogPost() {
     fetchPostView(id);
   }
 
-  // const timeAgo = (date) => {
-  //   const now = new Date();
-  //   const created = new Date(date);
-
-  //   const seconds = Math.floor((now - created) / 1000);
-
-  //   if (seconds < 5) {
-  //       return "Just now";
-  //   }
-
-  //   if (seconds < 60) {
-  //       return `${seconds}s ago`;
-  //   }
-
-  //   const minutes = Math.floor(seconds / 60);
-
-  //   if (minutes < 60) {
-  //       return `${minutes}m ago`;
-  //   }
-
-  //   const hours = Math.floor(minutes / 60);
-
-  //   if (hours < 24) {
-  //       return `${hours}h ago`;
-  //   }
-
-  //   const days = Math.floor(hours / 24);
-
-  //   if (days < 7) {
-  //       return `${days}d ago`;
-  //   }
-
-  //   const weeks = Math.floor(days / 7);
-
-  //   if (weeks < 4) {
-  //       return `${weeks}w ago`;
-  //   }
-
-  //   const months = Math.floor(days / 30);
-
-  //   if (months < 12) {
-  //       return `${months}mo ago`;
-  //   }
-
-  //   const years = Math.floor(days / 365);
-
-  //   return `${years}y ago`;
-  // };
-
   const [postComment, setPostComments] = useState([]);
   const postComments = async ()=>{
     try{
@@ -210,10 +161,8 @@ export default function BlogPost() {
 
   return (
     <>
-      {spinnerLoader ? (
-                <div className="d-flex min-vh-100 justify-content-center align-items-center"><LoadingSpinner /></div>
-            ):<div className={styles.page}>
-
+      {spinnerLoader ? (<div className="d-flex min-vh-100 justify-content-center align-items-center"><LoadingSpinner /></div>):
+      <div className={styles.page}>
         <div className={styles.hero}>
           {formData.post_image && <img
             src={`${baseUrl}/posts-images/${formData.post_image}`}
@@ -225,7 +174,6 @@ export default function BlogPost() {
             </h1>
           </div>
         </div>
-
         <div className="container">
           <div className={styles.authorRow}>
             <div className={styles.authorInfo}>
@@ -251,6 +199,9 @@ export default function BlogPost() {
               dangerouslySetInnerHTML={{ __html: formData.description }}
             />
           </div>
+        </div>
+      </div>}
+        
           <div className={styles.commentsSection}>
             <h5 className={styles.heading}>{postComment.length > 1 ? 'Comments' : 'Comment'} ({postComment.length < 1000 ? postComment.length : `${(postComment.length/1000).toFixed(1)}k` })</h5>
     
@@ -331,8 +282,6 @@ export default function BlogPost() {
               })}
             </div>
           </div>
-        </div>
-      </div>}
     </>
   );
 }

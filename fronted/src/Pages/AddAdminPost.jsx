@@ -5,6 +5,7 @@ import JoditEditor from "jodit-react";
 import { AppContext } from "../Context/AppContext";
 import { apiUpload, showToast } from "../services/apiClient.js";
 import { useNavigate } from "react-router-dom";
+import { usePost } from "../Context/PostContext.jsx";
 
 const ImageIcon = ({ size = 56, color = "#7d7d7d" }) => (
   <svg width={size} height={size} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -18,6 +19,7 @@ const ImageIcon = ({ size = 56, color = "#7d7d7d" }) => (
 const AddAdminPost = ({ placeholder }) => {
   const navigate = useNavigate();
   const { allCat, setRefresh } = useContext(AppContext);
+  const {triggerPostRefresh} = usePost();
 
   const config = useMemo(
     () => ({
@@ -81,6 +83,7 @@ const AddAdminPost = ({ placeholder }) => {
   };
 
   const submitPost = async (event) => {
+
     event.preventDefault();
     if (!formData.title) return showToast("Title is required", "Error", "danger");
     if (!content) return showToast("Description is required", "Error", "danger");
@@ -109,6 +112,7 @@ const AddAdminPost = ({ placeholder }) => {
       setTags([]);
       setContent("");
       setRefresh((prev) => prev + 1);
+      triggerPostRefresh();
       navigate("/admin-panel/posts");
     } catch (error) {
       console.log(error);
