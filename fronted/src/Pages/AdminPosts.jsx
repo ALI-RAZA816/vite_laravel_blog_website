@@ -8,6 +8,7 @@ import {
   BsStars,
 } from "react-icons/bs";
 import { FaEye } from "react-icons/fa";
+import { Bar } from "react-chartjs-2";
 
 import styles from "../assets/AdminPosts.module.css";
 import { Link } from "react-router-dom";
@@ -22,6 +23,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -30,14 +32,6 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-import { Bar } from "react-chartjs-2";
-
-const post = [
-  {
-    categoryColor: "",
-  }
-];
-
 
 const AdminPosts = () => {
 
@@ -84,6 +78,7 @@ const AdminPosts = () => {
   const {setPosts} = useContext(AppContext);
   const {allCat} = useContext(AppContext);
   const {setRefresh} = useContext(AppContext);
+  
   const chartData = {
     labels:chartData2.map(item => item.month),
     datasets: [
@@ -96,7 +91,7 @@ const AdminPosts = () => {
       },
     ],
   };
-  // const maxValue = Math.max(...chartData);
+
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,

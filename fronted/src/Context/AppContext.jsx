@@ -6,6 +6,7 @@ export const AppContext = createContext();
 
 const AppContextProvider = ({children})=>{
     // all users data 
+    const [lastMonthViews, setLastMonthViews] = useState([]);
     const [deleteModel, setDeleteModel] = useState(false);
     const [loggedUser, setLoggedUser] = useState([]);
     const [deletId, setDeleteId] = useState(null);
@@ -168,6 +169,20 @@ const AppContextProvider = ({children})=>{
                     total:data.posts.total,
                     perPage:data.posts.per_page
                 });
+
+                const formattedData = data?.last_month?.map((item)=>{
+                    const date = new Date(item.year, item.month-1);
+
+                    return {
+                        month:date.toLocaleString('en-US',{
+                            month:'short'
+                        }) + `${item.year}`,
+                        total:Number(item.monthly_views)
+                    }
+                }) || [];
+
+                const latest = formattedData.slice(-6);
+                setLastMonthViews(latest);
                 
             }
         }catch(error){
@@ -318,6 +333,7 @@ const AppContextProvider = ({children})=>{
             catPagination,
             setCatPagination,
             totalPosts,
+            lastMonthViews,
             allCat,
             comments,
             loggedUser,

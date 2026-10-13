@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('post_views', function (Blueprint $table) {
+        Schema::create('last_months_views', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users')->unique();
-            $table->foreignId('post_id')->references('id')->on('posts')->unique();
+            $table->unsignedInteger('month');
+            $table->unsignedInteger('year');
+            $table->unsignedBigInteger('snap_views');
+            $table->unsignedBigInteger('monthly_views');
+            $table->unique(['month', 'year']);
             $table->timestamps();
         });
     }
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('post_views');
+        Schema::dropIfExists('last_months_views');
     }
 };

@@ -1,11 +1,26 @@
 import React, { useContext } from "react";
+import {BsFileEarmarkTextFill, BsChatSquareTextFill, BsPeopleFill, BsEyeFill, BsPlusLg } from "react-icons/bs";
+import { Line } from 'react-chartjs-2';
 import {
-  BsFileEarmarkTextFill,
-  BsChatSquareTextFill,
-  BsPeopleFill,
-  BsEyeFill,
-  BsPlusLg,
-} from "react-icons/bs";
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 import { FaEye } from "react-icons/fa";
 import styles from "../assets/DashboardContent.module.css";
 import {Link} from 'react-router-dom';
@@ -24,6 +39,37 @@ const chartData = [
 
 
 const DashboardContent = () => {
+
+  const {lastMonthViews} = useContext(AppContext);
+
+   const data = {
+    labels: lastMonthViews.map(item => item.month),
+    datasets: [
+      {
+        label: 'Post Views',
+        data: lastMonthViews.map(item => item.total),
+        borderColor: '#4C32C2',
+        borderWidth: 4,          
+        pointRadius: 5,          
+        pointBackgroundColor: '#4C32C2',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        tension: 0.3,
+        fill: false,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+    },
+  };
+
   const {posts} = useContext(AppContext);
   const {totalViews} = useContext(AppContext);
   const {comments} = useContext(AppContext);
@@ -131,18 +177,8 @@ const DashboardContent = () => {
                 <option>This Year</option>
               </select>
             </div>
-            <div className={styles.chart}>
-              {chartData.map((bar, index) => (
-                <div className={styles.chartCol} key={index}>
-                  <div
-                    className={`${styles.chartBar} ${
-                      index === chartData.length - 1 ? styles.chartBarActive : ""
-                    }`}
-                    style={{ height: `${(bar.value / maxValue) * 100}%` }}
-                  ></div>
-                  <span className={styles.chartLabel}>{bar.month}</span>
-                </div>
-              ))}
+            <div className={`${styles.chart}`} style={{ width: '100%', height: '400px' }}>
+              <Line data={data} options={options} />
             </div>
           </div>
         </div>

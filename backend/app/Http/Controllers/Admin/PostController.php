@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\MonthlyReport;
+use App\Models\MonthlyViewsModel;
 use App\Models\Post;
 use App\Models\PostView;
 use Illuminate\Http\Request;
@@ -29,12 +30,14 @@ class PostController extends Controller
         $average_views = $total_views > 0 ? round(($view_per_month / $total_views) * 100, 2) : 0;
 
 
+        $monthlyPostViews = MonthlyViewsModel::select('month','year','monthly_views')->get();
 
         return response()->json([
             'posts'=>$posts,
             'total'=>$total,
             'views'=>$views,
             'velocity'=>$velocity,
+            'last_month'=>$monthlyPostViews,
             'averageViews'=>$average_views,
         ],200);
     }

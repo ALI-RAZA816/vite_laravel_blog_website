@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MonthlyViewsModel;
 use App\Models\Post;
 use App\Models\PostView;
 use Illuminate\Http\Request;
@@ -33,6 +34,16 @@ class PublicPostController extends Controller
                     'post_id'=>$post->id
                 ]);
                 $post->increment('views_counter');
+                $totalViews = Post::sum('views_counter');
+                $previousMonth = now()->subMonth();
+                $previousViews = MonthlyViewsModel::where('month', $previousMonth->month)->where('year', $previousMonth->year)->sum('snap_views') ?? 0;
+                MonthlyViewsModel::updateOrCreate([
+                    'month'=>now()->month,
+                    'year'=>now()->year,
+                ],[
+                    'snap_views'=>$totalViews,
+                    'monthly_views'=>$totalViews - $previousViews
+                ]);
             }
         }
         return response()->json([

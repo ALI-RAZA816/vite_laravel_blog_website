@@ -24,7 +24,7 @@ Route::get('post-comments/{id}',[CommentController::class, 'fetchPostComments'])
 Route::get('post-view/{id}',[PublicPostController::class, 'singleView']);
 
 Route::middleware('auth:sanctum')->group(function(){
-    Route::get('post-view/{id}',[PublicPostController::class, 'singleView']);
+    // Route::get('post-view/{id}',[PublicPostController::class, 'singleView']);
     Route::put('update-comments/{id}',[CommentController::class,'updateComment']);
     Route::get('filter-comments',[CommentController::class,'searchComments']);
     Route::post('logout',[AuthController::class,'logoutAccount']);
