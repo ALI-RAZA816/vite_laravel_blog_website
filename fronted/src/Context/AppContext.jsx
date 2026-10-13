@@ -176,13 +176,11 @@ const AppContextProvider = ({children})=>{
                     return {
                         month:date.toLocaleString('en-US',{
                             month:'short'
-                        }) + `${item.year}`,
+                        }) + " " + `${item.year}`,
                         total:Number(item.monthly_views)
                     }
                 }) || [];
-
-                const latest = formattedData.slice(-6);
-                setLastMonthViews(latest);
+                setLastMonthViews(formattedData);
                 
             }
         }catch(error){
@@ -317,6 +315,7 @@ const AppContextProvider = ({children})=>{
             formHandler,
             selectedIcon,
             setSelectedIcon,
+            lastMonthViews,
             posts,
             setPosts,
             velocity,

@@ -104,7 +104,16 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-       
+       $post = Post::with('category')->with('author')->where('id',$id)->first();
+        if(!$post){
+            return response()->json([
+                'messate'=>'Not found'
+            ],404);
+        }
+
+        return response()->json([
+            'post'=>$post
+        ],200);
     }
 
     /**

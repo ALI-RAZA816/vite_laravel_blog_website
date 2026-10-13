@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\MonthlyReportController;
 use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\PublicCategryController;
 use App\Http\Controllers\PublicPostController;
@@ -24,7 +25,6 @@ Route::get('post-comments/{id}',[CommentController::class, 'fetchPostComments'])
 Route::get('post-view/{id}',[PublicPostController::class, 'singleView']);
 
 Route::middleware('auth:sanctum')->group(function(){
-    // Route::get('post-view/{id}',[PublicPostController::class, 'singleView']);
     Route::put('update-comments/{id}',[CommentController::class,'updateComment']);
     Route::get('filter-comments',[CommentController::class,'searchComments']);
     Route::post('logout',[AuthController::class,'logoutAccount']);
@@ -35,5 +35,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::apiResource('users', UserController::class);
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('posts', PostController::class);
+    Route::post('settings', [SettingController::class, 'update']);
+    Route::get('show-setting', [SettingController::class, 'index']);
     Route::apiResource('comments', CommentController::class);
 });

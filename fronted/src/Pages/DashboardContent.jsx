@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef, useState } from "react";
 import {BsFileEarmarkTextFill, BsChatSquareTextFill, BsPeopleFill, BsEyeFill, BsPlusLg } from "react-icons/bs";
 import { Line } from 'react-chartjs-2';
 import {
@@ -40,14 +40,28 @@ const chartData = [
 
 const DashboardContent = () => {
 
+  const [monthlyRecord, setMonthlyRecord] = useState('');
   const {lastMonthViews} = useContext(AppContext);
+  const {posts} = useContext(AppContext);
+  const {totalViews} = useContext(AppContext);
+  const {comments} = useContext(AppContext);
+  const {allComments} = useContext(AppContext);
+  const {commentAvg} = useContext(AppContext);
+  const {totalPosts} = useContext(AppContext);
+  const {velocity} = useContext(AppContext);
+  const {avgViews} = useContext(AppContext);
+  const {totalUsers} = useContext(AppContext);
+
+  const recentPost = posts.slice(0,5);
+  const recentComments = comments.slice(0,5);
+  const monthData = monthlyRecord === 'last 6 months' ? lastMonthViews.slice(-6) : lastMonthViews.slice(-12);
 
    const data = {
-    labels: lastMonthViews.map(item => item.month),
+    labels: monthData.map(item => item.month),
     datasets: [
       {
         label: 'Post Views',
-        data: lastMonthViews.map(item => item.total),
+        data: monthData.map(item => item.total),
         borderColor: '#4C32C2',
         borderWidth: 4,          
         pointRadius: 5,          
@@ -70,18 +84,6 @@ const DashboardContent = () => {
     },
   };
 
-  const {posts} = useContext(AppContext);
-  const {totalViews} = useContext(AppContext);
-  const {comments} = useContext(AppContext);
-  const {allComments} = useContext(AppContext);
-  const {commentAvg} = useContext(AppContext);
-  const {totalPosts} = useContext(AppContext);
-  const {velocity} = useContext(AppContext);
-  const {avgViews} = useContext(AppContext);
-  const {totalUsers} = useContext(AppContext);
-
-  const recentComments = comments.slice(0,5);
-  const recentPost = posts.slice(0,5);
   const statCards = [
     {
       icon: <BsFileEarmarkTextFill />,
@@ -171,10 +173,9 @@ const DashboardContent = () => {
           <div className={styles.panel}>
             <div className="d-flex justify-content-between align-items-center mb-4">
               <h6 className={styles.panelTitle}>VIEWS PER MONTH</h6>
-              <select className={styles.rangeSelect} defaultValue="Last 6 Months">
-                <option>Last 6 Months</option>
-                <option>Last 12 Months</option>
-                <option>This Year</option>
+              <select onChange={(event)=> setMonthlyRecord(event.target.value)} className={styles.rangeSelect} defaultValue="Last 6 Months">
+                <option value='last 6 months'>Last 6 Months</option>
+                <option value='last 12 months'>Last 12 Months</option>
               </select>
             </div>
             <div className={`${styles.chart}`} style={{ width: '100%', height: '400px' }}>
