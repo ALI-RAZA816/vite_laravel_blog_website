@@ -279,17 +279,148 @@ const AppContextProvider = ({children})=>{
             console.log("9. ERROR:", error);
         }
     };
+
+    const [maintenance, setMaintenance] = useState(false);
+    const [logoPreview, setLogoPreview] = useState(null);
+    const [logo, setLogo] = useState(null);
+    const [settingData, setSettingData] = useState({
+        site_title: '',
+        site_desc: '',
+        site_copyright: '',
+        f_url: '',
+        t_url: '',
+        i_url: '',
+        l_url: '',
+    });
+
+    // settings form handler
+    const settingFormHandler = (event) => {
+    const { name, value } = event.target;
+    setSettingData((prev) => ({
+        ...prev,
+        [name]: value,
+    }));
+    };
+
+    // site logo handler
+    const siteLogo = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    setLogo(file);
+    setLogoPreview(URL.createObjectURL(file));
+    };
+
+    // fetch settings
+    const fetchSetting = async () => {
+    const token = localStorage.getItem('token');
+    try {
+        const response = await fetch(`${apiUrl}/show-setting`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-type': 'application/json',
+            'Accept': 'application/json',
+        },
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+        setSettingData({
+            site_title: data?.setting?.site_title,
+            site_desc: data?.setting?.site_description,
+            site_copyright: data?.setting?.site_copyright,
+            f_url: data?.setting?.f_url,
+            t_url: data?.setting?.t_url,
+            i_url: data?.setting?.i_url,
+            l_url: data?.setting?.l_url,
+        });
+        setLogo(data?.setting?.site_logo);
+        setMaintenance(data?.setting?.site_maintence === "true");
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    };
+
+    // save settings
+    const settingHandler = async () => {
+    const token = localStorage.getItem('token');
+    const form = new FormData();
+    form.append('site_title', settingData.site_title);
+    form.append('site_desc', settingData.site_desc);
+    form.append('site_copyright', settingData.site_copyright);
+    form.append('f_url', settingData.f_url);
+    form.append('t_url', settingData.t_url);
+    form.append('i_url', settingData.i_url);
+    form.append('l_url', settingData.l_url);
+    form.append('maintence', maintenance);
+    form.append('site_logo', logo);
+
+    try {
+        const response = await fetch(`${apiUrl}/settings`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+        },
+        body: form,
+        });
+
+        const data = await response.json();
+        console.log(data);
+        if (response.ok) {
+        setRefresh((prev) => prev + 1);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    };
+
+    // remove logo
+    const logoHandler = async (event) => {
+    event.preventDefault();
+    const token = localStorage.getItem('token');
+    try {
+        const response = await fetch(`${apiUrl}/logo`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+        },
+        });
+        const data = await response.json();
+        if (response.ok) {
+        setRefresh((prev) => prev + 1);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    };
     
     useEffect(()=>{
         fetchUsers();
         fetchPosts();
         fetchCategory();
         fetchcomments();
+        fetchSetting();
     },[refresh, currentComments, currentPage, currentPostPage, currentCatPage]);
 
     return (
         <AppContext.Provider value={{
             isAdmin,
+            maintenance,
+            setMaintenance,
+            logoPreview,
+            setLogoPreview,
+            logo,
+            setLogo,
+            settingData,
+            setSettingData,
+            settingFormHandler,
+            siteLogo,
+            settingHandler,
+            logoHandler,
+            fetchSetting,
             showCategoryModel,
             CategoryModelHandler,
             showLoadingSpinner,

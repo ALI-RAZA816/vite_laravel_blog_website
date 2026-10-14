@@ -82,8 +82,8 @@ export default function Home() {
 
 
       {/* Hero */}
-      <div className="container">
-        <div className={`${styles.hero} mb-3`}>
+      <div className="container overflow-hidden">
+        <div className={`${styles.hero} mt-3 mb-3`}>
           <div className={styles.heroOverlay}>
             <h1 className={styles.heroTitle}>Finding Stillness in a Chaotic Digital World</h1>
             <p className={styles.heroSubtitle}>

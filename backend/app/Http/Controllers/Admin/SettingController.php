@@ -61,7 +61,7 @@ class SettingController extends Controller
         $setting = Setting::first();
         $imageName = $setting?->site_logo;
         if($request->hasFile('site_logo')){
-            if($setting->site_logo){
+            if($setting?->site_logo){
                 $path = public_path('posts-images');
                 $previousImage = $path . '/'. $setting->site_logo;
                 if(file_exists($previousImage)){
@@ -99,8 +99,28 @@ class SettingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy()
     {
-        //
+        $setting = Setting::first();
+        if(!$setting){
+            return response()->json([
+                'message'=>'not found'
+            ],404);
+        }
+
+        $path = public_path('/posts-images/');
+        if($setting->site_logo){
+            $old_image = $path. $setting->site_logo;
+            if(file_exists($old_image)){
+                unlink($old_image);
+            }
+        }
+
+        $setting->update([
+            'site_logo'=>null
+        ]);
+        return response()->json([
+            'message'=>'Logo deleted successfully'
+        ],200);
     }
 }

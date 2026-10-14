@@ -42,7 +42,7 @@ export default function Header() {
   }
 
   return (
-    <header className={styles.navbar}>
+    <header className={`${styles.navbar} shadow-sm`}>
         <div className={`${styles.navInner}`}>
             <Link to="/" className={styles.logo}>SlowLiving Blog</Link>
             <nav className={styles.navLinks}>

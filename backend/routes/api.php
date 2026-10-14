@@ -37,5 +37,6 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::apiResource('posts', PostController::class);
     Route::post('settings', [SettingController::class, 'update']);
     Route::get('show-setting', [SettingController::class, 'index']);
+    Route::delete('logo', [SettingController::class, 'destroy']);
     Route::apiResource('comments', CommentController::class);
 });

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   BsSave2Fill,
   BsPalette2,
@@ -12,104 +12,21 @@ import {
   BsShieldFillCheck,
 } from "react-icons/bs";
 import styles from "../assets/AdminSetting.module.css";
-import { apiUrl } from "../Http/Http";
+import { apiUrl, baseUrl } from "../Http/Http";
+import { AppContext } from "../Context/AppContext";
 
 const GeneralSetting = () => {
-  const [maintenance, setMaintenance] = useState(false);
-  const [logoPreview, setLogoPreview] = useState(null);
-  const [logo, setLogo] = useState(null);
-  const [formData, setFormData] = useState({
-    site_title:'',
-    site_desc:'',
-    site_copyright:'',
-    f_url:'',
-    t_url:'',
-    i_url:'',
-    l_url:'',
-  });
 
-
-  const siteLogo = (event)=>{
-    const file = event.target.files[0];
-    setLogo(file);
-    setLogoPreview(URL.createObjectURL(file));
-  }
-
-  const formHandler = (event)=>{
-    const {name, value} = event.target;
-    setFormData((prev)=>({
-      ...prev,
-      [name]:value
-    }))
-  }
-
-  const fetchSetting = async ()=>{
-    const token = localStorage.getItem('token');
-
-    try{
-      const response = await fetch(`${apiUrl}/show-setting`,{
-        method:'GET',
-        headers:{
-          'Authorization':`Bearer ${token}`,
-          'Content-type':'application/json',
-          'Accept':'application/json',
-        },
-      });
-
-      const data = await response.json();
-      if(response.ok){
-        setFormData({
-          site_title:data?.setting?.site_title,
-          site_desc:data?.setting?.site_description,
-          site_copyright:data?.setting?.site_copyright,
-          f_url:data?.setting?.f_url,
-          t_url:data?.setting?.t_url,
-          i_url:data?.setting?.i_url,
-          l_url:data?.setting?.l_url,
-        });
-        setMaintenance(data?.setting?.site_maintence)
-      }
-    }catch(error){
-      console.log(error)
-    }
-  }
-
-  const settingHandler = async ()=>{
-    const token = localStorage.getItem('token');
-    const form = new FormData();
-    form.append('site_title',formData.site_title);
-    form.append('site_desc',formData.site_desc);
-    form.append('site_copyright',formData.site_copyright);
-    form.append('f_url',formData.f_url);
-    form.append('t_url',formData.t_url);
-    form.append('i_url',formData.i_url);
-    form.append('l_url',formData.l_url);
-    form.append('maintence',maintenance);
-    form.append('site_logo',logo);
-
-    try{
+  const {
+      maintenance, setMaintenance,
+      logoPreview, logo,
+      settingData: formData,       // 👈 rename here
+      settingFormHandler: formHandler,
+      siteLogo,
+      settingHandler,
+      logoHandler,
+    } = useContext(AppContext);
     
-      const response = await fetch(`${apiUrl}/settings`,{
-        method:'POST',
-        headers:{
-          'Authorization':`Bearer ${token}`,
-          'Accept':'application/json',
-        },
-        body:form
-      });
-
-      const data = await response.json();
-      console.log(data);
-
-    }catch(error){
-      console.log(error)
-    }
-  }
-
-  useEffect(()=>{
-    fetchSetting();
-  },[]);
-
   return (
     <div className={styles.content}>
       {/* Heading */}
@@ -181,9 +98,11 @@ const GeneralSetting = () => {
 
             <div style={{height:'180px',width:'100%',overflow:'hidden'}} className={styles.uploadBox}>
               <label htmlFor="site-logo">
-                {logoPreview ? <div style={{height:'180px',width:'100%',overflow:'hidden'}}>
+                {logoPreview ? (<div style={{height:'180px',width:'100%',overflow:'hidden'}}>
                   <img src={logoPreview} alt="" />
-                </div>:<div className="d-flex justify-content-center align-items-center flex-column mt-4">
+                </div>):logo ? (<div style={{height:'180px',width:'100%',overflow:'hidden'}}>
+                  <img src={`${baseUrl}/posts-images/${logo}`} alt="" />
+                </div>): <div className="d-flex justify-content-center align-items-center flex-column mt-4">
                   <div className={styles.uploadIcon}>
                     <BsImage />
                   </div>
@@ -196,7 +115,7 @@ const GeneralSetting = () => {
 
             <div className="d-flex justify-content-between align-items-center mt-4 mb-2">
               <span className={styles.currentLogoLabel}>Current Logo</span>
-              <a href="#" className={styles.removeLink}>Remove</a>
+              <span style={{cursor:'pointer'}} onClick={logoHandler} className={styles.removeLink}>Remove</span>
             </div>
           </div>
         </div>
