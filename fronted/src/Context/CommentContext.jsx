@@ -1,10 +1,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { apiGet , apiSend, emptyPagination, showToast, toPagination } from "../services/apiClient.js";
 import { StatusCode } from "../services/apiStatusCode.js";
+import {useNavigate} from 'react-router-dom';
 
 export const CommentContext = createContext();
 
 const CommentContextProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [commentRefresh, setCommentRefresh] = useState(0);
   const [spinnerLoader, setSpinnerLoader] = useState(false);
   const triggerCommentRefresh = () => setCommentRefresh((prev) => prev + 1);

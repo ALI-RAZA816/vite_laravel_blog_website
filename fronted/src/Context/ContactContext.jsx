@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { apiGet, apiSend, emptyPagination, showToast, toPagination } from "../services/apiClient";
 import { StatusCode } from "../services/apiStatusCode";
+import {useNavigate} from 'react-router-dom';
 
 export const ContactContext = createContext();
 
@@ -8,6 +9,7 @@ export const ContactContext = createContext();
 const ContactContextProvider = ({children})=>{
     
     const [contactRefresh, setContactRefresh] = useState(0);
+    const navigate = useNavigate();
     const triggerContactRefresh = ()=>setContactRefresh(prev=>prev+1);
 
     const [contactForm, setContactForm] = useState({
